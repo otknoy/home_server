@@ -1,0 +1,56 @@
+version: '2'
+services:
+
+  rproxy:
+    image: nginx
+    depends_on:
+      - web-server
+      - jupyter-notebook
+      - samba
+      # - solr
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 80:80
+    mem_limit: 128m
+
+  web-server:
+    image: nginx
+    ports:
+      - 10080:80
+    volumes:
+      - /home/otknoy/public_html/:/usr/share/nginx/html:ro
+    mem_limit: 128m
+
+  jupyter-notebook:
+    image: jupyter/datascience-notebook
+    ports:
+      - 8888:8888
+    volumes:
+      - /home/otknoy/notebook:/home/jovyan/work
+    command: start-notebook.sh --NotebookApp.password='sha1:76217d692f67:d46b306c90936cb8e3f0532db389749cb3650c10' --NotebookApp.base_url='/notebook'
+    environment:
+      TZ: 'Asia/Tokyo'
+    mem_limit: 8g
+
+  # solr:
+  #   image: solr:7.5
+  #   ports:
+  #     - 8983:8983
+  #   volumes:
+  #     - ./solr_core:/opt/solr/server/solr/mycores
+
+  samba:
+    image: dperson/samba
+    ports:
+      - 139:139
+      - 445:445
+    volumes:
+      - /home/otknoy:/mnt/home/otknoy
+      - /mnt/private:/mnt/private
+    command:
+      - "-uotknoy;passon"
+      - "-sotknoy;/mnt/home/otknoy;yes;yes;no;otknoy"
+      - "-sprivate;/mnt/private;yes;no;no;otknoy;otknoy"
+      - "-S"
+    mem_limit: 128m
