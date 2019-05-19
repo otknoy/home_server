@@ -25,12 +25,11 @@ services:
     mem_limit: 512m
 
   node-exporter:
-    image: quay.io/prometheus/node-exporter
-    ports:
-      - 9100:9100
+    image: prom/node-exporter:v0.18.0
     volumes:
-      # - /proc:/host/proc
-      # - /sys:/host/sys
-      - /:/host:ro,rslave
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
       - /:/rootfs:ro
     mem_limit: 128m
+    ports:
+      - 9100:9100
