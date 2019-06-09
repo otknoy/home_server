@@ -13,11 +13,6 @@ scrape_configs:
 
 remote_write:
 - url: http://influxdb:8086/api/v1/prom/write?db=prometheus
-  queue_config:
-    capacity: 1000000
-    batch_send_deadline: 10s
-    max_samples_per_send: 1000
-    max_shards: 3
 
 remote_read:
 - url: http://influxdb:8086/api/v1/prom/read?db=prometheus
