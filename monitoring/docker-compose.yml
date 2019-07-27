@@ -1,21 +1,21 @@
 version: '2'
 services:
   grafana:
-    image: grafana/grafana:6.2.4
+    image: grafana/grafana:6.2.5
     volumes:
       - ./grafana:/var/lib/grafana
     ports:
       - 3000:3000
     mem_limit: 128m
   prometheus:
-    image: prom/prometheus:v2.10.0
+    image: prom/prometheus:v2.11.1
     volumes:
       - ./prometheus-data/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - 9090:9090
     mem_limit: 512m
   influxdb:
-    image: influxdb:1.7.6
+    image: influxdb:1.7.7
     volumes:
       - ./influxdb:/var/lib/influxdb
     environment:
