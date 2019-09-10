@@ -2,7 +2,7 @@ version: '2'
 services:
 
   rproxy:
-    image: nginx:1.17.0
+    image: nginx:1.17.3-alpine
     depends_on:
       - web-server
       - jupyter-notebook
@@ -15,7 +15,7 @@ services:
     mem_limit: 16m
 
   web-server:
-    image: nginx:1.16.0
+    image: nginx:1.17.3-alpine
     ports:
       - 10080:80
     volumes:
