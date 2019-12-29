@@ -10,19 +10,11 @@ services:
   prometheus:
     image: prom/prometheus:v2.13.1
     volumes:
-      - ./prometheus-data/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/data/:/prometheus
     ports:
       - 9090:9090
     mem_limit: 1024m
-  influxdb:
-    image: influxdb:1.7.8
-    volumes:
-      - ./influxdb:/var/lib/influxdb
-    environment:
-      INFLUXDB_DB: prometheus
-    ports:
-      - 8086:8086
-    mem_limit: 1048m
 
   node-exporter:
     image: prom/node-exporter:v0.18.1
