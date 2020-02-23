@@ -41,7 +41,7 @@ services:
   #     - ./solr_core:/opt/solr/server/solr/mycores
 
   samba:
-    image: dperson/samba
+    build: samba
     ports:
       - 139:139
       - 445:445
@@ -49,10 +49,4 @@ services:
       - /home/otknoy:/mnt/home/otknoy
       - /mnt/backup:/mnt/backup
       - /mnt/temp:/mnt/temp
-    command:
-      - "-uotknoy;passon"
-      - "-sotknoy;/mnt/home/otknoy;yes;yes;no;otknoy"
-      - "-sbackup;/mnt/backup;yes;no;no;otknoy;otknoy"
-      - "-stemp;/mnt/temp;yes;no;no;otknoy;otknoy"
-      - "-S"
     mem_limit: 32m
