@@ -11,3 +11,8 @@ scrape_configs:
     static_configs:
       - targets:
         - 'node-exporter:9100'
+  - job_name: 'mflight-exporter'
+    scrape_interval: 60s
+    static_configs:
+      - targets:
+        - 'mflight-exporter:5000'

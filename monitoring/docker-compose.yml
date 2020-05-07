@@ -31,3 +31,9 @@ services:
     mem_limit: 32m
     ports:
       - 9100:9100
+
+  mflight-exporter:
+    image: mflight-exporter:dev
+    mem_limit: 32m
+    ports:
+      - 5000:5000
