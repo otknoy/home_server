@@ -29,8 +29,8 @@ services:
       - /sys:/host/sys:ro
       - /:/rootfs:ro
     mem_limit: 32m
-    ports:
-      - 9100:9100
+  #   ports:
+  #     - 9100:9100
 
   mflight-exporter:
     image: mflight-exporter:dev
