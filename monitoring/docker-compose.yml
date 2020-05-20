@@ -22,13 +22,13 @@ services:
       - 9090:9090
     mem_limit: 1024m
 
-  node-exporter:
-    image: prom/node-exporter:v0.18.1
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    mem_limit: 32m
+  # node-exporter:
+  #   image: prom/node-exporter:v0.18.1
+  #   volumes:
+  #     - /proc:/host/proc:ro
+  #     - /sys:/host/sys:ro
+  #     - /:/rootfs:ro
+  #   mem_limit: 32m
   #   ports:
   #     - 9100:9100
 
