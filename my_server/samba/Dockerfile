@@ -1,6 +1,6 @@
 FROM alpine:3.11.5
 
-RUN apk add --no-cache samba
+RUN apk add --no-cache samba tini
 
 ENV user=otknoy
 ENV passwd=passon
@@ -14,5 +14,4 @@ RUN chmod 775 /usr/local/bin/start_samba.sh
 
 EXPOSE 139 445
 
-ENTRYPOINT [ "/bin/ash" ]
-CMD [ "/usr/local/bin/start_samba.sh" ]
+ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/start_samba.sh"]
