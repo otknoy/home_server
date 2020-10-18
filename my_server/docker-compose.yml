@@ -2,12 +2,12 @@ version: '2'
 services:
 
   rproxy:
-    image: nginx:1.17.10-alpine
+    image: nginx:1.18.0-alpine
     depends_on:
       - web-server
-      - jupyter-notebook
-      - samba
+      # - jupyter-notebook
       # - solr
+      - samba
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
@@ -15,23 +15,23 @@ services:
     mem_limit: 16m
 
   web-server:
-    image: nginx:1.17.10-alpine
+    image: nginx:1.18.0-alpine
     ports:
       - 10080:80
     volumes:
       - ./public_html/:/usr/share/nginx/html:ro
     mem_limit: 16m
 
-  jupyter-notebook:
-    image: jupyter/datascience-notebook
-    ports:
-      - 8888:8888
-    volumes:
-      - /home/otknoy/notebook:/home/jovyan/work
-    command: start-notebook.sh --NotebookApp.password='sha1:76217d692f67:d46b306c90936cb8e3f0532db389749cb3650c10' --NotebookApp.base_url='/notebook'
-    environment:
-      TZ: 'Asia/Tokyo'
-    mem_limit: 8g
+  # jupyter-notebook:
+  #   image: jupyter/datascience-notebook
+  #   ports:
+  #     - 8888:8888
+  #   volumes:
+  #     - /home/otknoy/notebook:/home/jovyan/work
+  #   command: start-notebook.sh --NotebookApp.password='sha1:76217d692f67:d46b306c90936cb8e3f0532db389749cb3650c10' --NotebookApp.base_url='/notebook'
+  #   environment:
+  #     TZ: 'Asia/Tokyo'
+  #   mem_limit: 8g
 
   # solr:
   #   image: solr:7.5
