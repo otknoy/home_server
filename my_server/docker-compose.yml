@@ -19,7 +19,7 @@ services:
     ports:
       - 10080:80
     volumes:
-      - /home/otknoy/public_html/:/usr/share/nginx/html:ro
+      - ./public_html/:/usr/share/nginx/html:ro
     mem_limit: 16m
 
   jupyter-notebook:
