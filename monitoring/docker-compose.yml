@@ -14,6 +14,7 @@ services:
     image: prom/prometheus:v2.23.0
     volumes:
       - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/config/alert-rules.yml:/etc/prometheus/alert-rules.yml
       - ./prometheus/data/:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -26,8 +27,10 @@ services:
     mem_limit: 1024m
   alertmanager:
     image: prom/alertmanager:v0.21.0
-    # volumes:
-    #   - ./alertmanager:/etc/alertmanager
+    volumes:
+      - ./alertmanager:/etc/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/config.yaml'
     ports:
       - 9093:9093
     mem_limit: 128m

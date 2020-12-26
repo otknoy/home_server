@@ -1,0 +1,15 @@
+groups:
+
+  - name: sample
+    rules:
+    - alert: NodeInstanceDown
+      expr: up{job='node'} == 0
+      for: 30s
+
+  - name: room
+    rules:
+    - alert: templature
+      expr: MultiFunctionLight_humidity <= 40
+    - alert: humidity
+      expr: MultiFunctionLight_temperature <= 15 >= 25
+  
