@@ -33,7 +33,7 @@ services:
       - '--config.file=/etc/alertmanager/config.yaml'
     ports:
       - 9093:9093
-    mem_limit: 128m
+    mem_limit: 32m
 
   # node-exporter:
   #   image: prom/node-exporter:v0.18.1
