@@ -1,0 +1,35 @@
+groups:
+
+  - name: sample
+    rules:
+    - alert: NodeInstanceDown
+      expr: up{job='node'} == 0
+      for: 30s
+
+  - name: room
+    rules:
+    - alert: low templature
+      expr: MultiFunctionLight_temperature <= 18
+      labels:
+        severity: warn
+      annotations:
+        summary: "Low tempature: {{ humanize $value }}℃"
+    - alert: high templature
+      expr: MultiFunctionLight_temperature >= 28
+      labels:
+        severity: warn
+      annotations:
+        summary: "High tempature: {{ humanize $value }}℃"
+    - alert: low humidity
+      expr: MultiFunctionLight_humidity <= 45
+      labels:
+        severity: warn
+      annotations:
+        summary: "Low humidiry: {{ humanize $value }}%"
+    - alert: high humidity
+      expr: MultiFunctionLight_humidity >= 65
+      labels:
+        severity: warn
+      annotations:
+        summary: "High Humidity: {{ humanize $value }}%"
+  
