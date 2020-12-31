@@ -8,5 +8,6 @@ receivers:
   - name: 'slack'
     slack_configs:
      - channel: '#ops'
-       send_resolved: true
        title_link: 'http://localhost:9093/#/alerts?receiver={{ .Receiver | urlquery }}'
+       text: '{{ .CommonAnnotations.summary }}'
+       send_resolved: true
