@@ -32,4 +32,13 @@ groups:
         severity: warn
       annotations:
         summary: "High Humidity: {{ humanize $value }}%"
-  
+
+  - name: disk
+    rules:
+    - alert: disk usage
+      expr: |
+        100 * (1 - (node_filesystem_free_bytes{job="debian"} / node_filesystem_size_bytes{job="debian"})) >= 85
+      labels:
+        severity: warn
+      annotations:
+        summary: "disk usage too high: {{ humanize $value }}%"
