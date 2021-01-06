@@ -46,8 +46,8 @@ services:
   #   ports:
   #     - 9100:9100
 
-  mflight-exporter:
-    image: mflight-exporter:dev
+  mflight-api:
+    image: mflight-api:20200106
     ports:
       - 5000:5000
     environment:
