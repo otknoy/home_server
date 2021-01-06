@@ -20,8 +20,8 @@ scrape_configs:
     static_configs:
       - targets:
         - '192.168.1.50:9100'
-  - job_name: 'mflight-exporter'
+  - job_name: 'mflight-api'
     scrape_interval: 60s
     static_configs:
       - targets:
-        - 'mflight-exporter:5000'
+        - 'mflight-api:5000'
