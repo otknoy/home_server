@@ -21,13 +21,13 @@ groups:
       annotations:
         summary: "High tempature: {{ humanize $value }}℃"
     - alert: low humidity
-      expr: MultiFunctionLight_humidity <= 45
+      expr: MultiFunctionLight_humidity <= 40
       labels:
         severity: warn
       annotations:
         summary: "Low humidiry: {{ humanize $value }}%"
     - alert: high humidity
-      expr: MultiFunctionLight_humidity >= 65
+      expr: MultiFunctionLight_humidity >= 60
       labels:
         severity: warn
       annotations:
