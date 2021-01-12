@@ -11,7 +11,7 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
     mem_limit: 128m
   prometheus:
-    image: prom/prometheus:v2.23.0
+    image: prom/prometheus:v2.24.0
     volumes:
       - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus/config/alert-rules.yml:/etc/prometheus/alert-rules.yml
@@ -47,7 +47,7 @@ services:
   #     - 9100:9100
 
   mflight-api:
-    image: mflight-api:20200110
+    image: mflight-api:20200111
     ports:
       - 5000:5000
     environment:
