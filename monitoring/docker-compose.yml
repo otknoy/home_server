@@ -47,7 +47,7 @@ services:
   #     - 9100:9100
 
   mflight-api:
-    image: mflight-api:20200111
+    image: mflight-api:20210114
     ports:
       - 5000:5000
     environment:
