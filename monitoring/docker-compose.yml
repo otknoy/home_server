@@ -10,6 +10,7 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: "hogehoge"
       GF_AUTH_ANONYMOUS_ENABLED: "true"
     mem_limit: 128m
+    restart: always
   prometheus:
     image: prom/prometheus:v2.24.0
     volumes:
@@ -26,6 +27,7 @@ services:
     ports:
       - 9090:9090
     mem_limit: 1024m
+    restart: always
   alertmanager:
     image: prom/alertmanager:v0.21.0
     volumes:
@@ -35,6 +37,7 @@ services:
     ports:
       - 9093:9093
     mem_limit: 32m
+    restart: always
 
   # node-exporter:
   #   image: prom/node-exporter:v0.18.1
@@ -55,3 +58,4 @@ services:
       APP_MFLIGHT_URL: "http://192.168.1.10:56002"
       APP_MFLIGHT_MOBILE_ID: "03050100-0200-8f00-0000-00000019f855"
     mem_limit: 32m
+    restart: always
