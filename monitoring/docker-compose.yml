@@ -50,12 +50,13 @@ services:
   #     - 9100:9100
 
   mflight-api:
-    image: mflight-api:20210126
+    image: otknoy/mflight-api:20210203-120404
     ports:
       - 5000:5000
     environment:
       APP_PORT: "5000"
       APP_MFLIGHT_URL: "http://192.168.1.10:56002"
       APP_MFLIGHT_MOBILE_ID: "03050100-0200-8f00-0000-00000019f855"
+      APP_MFLIGHT_CACHE_TTL: "15s"
     mem_limit: 32m
     restart: always
