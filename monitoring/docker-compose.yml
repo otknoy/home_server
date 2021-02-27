@@ -32,8 +32,6 @@ services:
     image: prom/alertmanager:v0.21.0
     volumes:
       - ./alertmanager:/etc/alertmanager
-    command:
-      - '--config.file=/etc/alertmanager/config.yaml'
     ports:
       - 9093:9093
     mem_limit: 32m
