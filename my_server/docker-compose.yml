@@ -48,5 +48,5 @@ services:
     volumes:
       - /home/otknoy:/mnt/home/otknoy
       - /mnt/backup:/mnt/backup
-      - /mnt/temp:/mnt/temp
+      - /mnt/private:/mnt/private
     mem_limit: 32m
