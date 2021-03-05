@@ -46,7 +46,7 @@ services:
       - 139:139
       - 445:445
     volumes:
-      - /home/otknoy:/mnt/home/otknoy
-      - /mnt/backup:/mnt/backup
+      - /home/otknoy:/mnt/share/home/otknoy
+      - /mnt/backup:/mnt/share/backup
       - /mnt/private:/mnt/private
     mem_limit: 32m
