@@ -2,11 +2,11 @@ FROM alpine:3.13.2
 
 RUN apk add --no-cache samba tini
 
-ENV user=otknoy
-ENV passwd=passon
+ENV USER=otknoy
+ENV PASSWORD=passon
 
-RUN adduser -D ${user}
-RUN echo -e ${passwd}'\n'${passwd} | pdbedit -a -u ${user} 
+RUN adduser -D ${USER}
+RUN echo -e ${PASSWORD}'\n'${PASSWORD} | pdbedit -a -u ${USER}
 
 COPY ./smb.conf /etc/samba/
 COPY ./start_samba.sh /usr/local/bin
