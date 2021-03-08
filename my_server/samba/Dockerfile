@@ -5,9 +5,6 @@ RUN apk add --no-cache samba tini
 ENV USER=otknoy
 ENV PASSWORD=passon
 
-RUN adduser -D ${USER}
-RUN echo -e ${PASSWORD}'\n'${PASSWORD} | pdbedit -a -u ${USER}
-
 COPY ./smb.conf /etc/samba/
 COPY ./start_samba.sh /usr/local/bin
 RUN chmod 775 /usr/local/bin/start_samba.sh
