@@ -2,8 +2,8 @@ FROM alpine:3.13.2
 
 RUN apk add --no-cache samba tini
 
-ENV USER=otknoy
-ENV PASSWORD=passon
+ENV USER=user
+ENV PASSWORD=password
 
 COPY ./smb.conf /etc/samba/
 COPY ./start_samba.sh /usr/local/bin
