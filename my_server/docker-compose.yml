@@ -7,7 +7,6 @@ services:
       - web-server
       # - jupyter-notebook
       # - solr
-      - samba
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
