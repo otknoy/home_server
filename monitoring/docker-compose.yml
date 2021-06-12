@@ -29,9 +29,9 @@ services:
     mem_limit: 1024m
     restart: always
   alertmanager:
-    image: prom/alertmanager:v0.21.0
-    volumes:
-      - ./alertmanager:/etc/alertmanager
+    build: alertmanager
+    environment:
+      SLACK_API_URL: ${SLACK_API_URL}
     ports:
       - 9093:9093
     mem_limit: 32m
