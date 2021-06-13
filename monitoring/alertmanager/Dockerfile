@@ -1,4 +1,4 @@
-FROM prom/alertmanager:v0.21.0
+FROM prom/alertmanager:v0.22.2
 
 ENV SLACK_API_URL http://your_slack_api_url.example.com
 
