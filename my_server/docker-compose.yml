@@ -5,6 +5,7 @@ services:
     image: nginx:1.20.0-alpine
     depends_on:
       - web-server
+      # - webdav
       # - jupyter-notebook
       # - solr
     volumes:
@@ -52,3 +53,20 @@ services:
       - /mnt/backup:/mnt/share/backup
       - /mnt/private:/mnt/private
     mem_limit: 32m
+
+  webdav:
+    build: wsgidav
+    ports:
+      - 8081:8080
+    volumes:
+      - /mnt/private/:/var/wsgidav-root:ro
+
+  # mini-dlna:
+  #   image: vladgh/minidlna:0.5.0
+  #   volumes:
+  #     - /mnt/private:/media
+  #   ports:
+  #     - 8200:8200
+  #   environment:
+  #     MINIDLNA_MEDIA_DIR: '/media'
+  #     MINIDLNA_FRIENDLY_NAME: 'debian-dlna
