@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   grafana:
     image: grafana/grafana:8.0.1
@@ -9,7 +9,6 @@ services:
     environment:
       GF_SECURITY_ADMIN_PASSWORD: "hogehoge"
       GF_AUTH_ANONYMOUS_ENABLED: "true"
-    mem_limit: 128m
     restart: always
   prometheus:
     image: prom/prometheus:v2.27.1
@@ -26,7 +25,6 @@ services:
       - '--web.external-url=http://localhost:9090'
     ports:
       - 9090:9090
-    mem_limit: 1024m
     restart: always
   alertmanager:
     build: alertmanager
@@ -34,7 +32,6 @@ services:
       SLACK_API_URL: ${SLACK_API_URL}
     ports:
       - 9093:9093
-    mem_limit: 32m
     restart: always
 
   # node-exporter:
@@ -43,7 +40,6 @@ services:
   #     - /proc:/host/proc:ro
   #     - /sys:/host/sys:ro
   #     - /:/rootfs:ro
-  #   mem_limit: 32m
   #   ports:
   #     - 9100:9100
 
@@ -56,5 +52,4 @@ services:
       APP_MFLIGHT_URL: "http://192.168.1.10:56002"
       APP_MFLIGHT_MOBILE_ID: "03050100-0200-8f00-0000-00000019f855"
       APP_MFLIGHT_CACHE_TTL: "15s"
-    mem_limit: 32m
     restart: always
