@@ -63,3 +63,8 @@ services:
       PASSWORD: ${WEBDAV_PASSWORD}
     volumes:
       - /mnt/private/:/var/wsgidav-root:ro
+
+  dns-server:
+    build: dns_server
+    ports:
+      - 53:53

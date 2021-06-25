@@ -1,0 +1,20 @@
+$TTL 86400
+@ IN SOA ns1.otknoy.com. postmaster.otknoy.com. (
+        2021062337 ; Serial
+        28800 ; Refresh
+        14400 ; Retry
+        3600000 ; Expire
+        86400 ) ; Minimum
+
+; name server
+  IN NS ns1.otknoy.com.
+  IN NS ns2.otknoy.com.
+
+; IP Address
+  IN A 192.168.1.50
+ns1 IN A 192.168.1.50
+ns2 IN A 192.168.1.1
+
+debian IN A 192.168.1.50
+
+mac IN A 192.168.1.123
