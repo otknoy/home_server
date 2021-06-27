@@ -40,8 +40,8 @@ services:
   samba:
     build: samba
     environment:
-      USER: otknoy
-      PASSWORD: passon
+      USER: ${SAMBA_USER}
+      PASSWORD: ${SAMBA_PASSWORD}
     ports:
       - 139:139
       - 445:445
