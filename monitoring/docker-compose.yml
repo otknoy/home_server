@@ -33,7 +33,11 @@ services:
     ports:
       - 9093:9093
     restart: always
-
+  pushgateway:
+    image: prom/pushgateway:v1.4.1
+    ports:
+      - 9091:9091
+    restart: always
   # node-exporter:
   #   image: prom/node-exporter:v0.18.1
   #   volumes:
