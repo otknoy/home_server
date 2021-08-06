@@ -58,4 +58,4 @@ services:
       USER: ${WEBDAV_USER}
       PASSWORD: ${WEBDAV_PASSWORD}
     volumes:
-      - /mnt/private/:/var/wsgidav-root:ro
+      - /mnt/private/:/var/wsgidav-root/webdav:ro
