@@ -1,7 +1,7 @@
 version: '3'
 services:
   grafana:
-    image: grafana/grafana:8.3.2
+    image: grafana/grafana:8.3.3
     volumes:
       - ./grafana:/var/lib/grafana
     ports:
@@ -11,7 +11,7 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
     restart: always
   prometheus:
-    image: prom/prometheus:v2.31.1
+    image: prom/prometheus:v2.32.0
     volumes:
       - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus/config/alert-rules.yml:/etc/prometheus/alert-rules.yml
