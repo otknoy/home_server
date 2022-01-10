@@ -1,4 +1,4 @@
-FROM python:3.9.5-slim-buster
+FROM python:3.9.9-slim-buster
 
 RUN apt-get update && apt-get install -y tini
 RUN pip install wsgidav==3.1.0 cheroot python-pam
