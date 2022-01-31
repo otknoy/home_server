@@ -48,7 +48,7 @@ services:
   #     - 9100:9100
 
   mflight-api:
-    image: otknoy/mflight-api:20220125-151010
+    image: otknoy/mflight-api:20220129-115858
     ports:
       - 5000:5000
     environment:
