@@ -31,7 +31,7 @@ services:
   #     TZ: 'Asia/Tokyo'
 
   # solr:
-  #   image: solr:7.5
+  #   image: solr:7.7.3
   #   ports:
   #     - 8983:8983
   #   volumes:
