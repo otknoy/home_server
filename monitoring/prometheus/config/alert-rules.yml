@@ -33,7 +33,7 @@ groups:
       annotations:
         summary: "High Humidity: {{ humanize $value }}%"
 
-  - name: disk
+  - name: debian
     rules:
     - alert: disk usage
       expr: |
@@ -42,3 +42,10 @@ groups:
         severity: warn
       annotations:
         summary: "disk usage too high: {{ humanize $value }}%"
+    - alert: disk unmounted
+      expr: |
+        count(node_disk_info{job="debian"}) != 3
+      labels:
+        severity: warn
+      annotations:
+        summary: "disk is unmounted"
