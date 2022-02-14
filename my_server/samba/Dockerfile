@@ -1,6 +1,8 @@
 FROM alpine:3.15.0
 
-RUN apk add --no-cache samba tini
+ENV SAMBA_VERSION 4.15.5-r0
+
+RUN apk add --no-cache samba=${SAMBA_VERSION} tini
 
 ENV USER=user
 ENV PASSWORD=password
