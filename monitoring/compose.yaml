@@ -54,7 +54,7 @@ services:
       - 5000:5000
     environment:
       APP_PORT: "5000"
-      APP_MFLIGHT_URL: "http://192.168.0.3:56002"
+      APP_MFLIGHT_URL: "http://192.168.0.2:56002"
       APP_MFLIGHT_MOBILE_ID: "03050100-0200-8f00-0000-00000019f855"
       APP_MFLIGHT_CACHE_TTL: "15s"
     restart: always
