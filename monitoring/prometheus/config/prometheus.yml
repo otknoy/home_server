@@ -30,3 +30,8 @@ scrape_configs:
     static_configs:
       - targets:
         - 'mflight-api:5000'
+  - job_name: 'roomctl'
+    scrape_interval: 60s
+    static_configs:
+      - targets:
+        - 'host.docker.internal:9199'

@@ -1,6 +1,6 @@
 services:
   grafana:
-    image: grafana/grafana:9.0.1
+    image: grafana/grafana:9.0.3
     volumes:
       - ./grafana:/var/lib/grafana
     ports:
@@ -10,7 +10,7 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
     restart: always
   prometheus:
-    image: prom/prometheus:v2.36.2
+    image: prom/prometheus:v2.37.0
     volumes:
       - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus/config/alert-rules.yml:/etc/prometheus/alert-rules.yml
@@ -35,7 +35,7 @@ services:
       - 9093:9093
     restart: always
   pushgateway:
-    image: prom/pushgateway:v1.4.1
+    image: prom/pushgateway:v1.4.3
     ports:
       - 9091:9091
     restart: always
@@ -54,7 +54,7 @@ services:
       - 5000:5000
     environment:
       APP_PORT: "5000"
-      APP_MFLIGHT_URL: "http://192.168.0.3:56002"
+      APP_MFLIGHT_URL: "http://192.168.0.2:56002"
       APP_MFLIGHT_MOBILE_ID: "03050100-0200-8f00-0000-00000019f855"
       APP_MFLIGHT_CACHE_TTL: "15s"
     restart: always
