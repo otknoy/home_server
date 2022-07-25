@@ -1,6 +1,6 @@
 services:
   grafana:
-    image: grafana/grafana:9.0.3
+    image: grafana/grafana:9.0.4
     volumes:
       - ./grafana:/var/lib/grafana
     ports:
@@ -47,6 +47,18 @@ services:
   #     - /:/rootfs:ro
   #   ports:
   #     - 9100:9100
+
+  roomctl:
+    image: ghcr.io/otknoy/roomctl:20220725125128
+    ports:
+      - 9199:9199
+    environment:
+      APP_PORT: 9199
+      APP_SWITCHBOT_TOKEN:    ${APP_SWITCHBOT_TOKEN}
+      APP_SWITCHBOT_DEVICEID: ${APP_SWITCHBOT_DEVICEID}
+      APP_MFLIGHT_URL:        ${APP_MFLIGHT_URL}
+      APP_MFLIGHT_MOBILEID:   ${APP_MFLIGHT_MOBILEID}
+    restart: always
 
   mflight-api:
     image: otknoy/mflight-api:20220527-141212
