@@ -48,6 +48,18 @@ services:
   #   ports:
   #     - 9100:9100
 
+  roomctl:
+    image: ghcr.io/otknoy/roomctl:20220725125128
+    ports:
+      - 9199:9199
+    environment:
+      APP_PORT: 9199
+      APP_SWITCHBOT_TOKEN:    ${APP_SWITCHBOT_TOKEN}
+      APP_SWITCHBOT_DEVICEID: ${APP_SWITCHBOT_DEVICEID}
+      APP_MFLIGHT_URL:        ${APP_MFLIGHT_URL}
+      APP_MFLIGHT_MOBILEID:   ${APP_MFLIGHT_MOBILEID}
+    restart: always
+
   mflight-api:
     image: otknoy/mflight-api:20220527-141212
     ports:
