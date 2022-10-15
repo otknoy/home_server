@@ -22,7 +22,7 @@ $ sudo vi /etc/default/prometheus-node-exporter
 ```
 
 ```
-ARGS="--log.level=\"info\" --collector.filesystem.ignored-mount-points=\"^/(dev|proc|run|sys|media|var/lib/docker/.+)($|/)\""
+ARGS="--collector.filesystem.mount-points-exclude=\"^/(dev|proc|run|sys|media|var/lib/docker/.+|var/lib/containers/storage/.+)($|/)\""
 ```
 
 node-exporter を再起動する
