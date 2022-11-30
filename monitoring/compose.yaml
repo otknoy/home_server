@@ -35,7 +35,7 @@ services:
       - 9093:9093
     restart: always
   pushgateway:
-    image: prom/pushgateway:v1.5.0
+    image: prom/pushgateway:v1.5.1
     ports:
       - 9091:9091
     restart: always
