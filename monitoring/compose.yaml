@@ -1,6 +1,6 @@
 services:
   grafana:
-    image: grafana/grafana:9.2.7
+    image: grafana/grafana:9.3.1
     volumes:
       - ./grafana:/var/lib/grafana
     ports:
@@ -10,7 +10,7 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
     restart: always
   prometheus:
-    image: prom/prometheus:v2.40.4
+    image: prom/prometheus:v2.41.0
     volumes:
       - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus/config/alert-rules.yml:/etc/prometheus/alert-rules.yml
@@ -49,7 +49,7 @@ services:
   #     - 9100:9100
 
   roomctl:
-    image: ghcr.io/otknoy/roomctl:20221108131140
+    image: ghcr.io/otknoy/roomctl:20230108065354
     ports:
       - 9199:9199
     environment:
