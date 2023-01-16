@@ -49,7 +49,7 @@ services:
   #     - 9100:9100
 
   roomctl:
-    image: ghcr.io/otknoy/roomctl:20230108065354
+    image: ghcr.io/otknoy/roomctl:20230116124356
     ports:
       - 9199:9199
     environment:
