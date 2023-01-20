@@ -44,7 +44,7 @@ groups:
         summary: "disk usage too high: {{ humanize $value }}%"
     - alert: disk unmounted
       expr: |
-        count(avg by (device) (node_disk_info{job="debian"})) != 3
+        count(node_disk_info{job="debian"}) < 4
       labels:
         severity: warn
       annotations:
