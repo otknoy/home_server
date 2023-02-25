@@ -50,4 +50,5 @@ services:
       - /home/otknoy:/mnt/share/home/otknoy
       - /mnt/backup:/mnt/share/backup
       - /mnt/private:/mnt/private
+      - /mnt/temp:/mnt/share/temp
     restart: always
