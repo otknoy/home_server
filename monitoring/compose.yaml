@@ -1,6 +1,6 @@
 services:
   grafana:
-    image: grafana/grafana-oss:9.3.6
+    image: grafana/grafana-oss:9.3.8
     volumes:
       - ./grafana:/var/lib/grafana
     ports:
