@@ -9,25 +9,25 @@ groups:
   - name: room
     rules:
     - alert: low templature
-      expr:  roomctl_temperature < 15
+      expr:  roomctl_temperature < 10
       labels:
         severity: warn
       annotations:
         summary: "Low tempature: {{ humanize $value }}℃"
     - alert: high templature
-      expr: roomctl_temperature > 25
+      expr: roomctl_temperature > 30
       labels:
         severity: warn
       annotations:
         summary: "High tempature: {{ humanize $value }}℃"
     - alert: low humidity
-      expr: roomctl_humidity < 40
+      expr: roomctl_humidity < 30
       labels:
         severity: warn
       annotations:
         summary: "Low humidiry: {{ humanize $value }}%"
     - alert: high humidity
-      expr: roomctl_humidity > 65
+      expr: roomctl_humidity > 70
       labels:
         severity: warn
       annotations:
