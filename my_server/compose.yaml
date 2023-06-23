@@ -47,8 +47,8 @@ services:
       - 139:139
       - 445:445
     volumes:
-      - /home/otknoy:/mnt/share/home/otknoy
-      - /mnt/backup:/mnt/share/backup
-      - /mnt/private:/mnt/private
+      - /home/otknoy:/mnt/share/home/otknoy:ro
       - /mnt/temp:/mnt/share/temp
+      - /mnt/private:/mnt/private
+      - /mnt/backup:/mnt/backup:ro
     restart: always
