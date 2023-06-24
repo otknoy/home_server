@@ -1,13 +1,15 @@
 services:
   grafana:
     image: grafana/grafana-oss:9.5.5
+    environment:
+      GF_USERS_VIEWERS_CAN_EDIT: true
+      GF_AUTH_ANONYMOUS_ENABLED: true
+      GF_AUTH_ANONYMOUS_HIDE_VERSION: true
     volumes:
-      - ./grafana:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
     ports:
       - 3000:3000
-    environment:
-      GF_SECURITY_ADMIN_PASSWORD: "hogehoge"
-      GF_AUTH_ANONYMOUS_ENABLED: "true"
     restart: always
   prometheus:
     image: prom/prometheus:v2.44.0
