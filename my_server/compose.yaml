@@ -1,7 +1,7 @@
 services:
 
   rproxy:
-    image: nginx:1.20.2-alpine
+    image: nginx:1.25.1-alpine
     depends_on:
       - web-server
       # - webdav
@@ -14,7 +14,7 @@ services:
     restart: always
 
   web-server:
-    image: nginx:1.20.2-alpine
+    image: nginx:1.25.1-alpine
     ports:
       - 10080:80
     volumes:
