@@ -1,6 +1,11 @@
-FROM alpine:3.18.2
+FROM rockylinux:9.2-minimal
 
-RUN apk add --no-cache samba tini
+RUN microdnf -y update && microdnf -y install samba
+
+# Add Tini
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
 
 ENV USER=user
 ENV PASSWORD=password
@@ -10,4 +15,4 @@ RUN chmod 775 /usr/local/bin/start_samba.sh
 
 EXPOSE 139 445
 
-ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/start_samba.sh"]
+ENTRYPOINT ["/tini", "--", "/usr/local/bin/start_samba.sh"]
