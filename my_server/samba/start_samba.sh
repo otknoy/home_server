@@ -1,9 +1,10 @@
-#!/bin/ash
+#!/bin/sh
+set -e
 
 echo start samba
 
 # set user and password
-adduser -D ${USER}
+useradd ${USER}
 echo -e ${PASSWORD}'\n'${PASSWORD} | pdbedit -a -u ${USER}
 
 nmbd restart --daemon

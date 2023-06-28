@@ -47,8 +47,9 @@ services:
       - 139:139
       - 445:445
     volumes:
+      - ./samba/smb.conf:/etc/samba/smb.conf:ro
       - /home/otknoy:/mnt/share/home/otknoy:ro
-      - /mnt/temp:/mnt/share/temp
+      - /mnt/backup:/mnt/share/backup:ro
+      - /mnt/temp:/mnt/temp
       - /mnt/private:/mnt/private
-      - /mnt/backup:/mnt/backup:ro
     restart: always
