@@ -30,9 +30,10 @@ services:
       - 'host.docker.internal:host-gateway'
     restart: always
   alertmanager:
-    build: alertmanager
-    environment:
-      SLACK_API_URL: ${SLACK_API_URL}
+    image: prom/alertmanager:v0.25.0
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ./.slack_url:/etc/alertmanager/slack_url:ro
     ports:
       - 9093:9093
     restart: always
