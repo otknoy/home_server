@@ -12,7 +12,7 @@ services:
       - 3000:3000
     restart: always
   prometheus:
-    image: prom/prometheus:v2.45.0
+    image: prom/prometheus:v2.46.0
     volumes:
       - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus/config/alert-rules.yml:/etc/prometheus/alert-rules.yml
