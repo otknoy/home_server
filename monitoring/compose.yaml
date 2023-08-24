@@ -30,7 +30,7 @@ services:
       - 'host.docker.internal:host-gateway'
     restart: always
   alertmanager:
-    image: prom/alertmanager:v0.25.0
+    image: prom/alertmanager:v0.26.0
     volumes:
       - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
       - ./.slack_url:/etc/alertmanager/slack_url:ro
