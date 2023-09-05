@@ -34,6 +34,13 @@ scrape_configs:
       - targets:
         - 'proxmox001:9100'
         - 'proxmox002:9100'
+  - job_name: 'k8s-nodes'
+    static_configs:
+      - targets:
+        - 'k8s-cp001:9100'
+        - 'k8s-w001:9100'
+        - 'k8s-w002:9100'
+        - 'k8s-w003:9100'
   - job_name: 'roomctl'
     scrape_interval: 60s
     static_configs:
