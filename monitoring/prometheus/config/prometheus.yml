@@ -32,6 +32,7 @@ scrape_configs:
   - job_name: 'proxmox'
     static_configs:
       - targets:
+        - 'pve001:9100'
         - 'proxmox001:9100'
         - 'proxmox002:9100'
         - 'proxmox003:9100'
