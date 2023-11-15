@@ -2083,7 +2083,7 @@
             "uid": "lq59VODMz"
           },
           "editorMode": "code",
-          "expr": "node_load1{job=\"proxmox\"}",
+          "expr": "node_load1{job=\"server\"}",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
@@ -2185,7 +2185,7 @@
             "uid": "lq59VODMz"
           },
           "editorMode": "code",
-          "expr": "node_memory_MemTotal_bytes{job=\"proxmox\"} - node_memory_MemAvailable_bytes{job=\"proxmox\"}",
+          "expr": "node_memory_MemTotal_bytes{job=\"server\"} - node_memory_MemAvailable_bytes{job=\"server\"}",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -2369,7 +2369,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by (instance) (node_filesystem_size_bytes{job=\"proxmox\", device=~\"/.*\"} - node_filesystem_avail_bytes{job=\"proxmox\", device=~\"/.*\"})\n",
+          "expr": "sum by (instance) (node_filesystem_size_bytes{job=\"server\", device=~\"/.*\"} - node_filesystem_avail_bytes{job=\"server\", device=~\"/.*\"})\n",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -2535,7 +2535,7 @@
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {
@@ -2562,6 +2562,6 @@
   "timezone": "",
   "title": "localhost",
   "uid": "UeWrCmNWz",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
