@@ -25,10 +25,10 @@ scrape_configs:
     static_configs:
       - targets:
         - 'host.docker.internal:9100'
-  - job_name: 'proxmox'
+  - job_name: 'server'
     static_configs:
       - targets:
-        - 'pve001:9100'
+        - 'debian-server001:9100'
   - job_name: 'roomctl'
     scrape_interval: 60s
     static_configs:
