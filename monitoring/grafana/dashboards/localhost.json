@@ -2369,7 +2369,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by (instance) (node_filesystem_size_bytes{job=\"server\", device=~\"/.*\"} - node_filesystem_avail_bytes{job=\"server\", device=~\"/.*\"})\n",
+          "expr": "sum by (instance, device) (node_filesystem_size_bytes{job=\"server\", device=~\"/.*\"} - node_filesystem_avail_bytes{job=\"server\", device=~\"/.*\"})\n",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -2535,7 +2535,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {
@@ -2562,6 +2562,6 @@
   "timezone": "",
   "title": "localhost",
   "uid": "UeWrCmNWz",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }
