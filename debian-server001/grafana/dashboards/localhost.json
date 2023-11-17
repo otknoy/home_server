@@ -24,6 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
+  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -106,7 +107,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.1",
+      "pluginVersion": "",
       "targets": [
         {
           "datasource": {
@@ -376,7 +377,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.1",
+      "pluginVersion": "",
       "targets": [
         {
           "datasource": {
@@ -903,7 +904,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.1",
+      "pluginVersion": "",
       "targets": [
         {
           "datasource": {
@@ -2517,7 +2518,7 @@
         "hide": 2,
         "label": "",
         "name": "instance",
-        "query": "host.docker.internal:9100",
+        "query": "debian:9100",
         "skipUrlSync": false,
         "type": "constant"
       },
@@ -2535,7 +2536,7 @@
     ]
   },
   "time": {
-    "from": "now-24h",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
@@ -2562,6 +2563,6 @@
   "timezone": "",
   "title": "localhost",
   "uid": "UeWrCmNWz",
-  "version": 3,
+  "version": 1,
   "weekStart": ""
 }
