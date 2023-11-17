@@ -31,3 +31,16 @@ services:
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     restart: always
+  alertmanager:
+    image: prom/alertmanager:v0.26.0
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ./.slack_url:/etc/alertmanager/slack_url:ro
+    ports:
+      - 9093:9093
+    restart: always
+  pushgateway:
+    image: prom/pushgateway:v1.6.2
+    ports:
+      - 9091:9091
+    restart: always
