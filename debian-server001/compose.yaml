@@ -1,0 +1,14 @@
+version: '3'
+services:
+  grafana:
+    image: grafana/grafana-oss:10.2.1
+    environment:
+      GF_USERS_VIEWERS_CAN_EDIT: true
+      GF_AUTH_ANONYMOUS_ENABLED: true
+      GF_AUTH_ANONYMOUS_HIDE_VERSION: true
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - 3000:3000
+    restart: always
