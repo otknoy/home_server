@@ -34,3 +34,9 @@ scrape_configs:
     static_configs:
       - targets:
         - 'roomctl:9199'
+
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets:
+        - 'debian:9100'
+        - 'debian-server001:9100'
