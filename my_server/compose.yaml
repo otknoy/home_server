@@ -1,26 +1,5 @@
 services:
 
-  rproxy:
-    image: nginx:1.25.3-alpine
-    depends_on:
-      - web-server
-      # - webdav
-      # - jupyter-notebook
-      # - solr
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    ports:
-      - 80:80
-    restart: always
-
-  web-server:
-    image: nginx:1.25.3-alpine
-    ports:
-      - 10080:80
-    volumes:
-      - ./public_html/:/usr/share/nginx/html:ro
-    restart: always
-
   # jupyter-notebook:
   #   image: jupyter/datascience-notebook
   #   ports:
