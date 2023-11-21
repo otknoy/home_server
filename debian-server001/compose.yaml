@@ -20,7 +20,7 @@ services:
     restart: always
 
   grafana:
-    image: grafana/grafana-oss:10.2.1
+    image: grafana/grafana-oss:10.2.2
     environment:
       GF_USERS_VIEWERS_CAN_EDIT: true
       GF_AUTH_ANONYMOUS_ENABLED: true
