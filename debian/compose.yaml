@@ -18,7 +18,7 @@ services:
   #     - ./solr_core:/opt/solr/server/solr/mycores
 
   samba:
-    build: samba
+    build: ../docker/samba
     environment:
       USER: ${SAMBA_USER}
       PASSWORD: ${SAMBA_PASSWORD}
