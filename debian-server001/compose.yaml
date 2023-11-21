@@ -19,6 +19,20 @@ services:
       - ./web-server/public_html/:/usr/share/nginx/html:ro
     restart: always
 
+  samba:
+    build: ../docker/samba
+    environment:
+      USER: ${SAMBA_USER}
+      PASSWORD: ${SAMBA_PASSWORD}
+    ports:
+      - 139:139
+      - 445:445
+    volumes:
+      - ./samba/smb.conf:/etc/samba/smb.conf:ro
+      - /home/otknoy:/mnt/share/home/otknoy:ro
+      - /mnt/backup:/mnt/backup
+    restart: always
+
   grafana:
     image: grafana/grafana-oss:10.2.2
     environment:
