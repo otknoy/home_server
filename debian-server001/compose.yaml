@@ -1,4 +1,24 @@
+version: '3'
 services:
+
+  reverse-proxy:
+    image: nginx:1.25.3-alpine
+    depends_on:
+      - web-server
+    volumes:
+      - ./reverse-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 80:80
+    restart: always
+
+  web-server:
+    image: nginx:1.25.3-alpine
+    ports:
+      - 10080:80
+    volumes:
+      - ./web-server/public_html/:/usr/share/nginx/html:ro
+    restart: always
+
   grafana:
     image: grafana/grafana-oss:10.2.1
     environment:
@@ -11,6 +31,7 @@ services:
     ports:
       - 3000:3000
     restart: always
+
   prometheus:
     image: prom/prometheus:v2.48.0
     volumes:
@@ -42,14 +63,6 @@ services:
     ports:
       - 9091:9091
     restart: always
-  # node-exporter:
-  #   image: prom/node-exporter:v0.18.1
-  #   volumes:
-  #     - /proc:/host/proc:ro
-  #     - /sys:/host/sys:ro
-  #     - /:/rootfs:ro
-  #   ports:
-  #     - 9100:9100
 
   roomctl:
     image: ghcr.io/otknoy/roomctl:20231108005101
