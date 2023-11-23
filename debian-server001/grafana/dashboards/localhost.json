@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 1,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -626,7 +626,7 @@
             "uid": "lq59VODMz"
           },
           "editorMode": "code",
-          "expr": "node_load1{job=\"node-exporter\"}",
+          "expr": "node_load1{job=\"node-exporter\", instance=~\"$instance\"}",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
@@ -728,7 +728,7 @@
             "uid": "lq59VODMz"
           },
           "editorMode": "code",
-          "expr": "node_memory_MemTotal_bytes{job=\"node-exporter\"} - node_memory_MemAvailable_bytes{job=\"node-exporter\"}",
+          "expr": "node_memory_MemTotal_bytes{job=\"node-exporter\", instance=~\"$instance\"} - node_memory_MemAvailable_bytes{job=\"node-exporter\", instance=~\"$instance\"}",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -799,7 +799,7 @@
               }
             ]
           },
-          "unit": "bytes"
+          "unit": "percentunit"
         },
         "overrides": [
           {
@@ -889,14 +889,14 @@
         "x": 16,
         "y": 16
       },
-      "id": 80,
+      "id": 95,
       "links": [],
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": true
+          "showLegend": false
         },
         "tooltip": {
           "mode": "multi",
@@ -912,7 +912,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by (instance, device) (node_filesystem_size_bytes{job=\"node-exporter\", device=~\"/.*\"} - node_filesystem_avail_bytes{job=\"node-exporter\", device=~\"/.*\"})\n",
+          "expr": "avg by (instance, device) (1 - (node_filesystem_avail_bytes{job=\"node-exporter\", instance=~\"$instance\"} / node_filesystem_size_bytes{job=\"node-exporter\", instance=~\"$instance\"}))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -922,7 +922,121 @@
           "refId": "A"
         }
       ],
-      "title": "Disk used",
+      "title": "Disk usage rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "lq59VODMz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 24
+      },
+      "id": 108,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "9.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "lq59VODMz"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "sum by (instance, device) (rate(node_network_transmit_bytes_total{job=\"node-exporter\", instance=~\"$instance\", device!~\"(br|veth).+\"}[$__rate_interval]))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "transmit: {{instance}} {{device}}",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "lq59VODMz"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "- sum by (instance, device) (rate(node_network_receive_bytes_total{job=\"node-exporter\", instance=~\"$instance\", device!~\"(br|veth).+\"}[$__rate_interval]))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "receive: {{instance}} {{device}}",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Network I/O",
       "type": "timeseries"
     },
     {
@@ -931,7 +1045,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 24
+        "y": 32
       },
       "id": 82,
       "panels": [
@@ -987,8 +1101,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1004,7 +1117,7 @@
             "h": 8,
             "w": 8,
             "x": 0,
-            "y": 17
+            "y": 33
           },
           "id": 10,
           "links": [],
@@ -1090,8 +1203,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1107,7 +1219,7 @@
             "h": 8,
             "w": 8,
             "x": 8,
-            "y": 17
+            "y": 33
           },
           "id": 15,
           "links": [],
@@ -1172,12 +1284,13 @@
               },
               "links": [],
               "mappings": [],
+              "max": 1,
+              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1269,7 +1382,7 @@
             "h": 8,
             "w": 8,
             "x": 16,
-            "y": 17
+            "y": 33
           },
           "id": 81,
           "links": [],
@@ -1358,8 +1471,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1375,7 +1487,7 @@
             "h": 8,
             "w": 8,
             "x": 0,
-            "y": 25
+            "y": 41
           },
           "id": 31,
           "options": {
@@ -1485,8 +1597,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1502,7 +1613,7 @@
             "h": 8,
             "w": 8,
             "x": 8,
-            "y": 25
+            "y": 41
           },
           "id": 22,
           "links": [],
@@ -1588,8 +1699,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1605,7 +1715,7 @@
             "h": 8,
             "w": 8,
             "x": 16,
-            "y": 25
+            "y": 41
           },
           "id": 17,
           "links": [],
@@ -1707,8 +1817,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1724,7 +1833,7 @@
             "h": 8,
             "w": 8,
             "x": 0,
-            "y": 33
+            "y": 49
           },
           "id": 24,
           "links": [],
@@ -1811,8 +1920,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1828,7 +1936,7 @@
             "h": 8,
             "w": 8,
             "x": 8,
-            "y": 33
+            "y": 49
           },
           "id": 69,
           "options": {
@@ -1907,8 +2015,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -2004,7 +2111,7 @@
             "h": 8,
             "w": 8,
             "x": 16,
-            "y": 33
+            "y": 49
           },
           "id": 26,
           "links": [],
@@ -2090,8 +2197,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -2107,7 +2213,7 @@
             "h": 8,
             "w": 8,
             "x": 8,
-            "y": 41
+            "y": 57
           },
           "id": 33,
           "options": {
@@ -2232,8 +2338,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -2329,7 +2434,7 @@
             "h": 8,
             "w": 8,
             "x": 16,
-            "y": 41
+            "y": 57
           },
           "id": 42,
           "links": [],
@@ -2383,7 +2488,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 34
       },
       "id": 20,
       "panels": [
@@ -2435,8 +2540,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -2452,7 +2556,7 @@
             "h": 8,
             "w": 8,
             "x": 0,
-            "y": 28
+            "y": 44
           },
           "id": 29,
           "options": {
@@ -2507,7 +2611,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": [
             "All"
           ],
@@ -2551,7 +2655,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {
@@ -2578,6 +2682,6 @@
   "timezone": "",
   "title": "localhost",
   "uid": "UeWrCmNWz",
-  "version": 7,
+  "version": 4,
   "weekStart": ""
 }
