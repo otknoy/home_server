@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 1,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -396,6 +396,19 @@
       "type": "stat"
     },
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 134,
+      "panels": [],
+      "title": "PC",
+      "type": "row"
+    },
+    {
       "datasource": {
         "type": "prometheus",
         "uid": "lq59VODMz"
@@ -470,9 +483,9 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 12,
+        "w": 6,
         "x": 0,
-        "y": 9
+        "y": 10
       },
       "id": 73,
       "options": {
@@ -507,6 +520,104 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
+        "uid": "lq59VODMz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "points",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 6,
+        "y": 10
+      },
+      "id": 121,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "lq59VODMz"
+          },
+          "editorMode": "code",
+          "expr": "cron_duration_seconds != cron_duration_seconds offset 1m",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{instance}} {{name}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "cron duration",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
         "type": "datasource",
         "uid": "grafana"
       },
@@ -514,7 +625,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 9
+        "y": 10
       },
       "id": 74,
       "options": {
@@ -603,7 +714,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 16
+        "y": 17
       },
       "id": 78,
       "options": {
@@ -626,7 +737,7 @@
             "uid": "lq59VODMz"
           },
           "editorMode": "code",
-          "expr": "node_load1{job=\"node-exporter\"}",
+          "expr": "node_load1{job=\"node-exporter\", instance=~\"$instance\"}",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
@@ -704,7 +815,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 16
+        "y": 17
       },
       "id": 79,
       "links": [],
@@ -728,7 +839,7 @@
             "uid": "lq59VODMz"
           },
           "editorMode": "code",
-          "expr": "node_memory_MemTotal_bytes{job=\"node-exporter\"} - node_memory_MemAvailable_bytes{job=\"node-exporter\"}",
+          "expr": "node_memory_MemTotal_bytes{job=\"node-exporter\", instance=~\"$instance\"} - node_memory_MemAvailable_bytes{job=\"node-exporter\", instance=~\"$instance\"}",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -741,6 +852,82 @@
       "title": "Memory",
       "transformations": [],
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "lq59VODMz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [],
+          "mappings": [],
+          "max": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 8,
+        "x": 16,
+        "y": 17
+      },
+      "id": 95,
+      "links": [],
+      "options": {
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "valueMode": "color"
+      },
+      "pluginVersion": "",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "lq59VODMz"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "avg by (instance, device, mountpoint) (1 - (node_filesystem_avail_bytes{job=\"node-exporter\", instance=~\"$instance\"} / node_filesystem_size_bytes{job=\"node-exporter\", instance=~\"$instance\"}))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}} {{device}} {{mountpoint}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Disk usage rate",
+      "type": "bargauge"
     },
     {
       "datasource": {
@@ -801,106 +988,25 @@
           },
           "unit": "bytes"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "full: /dev/nvme0n1p1"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "light-green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "full: /dev/nvme0n1p2"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "semi-dark-yellow",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "full: /dev/sda1"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "light-blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "full: /dev/sdb1"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "light-orange",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/full.*/"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "rgb(255, 255, 255)",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "custom.fillOpacity",
-                "value": 0
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
         "w": 8,
-        "x": 16,
-        "y": 16
+        "x": 8,
+        "y": 25
       },
-      "id": 80,
-      "links": [],
+      "id": 108,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": true
+          "showLegend": false
         },
         "tooltip": {
           "mode": "multi",
-          "sort": "none"
+          "sort": "desc"
         }
       },
       "pluginVersion": "9.3.1",
@@ -912,17 +1018,29 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by (instance, device) (node_filesystem_size_bytes{job=\"node-exporter\", device=~\"/.*\"} - node_filesystem_avail_bytes{job=\"node-exporter\", device=~\"/.*\"})\n",
-          "format": "time_series",
+          "expr": "sum by (instance, device) (rate(node_network_transmit_bytes_total{job=\"node-exporter\", instance=~\"$instance\", device!~\"(br|veth).+\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}} {{device}}",
+          "legendFormat": "transmit: {{instance}} {{device}}",
           "range": true,
-          "refId": "A"
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "lq59VODMz"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "- sum by (instance, device) (rate(node_network_receive_bytes_total{job=\"node-exporter\", instance=~\"$instance\", device!~\"(br|veth).+\"}[$__rate_interval]))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "receive: {{instance}} {{device}}",
+          "range": true,
+          "refId": "D"
         }
       ],
-      "title": "Disk used",
+      "title": "Network I/O",
       "type": "timeseries"
     },
     {
@@ -931,7 +1049,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 24
+        "y": 33
       },
       "id": 82,
       "panels": [
@@ -987,8 +1105,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1004,7 +1121,7 @@
             "h": 8,
             "w": 8,
             "x": 0,
-            "y": 17
+            "y": 49
           },
           "id": 10,
           "links": [],
@@ -1090,8 +1207,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1107,7 +1223,7 @@
             "h": 8,
             "w": 8,
             "x": 8,
-            "y": 17
+            "y": 49
           },
           "id": 15,
           "links": [],
@@ -1172,12 +1288,13 @@
               },
               "links": [],
               "mappings": [],
+              "max": 1,
+              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1269,7 +1386,7 @@
             "h": 8,
             "w": 8,
             "x": 16,
-            "y": 17
+            "y": 49
           },
           "id": 81,
           "links": [],
@@ -1358,8 +1475,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1375,7 +1491,7 @@
             "h": 8,
             "w": 8,
             "x": 0,
-            "y": 25
+            "y": 57
           },
           "id": 31,
           "options": {
@@ -1485,8 +1601,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1502,7 +1617,7 @@
             "h": 8,
             "w": 8,
             "x": 8,
-            "y": 25
+            "y": 57
           },
           "id": 22,
           "links": [],
@@ -1588,8 +1703,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1605,7 +1719,7 @@
             "h": 8,
             "w": 8,
             "x": 16,
-            "y": 25
+            "y": 57
           },
           "id": 17,
           "links": [],
@@ -1707,8 +1821,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1724,7 +1837,7 @@
             "h": 8,
             "w": 8,
             "x": 0,
-            "y": 33
+            "y": 65
           },
           "id": 24,
           "links": [],
@@ -1811,8 +1924,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1828,7 +1940,7 @@
             "h": 8,
             "w": 8,
             "x": 8,
-            "y": 33
+            "y": 65
           },
           "id": 69,
           "options": {
@@ -1907,8 +2019,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -2004,7 +2115,7 @@
             "h": 8,
             "w": 8,
             "x": 16,
-            "y": 33
+            "y": 65
           },
           "id": 26,
           "links": [],
@@ -2090,8 +2201,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -2107,7 +2217,7 @@
             "h": 8,
             "w": 8,
             "x": 8,
-            "y": 41
+            "y": 73
           },
           "id": 33,
           "options": {
@@ -2232,8 +2342,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -2329,7 +2438,7 @@
             "h": 8,
             "w": 8,
             "x": 16,
-            "y": 41
+            "y": 73
           },
           "id": 42,
           "links": [],
@@ -2383,7 +2492,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 35
       },
       "id": 20,
       "panels": [
@@ -2435,8 +2544,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -2452,7 +2560,7 @@
             "h": 8,
             "w": 8,
             "x": 0,
-            "y": 28
+            "y": 60
           },
           "id": 29,
           "options": {
@@ -2551,7 +2659,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {
@@ -2578,6 +2686,6 @@
   "timezone": "",
   "title": "localhost",
   "uid": "UeWrCmNWz",
-  "version": 7,
+  "version": 6,
   "weekStart": ""
 }
