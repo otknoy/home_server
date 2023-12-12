@@ -1,0 +1,19 @@
+resources:
+- ./grafana.yaml
+
+configMapGenerator:
+- name: grafana-provisioning-dashboards-cm
+  files:
+  - ./provisioning/dashboards/dashboard_provider.yaml
+- name: grafana-provisioning-datasources-cm
+  files:
+  - ./provisioning/datasources/prometheus.yaml
+- name: grafana-dashboards01-cm
+  files:
+  - ./dashboards/localhost.json
+- name: grafana-dashboards02-cm
+  files:
+  - ./dashboards/node-exporter-full.json
+- name: grafana-dashboards03-cm
+  files:
+  - ./dashboards/prometheus-2.0-stats.json
