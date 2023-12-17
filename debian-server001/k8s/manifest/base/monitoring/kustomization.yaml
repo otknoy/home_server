@@ -3,3 +3,4 @@ namespace: monitoring
 resources:
 - ./prometheus
 - ./grafana
+- ./node-exporter.yaml
