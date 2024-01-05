@@ -1,2 +1,7 @@
 resources:
 - ./prometheus.yaml
+
+configMapGenerator:
+- name: prometheus-cm
+  files:
+  - ./config/prometheus.yml
