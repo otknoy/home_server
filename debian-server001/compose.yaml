@@ -47,7 +47,7 @@ services:
     restart: always
 
   prometheus:
-    image: prom/prometheus:v2.48.1
+    image: prom/prometheus:v2.49.0
     volumes:
       - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus/config/alert-rules.yml:/etc/prometheus/alert-rules.yml
