@@ -3,7 +3,7 @@ apiVersion: kind.x-k8s.io/v1alpha4
 name: my-cluster
 nodes:
   - role: control-plane
-    image: kindest/node:v1.27.3@sha256:3966ac761ae0136263ffdb6cfd4db23ef8a83cba8a463690e98317add2c9ba72
+    image: kindest/node:v1.29.0@sha256:eaa1450915475849a73a9227b8f201df25e55e268e5d619312131292e324d570
     kubeadmConfigPatches:
       - |
         kind: InitConfiguration
@@ -22,17 +22,17 @@ nodes:
         hostPort: 443
         protocol: TCP
   - role: worker
-    image: kindest/node:v1.27.3@sha256:3966ac761ae0136263ffdb6cfd4db23ef8a83cba8a463690e98317add2c9ba72
+    image: kindest/node:v1.29.0@sha256:eaa1450915475849a73a9227b8f201df25e55e268e5d619312131292e324d570
     extraMounts:
       - hostPath: ./volumes/w01
         containerPath: /volume
   - role: worker
-    image: kindest/node:v1.27.3@sha256:3966ac761ae0136263ffdb6cfd4db23ef8a83cba8a463690e98317add2c9ba72
+    image: kindest/node:v1.29.0@sha256:eaa1450915475849a73a9227b8f201df25e55e268e5d619312131292e324d570
     extraMounts:
       - hostPath: ./volumes/w02
         containerPath: /volume
   - role: worker
-    image: kindest/node:v1.27.3@sha256:3966ac761ae0136263ffdb6cfd4db23ef8a83cba8a463690e98317add2c9ba72
+    image: kindest/node:v1.29.0@sha256:eaa1450915475849a73a9227b8f201df25e55e268e5d619312131292e324d570
     extraMounts:
       - hostPath: ./volumes/w03
         containerPath: /volume
