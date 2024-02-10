@@ -6,4 +6,5 @@ namespace: monitoring
 resources:
 - ./prometheus
 - ./grafana
+- ./alertmanager
 - ./node-exporter.yaml
