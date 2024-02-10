@@ -8,3 +8,4 @@ configMapGenerator:
 - name: prometheus-cm
   files:
   - ./config/prometheus.yml
+  - ./config/alert-rules.yml
