@@ -1,2 +1,7 @@
 resources:
   - alertmanager.yaml
+
+configMapGenerator:
+  - name: alertmanager-cm
+    files:
+      - config/alertmanager.yml

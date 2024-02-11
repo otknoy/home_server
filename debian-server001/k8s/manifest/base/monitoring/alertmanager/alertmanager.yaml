@@ -19,6 +19,17 @@ spec:
         image: prom/alertmanager:v0.26.0
         ports:
         - containerPort: 9093
+        volumeMounts:
+        - name: alertmanager-config-volume
+          mountPath: /etc/alertmanager/
+      volumes:
+      - name: alertmanager-config-volume
+        projected:
+          sources:
+          - configMap:
+              name: alertmanager-cm
+          - secret:
+              name: alertmanager-slack-url-secret
 
 ---
 
