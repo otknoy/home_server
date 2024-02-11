@@ -79,7 +79,7 @@ services:
     restart: always
 
   roomctl:
-    image: ghcr.io/otknoy/roomctl:20240208133236
+    image: ghcr.io/otknoy/roomctl:20240211011139
     ports:
       - 9199:9199
     environment:
