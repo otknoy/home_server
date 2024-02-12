@@ -5,7 +5,4 @@ datasources:
     type: prometheus
     uid: lq59VODMz
     access: proxy
-    url: http://debian-server001:9090
-  - name: internal-prometheus
-    type: prometheus
     url: http://prometheus-svc:9090
