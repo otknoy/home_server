@@ -21,7 +21,7 @@ scrape_configs:
     honor_labels: true
     static_configs:
       - targets:
-          - 'debian-server001:9091'
+          - 'pushgateway-svc:9091'
 
   - job_name: 'node-exporter'
     static_configs:
