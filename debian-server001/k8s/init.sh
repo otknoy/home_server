@@ -19,6 +19,9 @@ kubectl wait --namespace ingress-nginx \
 # cluster init
 kubectl apply -k manifest/cluster
 
+# secret
+kubectl apply -f manifest/secret.yaml
+
 # deploy apps
 kubectl apply -k manifest/base/
 
