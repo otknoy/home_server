@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pushgateway
+  labels:
+    app: pushgateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pushgateway
+  template:
+    metadata:
+      labels:
+        app: pushgateway
+    spec:
+      containers:
+      - name: pushgateway
+        image: prom/pushgateway:v1.7.0
+        ports:
+        - containerPort: 9091
+        args:
+        - --web.external-url=http://localhost:9090/pushgateway/
+        - --web.route-prefix=/
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: pushgateway-svc
+spec:
+  selector:
+    app: pushgateway
+  ports:
+  - port: 9091
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pushgateway-ing
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: '/pushgateway(/|$)(.*)'
+        backend:
+          service:
+            name: pushgateway-svc
+            port:
+              number: 9091

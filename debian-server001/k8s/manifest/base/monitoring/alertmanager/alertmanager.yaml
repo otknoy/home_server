@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alertmanager
+  labels:
+    app: alertmanager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alertmanager
+  template:
+    metadata:
+      labels:
+        app: alertmanager
+    spec:
+      containers:
+      - name: alertmanager
+        image: prom/alertmanager:v0.26.0
+        ports:
+        - containerPort: 9093
+        volumeMounts:
+        - name: alertmanager-config-volume
+          mountPath: /etc/alertmanager/
+      volumes:
+      - name: alertmanager-config-volume
+        projected:
+          sources:
+          - configMap:
+              name: alertmanager-cm
+          - secret:
+              name: alertmanager-slack-url-secret
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: alertmanager-svc
+spec:
+  selector:
+    app: alertmanager
+  ports:
+  - port: 9093
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: alertmanager-ing
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: '/alertmanager(/|$)(.*)'
+        backend:
+          service:
+            name: alertmanager-svc
+            port:
+              number: 9093
