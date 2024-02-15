@@ -1,24 +1,6 @@
 version: '3'
 services:
 
-  reverse-proxy:
-    image: nginx:1.25.3-alpine
-    depends_on:
-      - web-server
-    volumes:
-      - ./reverse-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
-    ports:
-      - 81:80
-    restart: always
-
-  web-server:
-    image: nginx:1.25.3-alpine
-    ports:
-      - 10080:80
-    volumes:
-      - ./web-server/public_html/:/usr/share/nginx/html:ro
-    restart: always
-
   samba:
     build: ../docker/samba
     environment:
@@ -42,19 +24,6 @@ services:
     volumes:
       - ./nfs-server/data:/export
 
-  grafana:
-    image: grafana/grafana-oss:10.3.3
-    environment:
-      GF_USERS_VIEWERS_CAN_EDIT: true
-      GF_AUTH_ANONYMOUS_ENABLED: true
-      GF_AUTH_ANONYMOUS_HIDE_VERSION: true
-    volumes:
-      - ./grafana/provisioning:/etc/grafana/provisioning:ro
-      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
-    ports:
-      - 3000:3000
-    restart: always
-
   prometheus:
     image: prom/prometheus:v2.49.1
     volumes:
@@ -72,19 +41,6 @@ services:
       - 9090:9090
     extra_hosts:
       - 'host.docker.internal:host-gateway'
-    restart: always
-  alertmanager:
-    image: prom/alertmanager:v0.26.0
-    volumes:
-      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
-      - ./.slack_url:/etc/alertmanager/slack_url:ro
-    ports:
-      - 9093:9093
-    restart: always
-  pushgateway:
-    image: prom/pushgateway:v1.7.0
-    ports:
-      - 9091:9091
     restart: always
 
   roomctl:
