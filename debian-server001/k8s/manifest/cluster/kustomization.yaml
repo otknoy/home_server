@@ -1,3 +1,0 @@
-resources:
-- ./init.yaml
-- ./nfs-provisioner

@@ -16,12 +16,8 @@ kubectl wait --namespace ingress-nginx \
 # curl -v localhost:81/foo/hostname
 # curl -v localhost:81/bar/hostname
 
-# cluster init
-kubectl apply -k manifest/cluster
-
 # secret
 kubectl apply -f manifest/secret.yaml
 
 # deploy apps
 kubectl apply -k manifest/base/
-
