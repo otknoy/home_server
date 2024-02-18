@@ -1,0 +1,7 @@
+namespace: kube-system
+
+resources:
+- ./kube-state-metrics/cluster-role.yaml
+- ./kube-state-metrics/deployment.yaml
+- ./kube-state-metrics/service-account.yaml
+- ./kube-state-metrics/service.yaml

@@ -5,7 +5,7 @@ metadata:
   labels:
     app: web-dashboard
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     rollingUpdate:
       maxUnavailable: 0%
@@ -23,6 +23,13 @@ spec:
         image: nginx:1.25.4-alpine
         ports:
         - containerPort: 80
+        resources:
+          requests:
+            cpu: 100m
+            memory: 32M
+          limits:
+            cpu: 100m
+            memory: 32M
         volumeMounts:
         - name: web-dashboard-nginx-volume
           mountPath: /usr/share/nginx/html

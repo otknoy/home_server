@@ -4,4 +4,5 @@ kind: Kustomization
 namespace: app
 
 resources:
+- ./namespace.yaml
 - web-dashbaord/
