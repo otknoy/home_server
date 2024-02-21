@@ -24,25 +24,6 @@ services:
     volumes:
       - ./nfs-server/data:/export
 
-  prometheus:
-    image: prom/prometheus:v2.49.1
-    volumes:
-      - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus/config/alert-rules.yml:/etc/prometheus/alert-rules.yml
-      - ./prometheus/data/:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
-      - '--storage.tsdb.retention.time=2y'
-      - '--web.external-url=http://localhost:9090'
-    ports:
-      - 9090:9090
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
-    restart: always
-
   roomctl:
     image: ghcr.io/otknoy/roomctl:20240211011139
     ports:
