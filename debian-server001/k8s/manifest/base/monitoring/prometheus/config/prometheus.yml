@@ -36,13 +36,13 @@ scrape_configs:
         - 'debian-server001:9199'
 
   - job_name: 'kubernetes-nodes'
+    kubernetes_sd_configs:
+      - role: node
     scheme: https
     tls_config:
       insecure_skip_verify: true
       ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
     bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-    kubernetes_sd_configs:
-      - role: node
   - job_name: 'kubernetes-node-exporter'
     kubernetes_sd_configs:
       - role: pod
