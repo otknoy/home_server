@@ -26,6 +26,14 @@ spec:
         - --web.route-prefix=/
         ports:
         - containerPort: 9090
+        livenessProbe:
+          httpGet:
+            path: /-/healthy
+            port: 9090
+        readinessProbe:
+          httpGet:
+            path: /-/ready
+            port: 9090
         volumeMounts:
         - name: prometheus-config-volume
           mountPath: /etc/prometheus
