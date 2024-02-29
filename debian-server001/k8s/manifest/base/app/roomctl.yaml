@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: roomctl
+  labels:
+    app: roomctl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: roomctl
+  template:
+    metadata:
+      labels:
+        app: roomctl
+    spec:
+      containers:
+      - name: roomctl
+        image: ghcr.io/otknoy/roomctl:20240211011139
+        ports:
+        - containerPort: 9199
+        resources:
+          limits:
+            cpu: 100m
+            memory: 32M
+          requests:
+            cpu: 100m
+            memory: 32M
+        env:
+        - name: APP_PORT
+          value: "9199"
+        envFrom:
+        - secretRef:
+            name: roomctl-secret
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: roomctl-svc
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: "9199"
+    prometheus.io/scrape: "true"
+spec:
+  selector:
+    app: roomctl
+  ports:
+  - port: 9199
