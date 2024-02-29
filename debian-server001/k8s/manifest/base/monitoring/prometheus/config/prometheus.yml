@@ -29,12 +29,6 @@ scrape_configs:
         - 'debian:9100'
         - 'debian-server001:9100'
 
-  - job_name: 'roomctl'
-    scrape_interval: 60s
-    static_configs:
-      - targets:
-        - 'debian-server001:9199'
-
   # kubernetes
   # https://github.com/prometheus/prometheus/blob/release-2.50/documentation/examples/prometheus-kubernetes.yml
   - job_name: "kubernetes-apiservers"
