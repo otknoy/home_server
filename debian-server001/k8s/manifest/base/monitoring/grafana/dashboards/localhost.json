@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 3,
+  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -81,7 +81,8 @@
               }
             ]
           },
-          "unit": "celsius"
+          "unit": "celsius",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -104,6 +105,7 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
@@ -115,7 +117,7 @@
             "uid": "lq59VODMz"
           },
           "editorMode": "code",
-          "expr": "roomctl_temperature{device_name!=\"\"}",
+          "expr": "avg by (device_name) (roomctl_temperature{device_name!=\"\"})",
           "hide": false,
           "legendFormat": "{{device_name}}",
           "range": true,
@@ -183,7 +185,8 @@
               }
             ]
           },
-          "unit": "celsius"
+          "unit": "celsius",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -216,7 +219,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "roomctl_temperature",
+          "expr": "avg by (device_name) (roomctl_temperature)",
           "hide": false,
           "legendFormat": "{{device_name}}",
           "range": true,
@@ -283,7 +286,8 @@
               }
             ]
           },
-          "unit": "humidity"
+          "unit": "humidity",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -316,7 +320,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "roomctl_humidity",
+          "expr": "avg by (device_name) (roomctl_humidity)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{device_name}}",
@@ -351,7 +355,8 @@
               }
             ]
           },
-          "unit": "humidity"
+          "unit": "humidity",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -374,6 +379,7 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
@@ -385,7 +391,7 @@
             "uid": "lq59VODMz"
           },
           "editorMode": "code",
-          "expr": "roomctl_humidity{device_name!=\"\"}",
+          "expr": "avg by (device_name) (roomctl_humidity{device_name!=\"\"})",
           "hide": false,
           "legendFormat": "{{device_name}}",
           "range": true,
@@ -477,7 +483,8 @@
                 "value": 1
               }
             ]
-          }
+          },
+          "unitScale": true
         },
         "overrides": []
       },
@@ -574,7 +581,8 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "s",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -706,7 +714,8 @@
               }
             ]
           },
-          "unit": "short"
+          "unit": "short",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -807,7 +816,8 @@
               }
             ]
           },
-          "unit": "bytes"
+          "unit": "bytes",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -911,7 +921,8 @@
               }
             ]
           },
-          "unit": "bytes"
+          "unit": "bytes",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -1015,7 +1026,8 @@
               }
             ]
           },
-          "unit": "bytes"
+          "unit": "bytes",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -1131,7 +1143,8 @@
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "percentunit",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -1254,7 +1267,8 @@
               }
             ]
           },
-          "unit": "short"
+          "unit": "short",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -1357,7 +1371,8 @@
               }
             ]
           },
-          "unit": "bytes"
+          "unit": "bytes",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -1445,7 +1460,8 @@
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "percentunit",
+          "unitScale": true
         },
         "overrides": [
           {
@@ -1545,6 +1561,7 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
@@ -1627,7 +1644,8 @@
               }
             ]
           },
-          "unit": "short"
+          "unit": "short",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -1754,7 +1772,8 @@
               }
             ]
           },
-          "unit": "celsius"
+          "unit": "celsius",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -1857,7 +1876,8 @@
               }
             ]
           },
-          "unit": "decbytes"
+          "unit": "decbytes",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -1976,7 +1996,8 @@
               }
             ]
           },
-          "unit": "hertz"
+          "unit": "hertz",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -2080,7 +2101,8 @@
               }
             ]
           },
-          "unit": "rotrpm"
+          "unit": "rotrpm",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -2176,7 +2198,8 @@
               }
             ]
           },
-          "unit": "bytes"
+          "unit": "bytes",
+          "unitScale": true
         },
         "overrides": [
           {
@@ -2359,7 +2382,8 @@
               }
             ]
           },
-          "unit": "bytes"
+          "unit": "bytes",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -2501,7 +2525,8 @@
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "percentunit",
+          "unitScale": true
         },
         "overrides": [
           {
@@ -2637,7 +2662,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 67
+        "y": 99
       },
       "id": 20,
       "panels": [
@@ -2746,7 +2771,7 @@
   ],
   "refresh": "5m",
   "revision": 1,
-  "schemaVersion": 38,
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": [
@@ -2831,6 +2856,6 @@
   "timezone": "",
   "title": "localhost",
   "uid": "UeWrCmNWz",
-  "version": 10,
+  "version": 1,
   "weekStart": ""
 }
