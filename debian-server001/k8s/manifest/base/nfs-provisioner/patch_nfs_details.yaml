@@ -5,7 +5,13 @@ metadata:
     app: nfs-client-provisioner
   name: nfs-client-provisioner
 spec:
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
   template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
     spec:
       containers:
         - name: nfs-client-provisioner
