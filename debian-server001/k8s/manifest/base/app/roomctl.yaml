@@ -32,7 +32,8 @@ spec:
         envFrom:
         - secretRef:
             name: roomctl-secret
-
+        securityContext:
+          readOnlyRootFilesystem: true
 
 ---
 

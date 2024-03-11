@@ -20,6 +20,8 @@ spec:
               value: debian-server001
             - name: NFS_PATH
               value: /
+          securityContext:
+            readOnlyRootFilesystem: true
       volumes:
         - name: nfs-client-root
           nfs:

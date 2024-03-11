@@ -32,7 +32,11 @@ spec:
           value: 'true'
         - name: GF_AUTH_ANONYMOUS_HIDE_VERSION
           value: 'true'
+        securityContext:
+          readOnlyRootFilesystem: true
         volumeMounts:
+        - name: var-lib-grafana
+          mountPath: /var/lib/grafana
         - name: provisioning-dashboards-volume
           mountPath: /etc/grafana/provisioning/dashboards
         - name: provisioning-datasources-volume
@@ -40,6 +44,8 @@ spec:
         - name: dashboards-volume
           mountPath: /var/lib/grafana/dashboards
       volumes:
+      - name: var-lib-grafana
+        emptyDir: {}
       - name: provisioning-dashboards-volume
         configMap:
           name: grafana-provisioning-dashboards-cm

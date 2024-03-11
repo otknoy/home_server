@@ -19,6 +19,8 @@ spec:
         image: prom/alertmanager:v0.27.0
         ports:
         - containerPort: 9093
+        securityContext:
+          readOnlyRootFilesystem: true
         volumeMounts:
         - name: alertmanager-config-volume
           mountPath: /etc/alertmanager/
