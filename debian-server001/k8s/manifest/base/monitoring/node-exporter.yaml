@@ -21,3 +21,5 @@ spec:
           image: prom/node-exporter:v1.7.0
           ports:
             - containerPort: 9100
+          securityContext:
+            readOnlyRootFilesystem: true

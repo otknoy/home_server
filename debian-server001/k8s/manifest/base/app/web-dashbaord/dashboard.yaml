@@ -30,10 +30,20 @@ spec:
           limits:
             cpu: 100m
             memory: 32M
+        securityContext:
+          readOnlyRootFilesystem: true
         volumeMounts:
+        - name: var-run
+          mountPath: /var/run
         - name: web-dashboard-nginx-volume
           mountPath: /usr/share/nginx/html
+        - name: var-cache-nginx
+          mountPath: /var/cache/nginx
       volumes:
+      - name: var-cache-nginx
+        emptyDir: {}
+      - name: var-run
+        emptyDir: {}
       - name: web-dashboard-nginx-volume
         configMap:
           name: web-dashboard-nginx-cm

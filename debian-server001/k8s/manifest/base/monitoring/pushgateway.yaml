@@ -22,6 +22,8 @@ spec:
         args:
         - --web.external-url=http://localhost:9090/pushgateway/
         - --web.route-prefix=/
+        securityContext:
+          readOnlyRootFilesystem: true
 
 ---
 
