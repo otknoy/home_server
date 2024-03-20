@@ -15,25 +15,25 @@ spec:
         app: roomctl
     spec:
       containers:
-      - name: roomctl
-        image: ghcr.io/otknoy/roomctl:20240306005445
-        ports:
-        - containerPort: 9199
-        resources:
-          limits:
-            cpu: 100m
-            memory: 32M
-          requests:
-            cpu: 100m
-            memory: 32M
-        env:
-        - name: APP_PORT
-          value: "9199"
-        envFrom:
-        - secretRef:
-            name: roomctl-secret
-        securityContext:
-          readOnlyRootFilesystem: true
+        - name: roomctl
+          image: ghcr.io/otknoy/roomctl:20240306005445
+          ports:
+            - containerPort: 9199
+          resources:
+            requests:
+              cpu: 100m
+              memory: 32M
+            limits:
+              cpu: 100m
+              memory: 32M
+          env:
+            - name: APP_PORT
+              value: "9199"
+          envFrom:
+            - secretRef:
+                name: roomctl-secret
+          securityContext:
+            readOnlyRootFilesystem: true
 
 ---
 
@@ -49,4 +49,4 @@ spec:
   selector:
     app: roomctl
   ports:
-  - port: 9199
+    - port: 9199

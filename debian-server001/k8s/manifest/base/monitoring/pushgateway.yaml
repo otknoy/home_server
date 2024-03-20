@@ -15,15 +15,15 @@ spec:
         app: pushgateway
     spec:
       containers:
-      - name: pushgateway
-        image: prom/pushgateway:v1.7.0
-        ports:
-        - containerPort: 9091
-        args:
-        - --web.external-url=http://localhost:9090/pushgateway/
-        - --web.route-prefix=/
-        securityContext:
-          readOnlyRootFilesystem: true
+        - name: pushgateway
+          image: prom/pushgateway:v1.7.0
+          ports:
+            - containerPort: 9091
+          args:
+            - --web.external-url=http://localhost:9090/pushgateway/
+            - --web.route-prefix=/
+          securityContext:
+            readOnlyRootFilesystem: true
 
 ---
 
@@ -35,7 +35,7 @@ spec:
   selector:
     app: pushgateway
   ports:
-  - port: 9091
+    - port: 9091
 
 ---
 
@@ -47,12 +47,12 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
-  - http:
-      paths:
-      - pathType: Prefix
-        path: '/pushgateway(/|$)(.*)'
-        backend:
-          service:
-            name: pushgateway-svc
-            port:
-              number: 9091
+    - http:
+        paths:
+          - pathType: Prefix
+            path: '/pushgateway(/|$)(.*)'
+            backend:
+              service:
+                name: pushgateway-svc
+                port:
+                  number: 9091

@@ -19,34 +19,34 @@ spec:
         app: web-dashboard
     spec:
       containers:
-      - name: nginx
-        image: nginx:1.25.4-alpine
-        ports:
-        - containerPort: 80
-        resources:
-          requests:
-            cpu: 100m
-            memory: 32M
-          limits:
-            cpu: 100m
-            memory: 32M
-        securityContext:
-          readOnlyRootFilesystem: true
-        volumeMounts:
-        - name: var-run
-          mountPath: /var/run
-        - name: web-dashboard-nginx-volume
-          mountPath: /usr/share/nginx/html
-        - name: var-cache-nginx
-          mountPath: /var/cache/nginx
+        - name: nginx
+          image: nginx:1.25.4-alpine
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 32M
+            limits:
+              cpu: 100m
+              memory: 32M
+          securityContext:
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: var-run
+              mountPath: /var/run
+            - name: web-dashboard-nginx-volume
+              mountPath: /usr/share/nginx/html
+            - name: var-cache-nginx
+              mountPath: /var/cache/nginx
       volumes:
-      - name: var-cache-nginx
-        emptyDir: {}
-      - name: var-run
-        emptyDir: {}
-      - name: web-dashboard-nginx-volume
-        configMap:
-          name: web-dashboard-nginx-cm
+        - name: var-cache-nginx
+          emptyDir: {}
+        - name: var-run
+          emptyDir: {}
+        - name: web-dashboard-nginx-volume
+          configMap:
+            name: web-dashboard-nginx-cm
 
 ---
 
@@ -58,7 +58,7 @@ spec:
   selector:
     app: web-dashboard
   ports:
-  - port: 80
+    - port: 80
 
 ---
 
@@ -70,12 +70,12 @@ metadata:
   #   nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
-  - http:
-      paths:
-      - pathType: Prefix
-        path: '/'
-        backend:
-          service:
-            name: web-dashboard-svc
-            port:
-              number: 80
+    - http:
+        paths:
+          - pathType: Prefix
+            path: '/'
+            backend:
+              service:
+                name: web-dashboard-svc
+                port:
+                  number: 80

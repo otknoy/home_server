@@ -4,9 +4,9 @@ kind: Kustomization
 namespace: monitoring
 
 resources:
-- ./namespace.yaml
-- ./prometheus
-- ./grafana
-- ./alertmanager
-- ./node-exporter.yaml
-- ./pushgateway.yaml
+  - ./namespace.yaml
+  - ./prometheus
+  - ./grafana
+  - ./alertmanager
+  - ./node-exporter.yaml
+  - ./pushgateway.yaml

@@ -1,8 +1,8 @@
 namespace: kube-system
 
 resources:
-- ./kube-state-metrics
-- ./metrics-server/components.yaml
+  - ./kube-state-metrics
+  - ./metrics-server/components.yaml
 
 patches:
   - patch: |-
