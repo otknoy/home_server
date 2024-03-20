@@ -16,45 +16,45 @@ spec:
     spec:
       serviceAccountName: prometheus
       containers:
-      - name: prometheus
-        image: prom/prometheus:v2.51.0
-        args: 
-        - --config.file=/etc/prometheus/prometheus.yml
-        - --storage.tsdb.path=/prometheus/data
-        - --storage.tsdb.retention.time=2y
-        - --web.external-url=http://debian-server001/prometheus/
-        - --web.route-prefix=/
-        ports:
-        - containerPort: 9090
-        livenessProbe:
-          httpGet:
-            path: /-/healthy
-            port: 9090
-        readinessProbe:
-          httpGet:
-            path: /-/ready
-            port: 9090
-        securityContext:
-          readOnlyRootFilesystem: true
-        volumeMounts:
-        - name: prometheus-config-volume
-          mountPath: /etc/prometheus
-        - name: data
-          mountPath: /prometheus/data
+        - name: prometheus
+          image: prom/prometheus:v2.51.0
+          args:
+            - --config.file=/etc/prometheus/prometheus.yml
+            - --storage.tsdb.path=/prometheus/data
+            - --storage.tsdb.retention.time=2y
+            - --web.external-url=http://debian-server001/prometheus/
+            - --web.route-prefix=/
+          ports:
+            - containerPort: 9090
+          livenessProbe:
+            httpGet:
+              path: /-/healthy
+              port: 9090
+          readinessProbe:
+            httpGet:
+              path: /-/ready
+              port: 9090
+          securityContext:
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: prometheus-config-volume
+              mountPath: /etc/prometheus
+            - name: data
+              mountPath: /prometheus/data
       volumes:
-      - name: prometheus-config-volume
-        configMap:
-          name: prometheus-cm
+        - name: prometheus-config-volume
+          configMap:
+            name: prometheus-cm
   volumeClaimTemplates:
-  - metadata:
-      name: data
-    spec:
-      accessModes:
-        - ReadWriteMany
-      storageClassName: nfs-client
-      resources:
-        requests:
-          storage: 16Gi
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteMany
+        storageClassName: nfs-client
+        resources:
+          requests:
+            storage: 16Gi
 
 ---
 
@@ -66,7 +66,7 @@ spec:
   selector:
     app: prometheus
   ports:
-  - port: 9090
+    - port: 9090
 
 ---
 
@@ -78,15 +78,15 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
-  - http:
-      paths:
-      - pathType: Prefix
-        path: '/prometheus(/|$)(.*)'
-        backend:
-          service:
-            name: prometheus-svc
-            port:
-              number: 9090
+    - http:
+        paths:
+          - pathType: Prefix
+            path: '/prometheus(/|$)(.*)'
+            backend:
+              service:
+                name: prometheus-svc
+                port:
+                  number: 9090
 
 ---
 

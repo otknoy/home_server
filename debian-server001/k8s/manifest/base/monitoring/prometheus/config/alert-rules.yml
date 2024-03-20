@@ -2,50 +2,50 @@ groups:
 
   - name: sample
     rules:
-    - alert: NodeInstanceDown
-      expr: up{job='node'} == 0
-      for: 30s
+      - alert: NodeInstanceDown
+        expr: up{job='node'} == 0
+        for: 30s
 
   - name: room
     rules:
-    - alert: low templature
-      expr:  roomctl_temperature < 10
-      labels:
-        severity: warn
-      annotations:
-        summary: "Low tempature: {{ humanize $value }}℃"
-    - alert: high templature
-      expr: roomctl_temperature > 30
-      labels:
-        severity: warn
-      annotations:
-        summary: "High tempature: {{ humanize $value }}℃"
-    - alert: low humidity
-      expr: roomctl_humidity < 30
-      labels:
-        severity: warn
-      annotations:
-        summary: "Low humidiry: {{ humanize $value }}%"
-    - alert: high humidity
-      expr: roomctl_humidity > 70
-      labels:
-        severity: warn
-      annotations:
-        summary: "High Humidity: {{ humanize $value }}%"
+      - alert: low templature
+        expr: roomctl_temperature < 10
+        labels:
+          severity: warn
+        annotations:
+          summary: "Low tempature: {{ humanize $value }}℃"
+      - alert: high templature
+        expr: roomctl_temperature > 30
+        labels:
+          severity: warn
+        annotations:
+          summary: "High tempature: {{ humanize $value }}℃"
+      - alert: low humidity
+        expr: roomctl_humidity < 30
+        labels:
+          severity: warn
+        annotations:
+          summary: "Low humidiry: {{ humanize $value }}%"
+      - alert: high humidity
+        expr: roomctl_humidity > 70
+        labels:
+          severity: warn
+        annotations:
+          summary: "High Humidity: {{ humanize $value }}%"
 
   - name: debian
     rules:
-    - alert: disk usage
-      expr: |
-        100 * (1 - (node_filesystem_avail_bytes{job="node-exporter"} / node_filesystem_size_bytes{job="node-exporter"})) >= 85
-      labels:
-        severity: warn
-      annotations:
-        summary: "disk usage too high: {{ humanize $value }}%"
-    - alert: disk unmounted
-      expr: |
-        count(node_disk_info{job="debian"}) < 3
-      labels:
-        severity: warn
-      annotations:
-        summary: "disk is unmounted"
+      - alert: disk usage
+        expr: |
+          100 * (1 - (node_filesystem_avail_bytes{job="node-exporter"} / node_filesystem_size_bytes{job="node-exporter"})) >= 85
+        labels:
+          severity: warn
+        annotations:
+          summary: "disk usage too high: {{ humanize $value }}%"
+      - alert: disk unmounted
+        expr: |
+          count(node_disk_info{job="debian"}) < 3
+        labels:
+          severity: warn
+        annotations:
+          summary: "disk is unmounted"

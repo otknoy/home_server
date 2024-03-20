@@ -4,6 +4,6 @@ kind: Kustomization
 namespace: app
 
 resources:
-- ./namespace.yaml
-- web-dashbaord/
-- roomctl.yaml
+  - ./namespace.yaml
+  - web-dashbaord/
+  - roomctl.yaml
