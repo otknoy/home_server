@@ -20,10 +20,10 @@ spec:
         ports:
         - containerPort: 9199
         resources:
-          limits:
+          requests:
             cpu: 100m
             memory: 32M
-          requests:
+          limits:
             cpu: 100m
             memory: 32M
         env:
