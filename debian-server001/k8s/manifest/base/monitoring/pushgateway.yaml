@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: pushgateway
-          image: prom/pushgateway:v1.7.0
+          image: prom/pushgateway:v1.8.0
           ports:
             - containerPort: 9091
           args:
