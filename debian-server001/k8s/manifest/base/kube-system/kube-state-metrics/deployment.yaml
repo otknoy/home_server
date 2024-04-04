@@ -4,7 +4,7 @@ metadata:
   labels:
     app.kubernetes.io/component: exporter
     app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/version: 2.11.0
+    app.kubernetes.io/version: 2.12.0
   name: kube-state-metrics
   namespace: kube-system
 spec:
@@ -17,7 +17,7 @@ spec:
       labels:
         app.kubernetes.io/component: exporter
         app.kubernetes.io/name: kube-state-metrics
-        app.kubernetes.io/version: 2.11.0
+        app.kubernetes.io/version: 2.12.0
     spec:
       automountServiceAccountToken: true
       containers:
