@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ./influxdb.yaml
+
+configMapGenerator:
+  - name: influxdb-cm
+    literals:
+      - DOCKER_INFLUXDB_BASE_PATH=/influxdb
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=otknoy
+      - DOCKER_INFLUXDB_INIT_PASSWORD=hogehoge
+      - DOCKER_INFLUXDB_INIT_ORG=sandbox
+      - DOCKER_INFLUXDB_INIT_BUCKET=test
+      - DOCKER_INFLUXDB_INIT_RETENTION=1w
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token
+
