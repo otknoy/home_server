@@ -17,7 +17,7 @@ spec:
         - name: nfs-client-provisioner
           env:
             - name: NFS_SERVER
-              value: debian-server001
+              value: debian
             - name: NFS_PATH
               value: /
           securityContext:
@@ -25,5 +25,5 @@ spec:
       volumes:
         - name: nfs-client-root
           nfs:
-            server: debian-server001
+            server: debian
             path: /
