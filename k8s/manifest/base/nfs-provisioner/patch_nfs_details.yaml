@@ -17,13 +17,13 @@ spec:
         - name: nfs-client-provisioner
           env:
             - name: NFS_SERVER
-              value: debian
+              value: 192.168.0.100
             - name: NFS_PATH
-              value: /
+              value: /volume1/nfs
           securityContext:
             readOnlyRootFilesystem: true
       volumes:
         - name: nfs-client-root
           nfs:
-            server: debian
-            path: /
+            server: 192.168.0.100
+            path: /volume1/nfs
