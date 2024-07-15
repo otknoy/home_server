@@ -59,6 +59,8 @@ spec:
                   name: grafana-dashboards01-cm
               - configMap:
                   name: grafana-dashboards02-cm
+              - configMap:
+                  name: grafana-dashboards03-cm
 
 ---
 

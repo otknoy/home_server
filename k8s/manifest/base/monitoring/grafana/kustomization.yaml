@@ -17,3 +17,6 @@ configMapGenerator:
   - name: grafana-dashboards02-cm
     files:
       - ./dashboards/prometheus-2.0-stats.json
+  - name: grafana-dashboards03-cm
+    files:
+      - ./dashboards/synology-nas-details.json
