@@ -10,3 +10,4 @@ resources:
   - ./alertmanager
   - ./node-exporter.yaml
   - ./pushgateway.yaml
+  - ./snmp-exporter.yaml
