@@ -1,10 +1,10 @@
 FROM python:3.12
 
 RUN apt-get install -y wget
-RUN apt-get install -y iputils-ping net-tools
+# RUN apt-get install -y iputils-ping net-tools
 
 # https://github.com/kubernetes-sigs/kubespray/blob/v2.25.0/docs/ansible/ansible.md
-ENV KUBESPRAY_VERSION v2.25.0
+ENV KUBESPRAY_VERSION=v2.25.0
 
 WORKDIR /kubespray
 
