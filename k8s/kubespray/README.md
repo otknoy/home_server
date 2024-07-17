@@ -10,5 +10,15 @@
 
 
 ```sh
+# ansible-playbook --check --diff -i inventory/mycluster/inventory.ini cluster.yaml
+
 # ansible-playbook -i inventory/mycluster/inventory.ini cluster.yaml
 ```
+
+
+## memo
+
+- `apt install nfs-common`
+- apply secrets
+- apply tailscale-operator
+- add tailscale annotation to ingress-nginx service
