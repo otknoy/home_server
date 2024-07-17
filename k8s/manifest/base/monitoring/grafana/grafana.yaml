@@ -32,6 +32,8 @@ spec:
               value: 'true'
             - name: GF_AUTH_ANONYMOUS_HIDE_VERSION
               value: 'true'
+            - name: GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH
+              value: /var/lib/grafana/dashboards/localhost.json
           securityContext:
             readOnlyRootFilesystem: true
           volumeMounts:
