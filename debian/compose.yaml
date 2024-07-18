@@ -29,5 +29,4 @@ services:
       - ./samba/smb.conf:/etc/samba/smb.conf:ro
       - /home/otknoy:/mnt/share/home/otknoy:ro
       - /mnt/temp:/mnt/temp
-      - /mnt/private:/mnt/private
     restart: always

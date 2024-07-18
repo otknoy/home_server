@@ -197,7 +197,7 @@ metallb_config:
     primary:
       ip_range:
         # - 10.5.0.0/16
-        - 192.168.0.201-192.168.0.232
+        - 192.168.0.201-192.168.0.210
       auto_assign: true
 #     pool1:
 #       ip_range:

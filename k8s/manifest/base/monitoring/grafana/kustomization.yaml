@@ -19,4 +19,4 @@ configMapGenerator:
       - ./dashboards/prometheus-2.0-stats.json
   - name: grafana-dashboards03-cm
     files:
-      - ./dashboards/synology-nas-details.json
+      - ./dashboards/synology-snmp.json

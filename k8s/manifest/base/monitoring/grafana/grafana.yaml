@@ -23,6 +23,14 @@ spec:
           image: grafana/grafana-oss:11.1.0
           ports:
             - containerPort: 3000
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
           env:
             - name: GF_SERVER_ROOT_URL
               value: '/grafana'
@@ -32,6 +40,8 @@ spec:
               value: 'true'
             - name: GF_AUTH_ANONYMOUS_HIDE_VERSION
               value: 'true'
+            - name: GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH
+              value: /var/lib/grafana/dashboards/localhost.json
           securityContext:
             readOnlyRootFilesystem: true
           volumeMounts:
