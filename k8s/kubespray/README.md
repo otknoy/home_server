@@ -18,7 +18,9 @@
 
 ## memo
 
-- `apt install nfs-common`
+- `apt -install`
+  - `nfs-common`
+  - `open-iscsi`
 - apply secrets
 - apply tailscale-operator
 - add tailscale annotation to ingress-nginx service
