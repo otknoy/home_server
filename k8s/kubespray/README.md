@@ -10,9 +10,9 @@
 
 
 ```sh
-# ansible-playbook --check --diff -i inventory/mycluster/inventory.ini cluster.yaml
+# ansible-playbook --check --diff -i inventory/mycluster/inventory.yaml cluster.yaml
 
-# ansible-playbook -i inventory/mycluster/inventory.ini cluster.yaml
+# ansible-playbook -i inventory/mycluster/inventory.yaml cluster.yaml
 ```
 
 
