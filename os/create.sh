@@ -3,19 +3,19 @@
 VM_NAME=ubuntu-server001
 
 # https://cloud-images.ubuntu.com/noble/
-# wget https://cloud-images.ubuntu.com/noble/20240731/noble-server-cloudimg-amd64.img -O ubuntu-server-24.04-cloudimg-amd64.img
+# wget https://cloud-images.ubuntu.com/noble/20240815/noble-server-cloudimg-amd64.img -O ./temp/ubuntu-server-24.04-cloudimg-amd64.img
 
-cp ubuntu-server-24.04-cloudimg-amd64.img ${VM_NAME}.img
+cp ./temp/ubuntu-server-24.04-cloudimg-amd64.img ${VM_NAME}.img
 qemu-img resize ${VM_NAME}.img 32G
 
 # meta-data
-cat - <<EOF > cloud-init/meta-data
+cat - <<EOF > ./temp/cloud-init/meta-data
 meta-data
 instance-id: ${VM_NAME}
 local-hostname: ${VM_NAME}
 EOF
 # user-data
-cat - <<EOF > cloud-init/user-data 
+cat - <<EOF > ./temp/cloud-init/user-data
 #cloud-config
 hostname: ${VM_NAME}
 password: test
@@ -45,7 +45,7 @@ runcmd:
   - ['tailscale', 'set', '--ssh']
 EOF
 # 
-cloud-localds ${VM_NAME}_user-data.img cloud-init/user-data cloud-init/meta-data
+cloud-localds ${VM_NAME}_user-data.img ./temp/cloud-init/user-data ./temp/cloud-init/meta-data
 
 virt-install \
     --virt-type kvm \
