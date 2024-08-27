@@ -4,6 +4,6 @@
     "config:recommended"
   ],
   "kubernetes": {
-    "fileMatch": ["debian-server001/k8s/.+\\.ya?ml$"]
+    "fileMatch": ["k8s/.+\\.ya?ml$"]
   }
 }
