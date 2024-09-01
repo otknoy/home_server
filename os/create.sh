@@ -1,6 +1,5 @@
 #!/bin/bash
-# VM_NAME=$1
-VM_NAME=ubuntu-server001
+VM_NAME=$1
 
 # https://cloud-images.ubuntu.com/noble/
 # wget https://cloud-images.ubuntu.com/noble/20240815/noble-server-cloudimg-amd64.img -O ./temp/ubuntu-server-24.04-cloudimg-amd64.img
@@ -10,7 +9,7 @@ qemu-img resize ${VM_NAME}.img 32G
 
 # meta-data
 cat - <<EOF > ./temp/cloud-init/meta-data
-meta-data
+#meta-data
 instance-id: ${VM_NAME}
 local-hostname: ${VM_NAME}
 EOF
@@ -22,6 +21,7 @@ password: test
 chpasswd:
   expire: False
 ssh_pwauth: False
+package_upgrade: true
 
 users:
   - default
@@ -29,7 +29,7 @@ users:
     passwd: $6$rounds=4096$.0Ick2N9HreFULS/$/1/XD4tNxJOD4iVB0MvrK0BOPLcsk/CkHSkWWj0NWqBpC7GmLcV8z4UElX1D9.HrWHZ.z.dIUQeHOFW5DJirk0
     lock_passwd: false
     shell: /bin/bash
-    sudo: ALL=(ALL) NOPASSWD:ALLpackage_upgrade: true
+    sudo: ALL=(ALL) NOPASSWD:ALL
 
 runcmd:
   # install tailscale https://tailscale.com/kb/1293/cloud-init
@@ -52,7 +52,7 @@ virt-install \
     --name ${VM_NAME} \
     --os-variant=ubuntu24.04 \
     --vcpus=4 \
-    --memory=16384 \
+    --memory=4096 \
     --disk ./${VM_NAME}.img \
     --disk ./${VM_NAME}_user-data.img,device=cdrom \
     --import \
