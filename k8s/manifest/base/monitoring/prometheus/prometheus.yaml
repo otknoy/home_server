@@ -54,7 +54,16 @@ spec:
         storageClassName: nfs-client
         resources:
           requests:
-            storage: 16Gi
+            storage: 32Gi
+    # - metadata:
+    #     name: data
+    #   spec:
+    #     accessModes:
+    #       - ReadWriteOnce
+    #     storageClassName: synostorage
+    #     resources:
+    #       requests:
+    #         storage: 64Gi
 
 ---
 
