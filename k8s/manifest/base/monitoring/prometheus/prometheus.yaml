@@ -55,6 +55,15 @@ spec:
         resources:
           requests:
             storage: 32Gi
+    # - metadata:
+    #     name: data
+    #   spec:
+    #     accessModes:
+    #       - ReadWriteOnce
+    #     storageClassName: synostorage
+    #     resources:
+    #       requests:
+    #         storage: 64Gi
 
 ---
 
