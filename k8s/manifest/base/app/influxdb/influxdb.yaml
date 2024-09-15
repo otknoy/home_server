@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: influxdb
+  labels:
+    app: influxdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+        - name: influxdb
+          image: influxdb:2.7.6
+          ports:
+            - containerPort: 8086
+          envFrom:
+            - configMapRef:
+                name: influxdb-cm
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8086
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8086
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/influxdb2
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteMany
+        storageClassName: nfs-client
+        resources:
+          requests:
+            storage: 16Gi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb
+spec:
+  selector:
+    app: influxdb
+  ports:
+    - port: 8086
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: influxdb
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: '/influxdb(/|$)(.*)'
+            backend:
+              service:
+                name: influxdb
+                port:
+                  number: 8086
