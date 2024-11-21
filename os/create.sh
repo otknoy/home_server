@@ -2,7 +2,7 @@
 VM_NAME=$1
 
 # https://cloud-images.ubuntu.com/noble/
-# wget https://cloud-images.ubuntu.com/noble/20240815/noble-server-cloudimg-amd64.img -O ./temp/ubuntu-server-24.04-cloudimg-amd64.img
+# wget https://cloud-images.ubuntu.com/noble/20241004/noble-server-cloudimg-amd64.img -O ./temp/ubuntu-server-24.04-cloudimg-amd64.img
 
 cp ./temp/ubuntu-server-24.04-cloudimg-amd64.img ${VM_NAME}.img
 qemu-img resize ${VM_NAME}.img 32G
@@ -52,7 +52,7 @@ virt-install \
     --name ${VM_NAME} \
     --os-variant=ubuntu24.04 \
     --vcpus=4 \
-    --memory=4096 \
+    --memory=16384 \
     --disk ./${VM_NAME}.img \
     --disk ./${VM_NAME}_user-data.img,device=cdrom \
     --import \
