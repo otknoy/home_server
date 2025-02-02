@@ -27,7 +27,6 @@ scrape_configs:
     static_configs:
       - targets:
           - 'debian:9100'
-          - 'debian-server001:9100'
 
   # kubernetes
   # https://github.com/prometheus/prometheus/blob/release-2.50/documentation/examples/prometheus-kubernetes.yml
