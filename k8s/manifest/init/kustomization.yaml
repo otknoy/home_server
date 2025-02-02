@@ -4,3 +4,5 @@ kind: Kustomization
 resources:
   - ./metallb-system
   - ./ingress-nginx
+  - ./tailscale-k8s-operator.yaml
+  - ./secret.yaml
