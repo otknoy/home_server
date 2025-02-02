@@ -104,7 +104,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "datasource": {
@@ -205,7 +205,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "datasource": {
@@ -306,7 +306,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "datasource": {
@@ -378,7 +378,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "datasource": {
@@ -417,41 +417,20 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "continuous-RdYlGr"
           },
           "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 70,
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "normal"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "lineWidth": 0,
+            "spanNulls": false
           },
+          "fieldMinMax": false,
           "mappings": [
             {
               "options": {
@@ -473,10 +452,6 @@
               {
                 "color": "red",
                 "value": null
-              },
-              {
-                "color": "green",
-                "value": 1
               }
             ]
           }
@@ -491,19 +466,22 @@
       },
       "id": 73,
       "options": {
+        "alignValue": "center",
         "legend": {
-          "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
+        "mergeValues": true,
+        "rowHeight": 0.9,
+        "showValue": "auto",
         "tooltip": {
           "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "datasource": {
@@ -512,15 +490,42 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "up",
+          "expr": "up{job=\"node-exporter\"}",
+          "hide": false,
           "instant": false,
           "legendFormat": "{{instance}}",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "lq59VODMz"
+          },
+          "editorMode": "code",
+          "expr": "up{job=\"kubernetes-nodes\"}",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "lq59VODMz"
+          },
+          "editorMode": "code",
+          "expr": "up{job=\"kubernetes-node-exporter\"}",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{instance}}",
+          "range": true,
+          "refId": "C"
         }
       ],
-      "title": "up",
-      "type": "timeseries"
+      "title": "health",
+      "type": "state-timeline"
     },
     {
       "datasource": {
@@ -603,7 +608,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "datasource": {
@@ -652,7 +657,7 @@
         },
         "viewMode": "list"
       },
-      "pluginVersion": "",
+      "pluginVersion": "11.5.0",
       "title": "Alert list",
       "type": "alertlist"
     },
@@ -738,7 +743,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "datasource": {
@@ -855,7 +860,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "datasource": {
@@ -972,7 +977,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "datasource": {
@@ -1077,7 +1082,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "expr": "prometheus_tsdb_storage_blocks_bytes",
@@ -1178,7 +1183,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "datasource": {
@@ -1296,7 +1301,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "datasource": {
