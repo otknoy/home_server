@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    tailscale.com/tailnet-ip: 100.101.225.78
+  name: debian
+  namespace: monitoring
+spec:
+  externalName: placeholder   # any value - will be overwritten by operator
+  type: ExternalName
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    tailscale.com/tailnet-ip: 100.86.254.100
+  name: ds224plus
+  namespace: monitoring
+spec:
+  externalName: placeholder   # any value - will be overwritten by operator
+  type: ExternalName

@@ -6,3 +6,4 @@ resources:
   - ./nfs-provisioner
   - ./monitoring
   - ./app
+  - ./external_services.yaml
