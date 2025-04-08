@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 1,
+  "id": 2,
   "links": [],
   "panels": [
     {
@@ -39,88 +39,6 @@
       "panels": [],
       "title": "My Home",
       "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "lq59VODMz"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "purple",
-                "value": null
-              },
-              {
-                "color": "blue",
-                "value": 10
-              },
-              {
-                "color": "green",
-                "value": 15
-              },
-              {
-                "color": "red",
-                "value": 25
-              },
-              {
-                "color": "dark-red",
-                "value": 30
-              }
-            ]
-          },
-          "unit": "celsius"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 8,
-        "x": 0,
-        "y": 1
-      },
-      "id": 65,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "11.5.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "lq59VODMz"
-          },
-          "editorMode": "code",
-          "expr": "avg by (device_name) (roomctl_temperature{device_name!=\"\"})",
-          "hide": false,
-          "legendFormat": "{{device_name}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Temperature",
-      "type": "stat"
     },
     {
       "datasource": {
@@ -172,8 +90,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -188,7 +105,7 @@
       "gridPos": {
         "h": 8,
         "w": 8,
-        "x": 8,
+        "x": 0,
         "y": 1
       },
       "id": 63,
@@ -205,7 +122,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "",
       "targets": [
         {
           "datasource": {
@@ -252,6 +169,9 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -267,14 +187,14 @@
               "mode": "off"
             }
           },
+          "fieldMinMax": false,
           "links": [],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -289,7 +209,7 @@
       "gridPos": {
         "h": 8,
         "w": 8,
-        "x": 16,
+        "x": 8,
         "y": 1
       },
       "id": 56,
@@ -306,7 +226,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "",
       "targets": [
         {
           "datasource": {
@@ -331,70 +251,93 @@
         "type": "prometheus",
         "uid": "lq59VODMz"
       },
+      "description": "[不快指数](https://ja.wikipedia.org/wiki/%E4%B8%8D%E5%BF%AB%E6%8C%87%E6%95%B0)",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
                 "value": 80
               }
             ]
-          },
-          "unit": "humidity"
+          }
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 8,
         "w": 8,
-        "x": 0,
-        "y": 5
+        "x": 16,
+        "y": 1
       },
-      "id": 67,
+      "id": 148,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "lq59VODMz"
-          },
           "editorMode": "code",
-          "expr": "avg by (device_name) (roomctl_humidity{device_name!=\"\"})",
-          "hide": false,
+          "expr": "(0.81 * roomctl_temperature) + ((0.01 * roomctl_humidity) * ((0.99 * roomctl_temperature) -14.3)) + 46.3",
           "legendFormat": "{{device_name}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Humidity",
-      "type": "stat"
+      "title": "Temperature-Humidity Index",
+      "type": "timeseries"
     },
     {
       "collapsed": false,
@@ -420,6 +363,7 @@
             "mode": "continuous-RdYlGr"
           },
           "custom": {
+            "axisPlacement": "auto",
             "fillOpacity": 70,
             "hideFrom": {
               "legend": false,
@@ -450,8 +394,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "red",
-                "value": null
+                "color": "red"
               }
             ]
           }
@@ -481,7 +424,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "",
       "targets": [
         {
           "datasource": {
@@ -575,8 +518,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -608,7 +550,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "",
       "targets": [
         {
           "datasource": {
@@ -657,7 +599,7 @@
         },
         "viewMode": "list"
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "",
       "title": "Alert list",
       "type": "alertlist"
     },
@@ -710,8 +652,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -743,7 +684,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "",
       "targets": [
         {
           "datasource": {
@@ -827,8 +768,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -860,7 +800,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "",
       "targets": [
         {
           "datasource": {
@@ -944,8 +884,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -977,7 +916,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "",
       "targets": [
         {
           "datasource": {
@@ -1049,8 +988,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1082,7 +1020,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "",
       "targets": [
         {
           "expr": "prometheus_tsdb_storage_blocks_bytes",
@@ -1150,8 +1088,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1183,7 +1120,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "",
       "targets": [
         {
           "datasource": {
@@ -1268,8 +1205,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1301,7 +1237,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "",
       "targets": [
         {
           "datasource": {
@@ -2598,7 +2534,7 @@
   ],
   "preload": false,
   "refresh": "5m",
-  "schemaVersion": 40,
+  "schemaVersion": 41,
   "tags": [],
   "templating": {
     "list": [
@@ -2668,6 +2604,5 @@
   "timezone": "",
   "title": "localhost",
   "uid": "UeWrCmNWz",
-  "version": 1,
-  "weekStart": ""
+  "version": 1
 }
