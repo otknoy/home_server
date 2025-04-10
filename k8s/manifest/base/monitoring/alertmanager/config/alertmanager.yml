@@ -8,6 +8,6 @@ receivers:
   - name: 'slack'
     slack_configs:
       - channel: '#ops'
-        title_link: 'http://debian-server001/alertmanager/#/alerts?receiver={{ .Receiver | urlquery }}'
+        title_link: 'http://otknoy-k8s/alertmanager/#/alerts?receiver={{ .Receiver | urlquery }}'
         text: '{{ .CommonAnnotations.summary }}'
         send_resolved: true
