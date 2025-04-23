@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: snmp-exporter
-          image: prom/snmp-exporter:v0.28.0
+          image: prom/snmp-exporter:v0.29.0
           ports:
             - containerPort: 9116
 
