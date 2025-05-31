@@ -1,4 +1,4 @@
-# https://raw.githubusercontent.com/tailscale/tailscale/refs/tags/v1.80.0/cmd/k8s-operator/deploy/manifests/operator.yaml
+# https://raw.githubusercontent.com/tailscale/tailscale/refs/tags/v1.84.1/cmd/k8s-operator/deploy/manifests/operator.yaml
 #
 # Copyright (c) Tailscale Inc & AUTHORS
 # SPDX-License-Identifier: BSD-3-Clause
@@ -63,6 +63,9 @@ spec:
               jsonPath: .status.conditions[?(@.type == "ConnectorReady")].reason
               name: Status
               type: string
+            - jsonPath: .metadata.creationTimestamp
+              name: Age
+              type: date
           name: v1alpha1
           schema:
             openAPIV3Schema:
@@ -314,6 +317,9 @@ spec:
               jsonPath: .status.nameserver.ip
               name: NameserverIP
               type: string
+            - jsonPath: .metadata.creationTimestamp
+              name: Age
+              type: date
           name: v1alpha1
           schema:
             openAPIV3Schema:
@@ -494,6 +500,9 @@ spec:
               jsonPath: .status.conditions[?(@.type == "ProxyClassReady")].reason
               name: Status
               type: string
+            - jsonPath: .metadata.creationTimestamp
+              name: Age
+              type: date
           name: v1alpha1
           schema:
             openAPIV3Schema:
@@ -2687,6 +2696,22 @@ spec:
                                             Defaults to false.
                                         type: boolean
                                 type: object
+                            useLetsEncryptStagingEnvironment:
+                                description: |-
+                                    Set UseLetsEncryptStagingEnvironment to true to issue TLS
+                                    certificates for any HTTPS endpoints exposed to the tailnet from
+                                    LetsEncrypt's staging environment.
+                                    https://letsencrypt.org/docs/staging-environment/
+                                    This setting only affects Tailscale Ingress resources.
+                                    By default Ingress TLS certificates are issued from LetsEncrypt's
+                                    production environment.
+                                    Changing this setting true -> false, will result in any
+                                    existing certs being re-issued from the production environment.
+                                    Changing this setting false (default) -> true, when certs have already
+                                    been provisioned from production environment will NOT result in certs
+                                    being re-issued from the staging environment before they need to be
+                                    renewed.
+                                type: boolean
                         type: object
                     status:
                         description: |-
@@ -2789,6 +2814,9 @@ spec:
               jsonPath: .spec.type
               name: Type
               type: string
+            - jsonPath: .metadata.creationTimestamp
+              name: Age
+              type: date
           name: v1alpha1
           schema:
             openAPIV3Schema:
@@ -2862,7 +2890,7 @@ spec:
                                 type: array
                             type:
                                 description: |-
-                                    Type of the ProxyGroup proxies. Currently the only supported type is egress.
+                                    Type of the ProxyGroup proxies. Supported types are egress and ingress.
                                     Type is immutable once a ProxyGroup is created.
                                 enum:
                                     - egress
@@ -2999,6 +3027,9 @@ spec:
               jsonPath: .status.devices[?(@.url != "")].url
               name: URL
               type: string
+            - jsonPath: .metadata.creationTimestamp
+              name: Age
+              type: date
           name: v1alpha1
           schema:
             openAPIV3Schema:
@@ -3950,7 +3981,7 @@ spec:
                                                 additionalProperties:
                                                     type: string
                                                 description: |-
-                                                    Annotations that will be added to Recorder Pods. Any annotations
+                                                    Annotations that will be added to Recorder Pods. Any annotations
                                                     specified here will be merged with the default annotations applied to
                                                     the Pod by the operator.
                                                     https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/#syntax-and-character-set
@@ -4523,6 +4554,36 @@ spec:
                                                                 type: string
                                                         type: object
                                                 type: object
+                                            serviceAccount:
+                                                description: |-
+                                                    Config for the ServiceAccount to create for the Recorder's StatefulSet.
+                                                    By default, the operator will create a ServiceAccount with the same
+                                                    name as the Recorder resource.
+                                                    https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#service-account
+                                                properties:
+                                                    annotations:
+                                                        additionalProperties:
+                                                            type: string
+                                                        description: |-
+                                                            Annotations to add to the ServiceAccount.
+                                                            https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/#syntax-and-character-set
+
+                                                            You can use this to add IAM roles to the ServiceAccount (IRSA) instead of
+                                                            providing static S3 credentials in a Secret.
+                                                            https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html
+
+                                                            For example:
+                                                            eks.amazonaws.com/role-arn: arn:aws:iam::<account-id>:role/<role-name>
+                                                        type: object
+                                                    name:
+                                                        description: |-
+                                                            Name of the ServiceAccount to create. Defaults to the name of the
+                                                            Recorder resource.
+                                                            https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#service-account
+                                                        maxLength: 253
+                                                        pattern: ^[a-z0-9]([a-z0-9-.]{0,61}[a-z0-9])?$
+                                                        type: string
+                                                type: object
                                             tolerations:
                                                 description: |-
                                                     Tolerations for Recorder Pods. By default, the operator does not apply
@@ -4770,6 +4831,14 @@ rules:
         - list
         - watch
     - apiGroups:
+        - discovery.k8s.io
+      resources:
+        - endpointslices
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
         - tailscale.com
       resources:
         - connectors
@@ -4900,6 +4969,7 @@ rules:
         - update
         - list
         - watch
+        - deletecollection
     - apiGroups:
         - monitoring.coreos.com
       resources:
