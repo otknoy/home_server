@@ -1,4 +1,4 @@
-# https://raw.githubusercontent.com/tailscale/tailscale/refs/tags/v1.84.1/cmd/k8s-operator/deploy/manifests/operator.yaml
+# https://raw.githubusercontent.com/tailscale/tailscale/refs/tags/v1.84.3/cmd/k8s-operator/deploy/manifests/operator.yaml
 #
 # Copyright (c) Tailscale Inc & AUTHORS
 # SPDX-License-Identifier: BSD-3-Clause
