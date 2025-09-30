@@ -20,5 +20,5 @@ $ talosctl upgrade --image ghcr.io/siderolabs/installer:v1.11.2
 ## upgrade kubernetes
 
 ```sh
-$ talosctl upgrade-k8s --to 1.32.9
+$ talosctl upgrade-k8s --to 1.33.5
 ```
