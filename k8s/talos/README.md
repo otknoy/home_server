@@ -14,11 +14,11 @@ talosctl gen config my-k8s-cluster https://192.168.0.18:6443 \
 ## upgrade talos linux
 
 ```sh
-$ talosctl upgrade --image ghcr.io/siderolabs/installer:v1.11.3
+$ talosctl upgrade --image ghcr.io/siderolabs/installer:v1.11.5
 ```
 
 ## upgrade kubernetes
 
 ```sh
-$ talosctl upgrade-k8s --to 1.33.5
+$ talosctl upgrade-k8s --to 1.33.6
 ```
