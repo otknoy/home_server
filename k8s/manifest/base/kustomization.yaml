@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - ./kube-system
   - ./nfs-provisioner
-  - ./minio
+  # - ./minio
   - ./monitoring
   - ./app
   - ./external_services.yaml
