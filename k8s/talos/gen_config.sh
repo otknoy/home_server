@@ -7,6 +7,8 @@ talosctl gen config my-k8s-cluster https://192.168.0.18:6443 \
 	 --config-patch @patch/controlplane.yaml \
 	 --force
 
+talosctl -n 192.168.0.18 apply-config -f controlplane.yaml --dry-run
+
 # talosctl gen secrets -o secrets.yaml
 
 # talosctl gen config --with-secrets secrets.yaml my-k8s-cluster https://192.168.0.18:6443
