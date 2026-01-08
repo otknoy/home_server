@@ -3,6 +3,10 @@
 ## generate talos manifest
 
 ```sh
+$ ./gen_config.sh
+```
+
+```sh
 talosctl gen config my-k8s-cluster https://192.168.0.18:6443 \
 	 --force \
 	 --config-patch @patch/all.yaml \
@@ -11,14 +15,20 @@ talosctl gen config my-k8s-cluster https://192.168.0.18:6443 \
 	 --with-secrets secrets.yaml
 ```
 
+## apply
+
+```sh
+$ talosctl -n 192.168.0.18 apply-config -f controlplane.yaml --dry-run
+```
+
 ## upgrade talos linux
 
 ```sh
-$ talosctl upgrade --image ghcr.io/siderolabs/installer:v1.11.3
+$ talosctl upgrade --image ghcr.io/siderolabs/installer:v1.12.1
 ```
 
 ## upgrade kubernetes
 
 ```sh
-$ talosctl upgrade-k8s --to 1.33.5
+$ talosctl upgrade-k8s --to 1.33.6
 ```
