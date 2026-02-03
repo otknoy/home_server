@@ -32,3 +32,10 @@ $ talosctl upgrade --image ghcr.io/siderolabs/installer:v1.12.2
 ```sh
 $ talosctl upgrade-k8s --to 1.33.7
 ```
+
+## memo
+
+re-create talosconfig
+```sh
+$ talosctl kubeconfig -n 192.168.0.18 -e 192.168.0.18 --talosconfig ./talosconfig
+```
