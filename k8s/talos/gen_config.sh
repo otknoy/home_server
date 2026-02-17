@@ -1,12 +1,16 @@
 #!/bin/sh
 
 talosctl gen config my-k8s-cluster https://192.168.0.18:6443 \
+	 --kubernetes-version 1.34.3 \
 	 --force \
-	 --config-patch @patch/all.yaml \
 	 --config-patch-control-plane @patch/controlplane.yaml \
-	 --config-patch-worker @patch/worker.yaml \
 	 --with-secrets secrets.yaml 
-
+# talosctl gen config my-k8s-cluster https://192.168.0.18:6443 \
+# 	 --force \
+# 	 --config-patch @patch/all.yaml \
+# 	 --config-patch-control-plane @patch/controlplane.yaml \
+# 	 --config-patch-worker @patch/worker.yaml \
+# 	 --with-secrets secrets.yaml
 
 # talosctl gen secrets -o secrets.yaml
 
