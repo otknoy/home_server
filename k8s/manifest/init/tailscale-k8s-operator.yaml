@@ -1,4 +1,4 @@
-# https://raw.githubusercontent.com/tailscale/tailscale/refs/tags/v1.84.3/cmd/k8s-operator/deploy/manifests/operator.yaml
+# https://raw.githubusercontent.com/tailscale/tailscale/refs/tags/v1.94.2/cmd/k8s-operator/deploy/manifests/operator.yaml
 #
 # Copyright (c) Tailscale Inc & AUTHORS
 # SPDX-License-Identifier: BSD-3-Clause
@@ -142,8 +142,18 @@ spec:
                                     Connector node. If unset, hostname defaults to <connector
                                     name>-connector. Hostname can contain lower case letters, numbers and
                                     dashes, it must not start or end with a dash and must be between 2
-                                    and 63 characters long.
+                                    and 63 characters long. This field should only be used when creating a connector
+                                    with an unspecified number of replicas, or a single replica.
                                 pattern: ^[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$
+                                type: string
+                            hostnamePrefix:
+                                description: |-
+                                    HostnamePrefix specifies the hostname prefix for each
+                                    replica. Each device will have the integer number
+                                    from its StatefulSet pod appended to this prefix to form the full hostname.
+                                    HostnamePrefix can contain lower case letters, numbers and dashes, it
+                                    must not start with a dash and must be between 1 and 62 characters long.
+                                pattern: ^[a-z0-9][a-z0-9-]{0,61}$
                                 type: string
                             proxyClass:
                                 description: |-
@@ -152,6 +162,14 @@ spec:
                                     resources created for this Connector. If unset, the operator will
                                     create resources with the default configuration.
                                 type: string
+                            replicas:
+                                description: |-
+                                    Replicas specifies how many devices to create. Set this to enable
+                                    high availability for app connectors, subnet routers, or exit nodes.
+                                    https://tailscale.com/kb/1115/high-availability. Defaults to 1.
+                                format: int32
+                                minimum: 0
+                                type: integer
                             subnetRouter:
                                 description: |-
                                     SubnetRouter defines subnet routes that the Connector device should
@@ -196,6 +214,10 @@ spec:
                               rule: has(self.subnetRouter) || (has(self.exitNode) && self.exitNode == true) || has(self.appConnector)
                             - message: The appConnector field is mutually exclusive with exitNode and subnetRouter fields.
                               rule: '!((has(self.subnetRouter) || (has(self.exitNode)  && self.exitNode == true)) && has(self.appConnector))'
+                            - message: The hostname field cannot be specified when replicas is greater than 1.
+                              rule: '!(has(self.hostname) && has(self.replicas) && self.replicas > 1)'
+                            - message: The hostname and hostnamePrefix fields are mutually exclusive.
+                              rule: '!(has(self.hostname) && has(self.hostnamePrefix))'
                     status:
                         description: |-
                             ConnectorStatus describes the status of the Connector. This is set
@@ -262,11 +284,32 @@ spec:
                                 x-kubernetes-list-map-keys:
                                     - type
                                 x-kubernetes-list-type: map
+                            devices:
+                                description: Devices contains information on each device managed by the Connector resource.
+                                items:
+                                    properties:
+                                        hostname:
+                                            description: |-
+                                                Hostname is the fully qualified domain name of the Connector replica.
+                                                If MagicDNS is enabled in your tailnet, it is the MagicDNS name of the
+                                                node.
+                                            type: string
+                                        tailnetIPs:
+                                            description: |-
+                                                TailnetIPs is the set of tailnet IP addresses (both IPv4 and IPv6)
+                                                assigned to the Connector replica.
+                                            items:
+                                                type: string
+                                            type: array
+                                    type: object
+                                type: array
                             hostname:
                                 description: |-
                                     Hostname is the fully qualified domain name of the Connector node.
                                     If MagicDNS is enabled in your tailnet, it is the MagicDNS name of the
-                                    node.
+                                    node. When using multiple replicas, this field will be populated with the
+                                    first replica's hostname. Use the Hostnames field for the full list
+                                    of hostnames.
                                 type: string
                             isAppConnector:
                                 description: IsAppConnector is set to true if the Connector acts as an app connector.
@@ -349,7 +392,6 @@ spec:
                     using its MagicDNS name, you must also annotate the Ingress resource with
                     tailscale.com/experimental-forward-cluster-traffic-via-ingress annotation to
                     ensure that the proxy created for the Ingress listens on its Pod IP address.
-                    NB: Clusters where Pods get assigned IPv6 addresses only are currently not supported.
                 properties:
                     apiVersion:
                         description: |-
@@ -389,6 +431,61 @@ spec:
                                                 type: string
                                             tag:
                                                 description: Tag defaults to unstable.
+                                                type: string
+                                        type: object
+                                    pod:
+                                        description: Pod configuration.
+                                        properties:
+                                            tolerations:
+                                                description: If specified, applies tolerations to the pods deployed by the DNSConfig resource.
+                                                items:
+                                                    description: |-
+                                                        The pod this Toleration is attached to tolerates any taint that matches
+                                                        the triple <key,value,effect> using the matching operator <operator>.
+                                                    properties:
+                                                        effect:
+                                                            description: |-
+                                                                Effect indicates the taint effect to match. Empty means match all taint effects.
+                                                                When specified, allowed values are NoSchedule, PreferNoSchedule and NoExecute.
+                                                            type: string
+                                                        key:
+                                                            description: |-
+                                                                Key is the taint key that the toleration applies to. Empty means match all taint keys.
+                                                                If the key is empty, operator must be Exists; this combination means to match all values and all keys.
+                                                            type: string
+                                                        operator:
+                                                            description: |-
+                                                                Operator represents a key's relationship to the value.
+                                                                Valid operators are Exists and Equal. Defaults to Equal.
+                                                                Exists is equivalent to wildcard for value, so that a pod can
+                                                                tolerate all taints of a particular category.
+                                                            type: string
+                                                        tolerationSeconds:
+                                                            description: |-
+                                                                TolerationSeconds represents the period of time the toleration (which must be
+                                                                of effect NoExecute, otherwise this field is ignored) tolerates the taint. By default,
+                                                                it is not set, which means tolerate the taint forever (do not evict). Zero and
+                                                                negative values will be treated as 0 (evict immediately) by the system.
+                                                            format: int64
+                                                            type: integer
+                                                        value:
+                                                            description: |-
+                                                                Value is the taint value the toleration matches to.
+                                                                If the operator is Exists, the value should be empty, otherwise just a regular string.
+                                                            type: string
+                                                    type: object
+                                                type: array
+                                        type: object
+                                    replicas:
+                                        description: Replicas specifies how many Pods to create. Defaults to 1.
+                                        format: int32
+                                        minimum: 0
+                                        type: integer
+                                    service:
+                                        description: Service configuration.
+                                        properties:
+                                            clusterIP:
+                                                description: ClusterIP sets the static IP of the service used by the nameserver.
                                                 type: string
                                         type: object
                                 type: object
@@ -464,7 +561,7 @@ spec:
                                     ip:
                                         description: |-
                                             IP is the ClusterIP of the Service fronting the deployed ts.net nameserver.
-                                            Currently you must manually update your cluster DNS config to add
+                                            Currently, you must manually update your cluster DNS config to add
                                             this address as a stub nameserver for ts.net for cluster workloads to be
                                             able to resolve MagicDNS names associated with egress or Ingress
                                             proxies.
@@ -897,7 +994,6 @@ spec:
                                                                                         pod labels will be ignored. The default value is empty.
                                                                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                                                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                                                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                                                                     items:
                                                                                         type: string
                                                                                     type: array
@@ -912,7 +1008,6 @@ spec:
                                                                                         pod labels will be ignored. The default value is empty.
                                                                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                                                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                                                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                                                                     items:
                                                                                         type: string
                                                                                     type: array
@@ -1073,7 +1168,6 @@ spec:
                                                                                 pod labels will be ignored. The default value is empty.
                                                                                 The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                                                                 Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                                                                This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                                                             items:
                                                                                 type: string
                                                                             type: array
@@ -1088,7 +1182,6 @@ spec:
                                                                                 pod labels will be ignored. The default value is empty.
                                                                                 The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                                                                 Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                                                                This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                                                             items:
                                                                                 type: string
                                                                             type: array
@@ -1177,8 +1270,8 @@ spec:
                                                                     most preferred is the one with the greatest sum of weights, i.e.
                                                                     for each node that meets all of the scheduling requirements (resource
                                                                     request, requiredDuringScheduling anti-affinity expressions, etc.),
-                                                                    compute a sum by iterating through the elements of this field and adding
-                                                                    "weight" to the sum if the node has pods which matches the corresponding podAffinityTerm; the
+                                                                    compute a sum by iterating through the elements of this field and subtracting
+                                                                    "weight" from the sum if the node has pods which matches the corresponding podAffinityTerm; the
                                                                     node(s) with the highest sum are the most preferred.
                                                                 items:
                                                                     description: The weights of all of the matched WeightedPodAffinityTerm fields are added per-node to find the most preferred node(s)
@@ -1242,7 +1335,6 @@ spec:
                                                                                         pod labels will be ignored. The default value is empty.
                                                                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                                                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                                                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                                                                     items:
                                                                                         type: string
                                                                                     type: array
@@ -1257,7 +1349,6 @@ spec:
                                                                                         pod labels will be ignored. The default value is empty.
                                                                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                                                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                                                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                                                                     items:
                                                                                         type: string
                                                                                     type: array
@@ -1418,7 +1509,6 @@ spec:
                                                                                 pod labels will be ignored. The default value is empty.
                                                                                 The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                                                                 Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                                                                This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                                                             items:
                                                                                 type: string
                                                                             type: array
@@ -1433,7 +1523,6 @@ spec:
                                                                                 pod labels will be ignored. The default value is empty.
                                                                                 The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                                                                 Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                                                                This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                                                             items:
                                                                                 type: string
                                                                             type: array
@@ -1522,6 +1611,62 @@ spec:
                                                     Annotations must be valid Kubernetes annotations.
                                                     https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/#syntax-and-character-set
                                                 type: object
+                                            dnsConfig:
+                                                description: |-
+                                                    DNSConfig defines DNS parameters for the proxy Pod in addition to those generated from DNSPolicy.
+                                                    When DNSPolicy is set to "None", DNSConfig must be specified.
+                                                    https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
+                                                properties:
+                                                    nameservers:
+                                                        description: |-
+                                                            A list of DNS name server IP addresses.
+                                                            This will be appended to the base nameservers generated from DNSPolicy.
+                                                            Duplicated nameservers will be removed.
+                                                        items:
+                                                            type: string
+                                                        type: array
+                                                        x-kubernetes-list-type: atomic
+                                                    options:
+                                                        description: |-
+                                                            A list of DNS resolver options.
+                                                            This will be merged with the base options generated from DNSPolicy.
+                                                            Duplicated entries will be removed. Resolution options given in Options
+                                                            will override those that appear in the base DNSPolicy.
+                                                        items:
+                                                            description: PodDNSConfigOption defines DNS resolver options of a pod.
+                                                            properties:
+                                                                name:
+                                                                    description: |-
+                                                                        Name is this DNS resolver option's name.
+                                                                        Required.
+                                                                    type: string
+                                                                value:
+                                                                    description: Value is this DNS resolver option's value.
+                                                                    type: string
+                                                            type: object
+                                                        type: array
+                                                        x-kubernetes-list-type: atomic
+                                                    searches:
+                                                        description: |-
+                                                            A list of DNS search domains for host-name lookup.
+                                                            This will be appended to the base search paths generated from DNSPolicy.
+                                                            Duplicated search paths will be removed.
+                                                        items:
+                                                            type: string
+                                                        type: array
+                                                        x-kubernetes-list-type: atomic
+                                                type: object
+                                            dnsPolicy:
+                                                description: |-
+                                                    DNSPolicy defines how DNS will be configured for the proxy Pod.
+                                                    By default the Tailscale Kubernetes Operator does not set a DNS policy (uses cluster default).
+                                                    https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+                                                enum:
+                                                    - ClusterFirstWithHostNet
+                                                    - ClusterFirst
+                                                    - Default
+                                                    - None
+                                                type: string
                                             imagePullSecrets:
                                                 description: |-
                                                     Proxy Pod's image pull Secrets.
@@ -1569,6 +1714,12 @@ spec:
                                                     selector.
                                                     https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling
                                                 type: object
+                                            priorityClassName:
+                                                description: |-
+                                                    PriorityClassName for the proxy Pod.
+                                                    By default Tailscale Kubernetes operator does not apply any priority class.
+                                                    https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling
+                                                type: string
                                             securityContext:
                                                 description: |-
                                                     Proxy Pod's security context.
@@ -1854,12 +2005,21 @@ spec:
                                                         type: array
                                                     image:
                                                         description: |-
-                                                            Container image name. By default images are pulled from
-                                                            docker.io/tailscale/tailscale, but the official images are also
-                                                            available at ghcr.io/tailscale/tailscale. Specifying image name here
-                                                            will override any proxy image values specified via the Kubernetes
-                                                            operator's Helm chart values or PROXY_IMAGE env var in the operator
-                                                            Deployment.
+                                                            Container image name. By default images are pulled from docker.io/tailscale,
+                                                            but the official images are also available at ghcr.io/tailscale.
+
+                                                            For all uses except on ProxyGroups of type "kube-apiserver", this image must
+                                                            be either tailscale/tailscale, or an equivalent mirror of that image.
+                                                            To apply to ProxyGroups of type "kube-apiserver", this image must be
+                                                            tailscale/k8s-proxy or a mirror of that image.
+
+                                                            For "tailscale/tailscale"-based proxies, specifying image name here will
+                                                            override any proxy image values specified via the Kubernetes operator's
+                                                            Helm chart values or PROXY_IMAGE env var in the operator Deployment.
+                                                            For "tailscale/k8s-proxy"-based proxies, there is currently no way to
+                                                            configure your own default, and this field is the only way to use a
+                                                            custom image.
+
                                                             https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#image
                                                         type: string
                                                     imagePullPolicy:
@@ -1885,7 +2045,7 @@ spec:
                                                                     Claims lists the names of resources, defined in spec.resourceClaims,
                                                                     that are used by this container.
 
-                                                                    This is an alpha field and requires enabling the
+                                                                    This field depends on the
                                                                     DynamicResourceAllocation feature gate.
 
                                                                     This field is immutable. It can only be set for containers.
@@ -2131,7 +2291,9 @@ spec:
                                                         type: object
                                                 type: object
                                             tailscaleInitContainer:
-                                                description: Configuration for the proxy init container that enables forwarding.
+                                                description: |-
+                                                    Configuration for the proxy init container that enables forwarding.
+                                                    Not valid to apply to ProxyGroups of type "kube-apiserver".
                                                 properties:
                                                     debug:
                                                         description: |-
@@ -2184,12 +2346,21 @@ spec:
                                                         type: array
                                                     image:
                                                         description: |-
-                                                            Container image name. By default images are pulled from
-                                                            docker.io/tailscale/tailscale, but the official images are also
-                                                            available at ghcr.io/tailscale/tailscale. Specifying image name here
-                                                            will override any proxy image values specified via the Kubernetes
-                                                            operator's Helm chart values or PROXY_IMAGE env var in the operator
-                                                            Deployment.
+                                                            Container image name. By default images are pulled from docker.io/tailscale,
+                                                            but the official images are also available at ghcr.io/tailscale.
+
+                                                            For all uses except on ProxyGroups of type "kube-apiserver", this image must
+                                                            be either tailscale/tailscale, or an equivalent mirror of that image.
+                                                            To apply to ProxyGroups of type "kube-apiserver", this image must be
+                                                            tailscale/k8s-proxy or a mirror of that image.
+
+                                                            For "tailscale/tailscale"-based proxies, specifying image name here will
+                                                            override any proxy image values specified via the Kubernetes operator's
+                                                            Helm chart values or PROXY_IMAGE env var in the operator Deployment.
+                                                            For "tailscale/k8s-proxy"-based proxies, there is currently no way to
+                                                            configure your own default, and this field is the only way to use a
+                                                            custom image.
+
                                                             https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#image
                                                         type: string
                                                     imagePullPolicy:
@@ -2215,7 +2386,7 @@ spec:
                                                                     Claims lists the names of resources, defined in spec.resourceClaims,
                                                                     that are used by this container.
 
-                                                                    This is an alpha field and requires enabling the
+                                                                    This field depends on the
                                                                     DynamicResourceAllocation feature gate.
 
                                                                     This field is immutable. It can only be set for containers.
@@ -2626,7 +2797,6 @@ spec:
                                                                 - Ignore: nodeAffinity/nodeSelector are ignored. All nodes are included in the calculations.
 
                                                                 If this value is nil, the behavior is equivalent to the Honor policy.
-                                                                This is a beta-level feature default enabled by the NodeInclusionPolicyInPodTopologySpread feature flag.
                                                             type: string
                                                         nodeTaintsPolicy:
                                                             description: |-
@@ -2637,7 +2807,6 @@ spec:
                                                                 - Ignore: node taints are ignored. All nodes are included.
 
                                                                 If this value is nil, the behavior is equivalent to the Ignore policy.
-                                                                This is a beta-level feature default enabled by the NodeInclusionPolicyInPodTopologySpread feature flag.
                                                             type: string
                                                         topologyKey:
                                                             description: |-
@@ -2680,6 +2849,51 @@ spec:
                                                     type: object
                                                 type: array
                                         type: object
+                                type: object
+                            staticEndpoints:
+                                description: |-
+                                    Configuration for 'static endpoints' on proxies in order to facilitate
+                                    direct connections from other devices on the tailnet.
+                                    See https://tailscale.com/kb/1445/kubernetes-operator-customization#static-endpoints.
+                                properties:
+                                    nodePort:
+                                        description: The configuration for static endpoints using NodePort Services.
+                                        properties:
+                                            ports:
+                                                description: |-
+                                                    The port ranges from which the operator will select NodePorts for the Services.
+                                                    You must ensure that firewall rules allow UDP ingress traffic for these ports
+                                                    to the node's external IPs.
+                                                    The ports must be in the range of service node ports for the cluster (default `30000-32767`).
+                                                    See https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport.
+                                                items:
+                                                    properties:
+                                                        endPort:
+                                                            description: |-
+                                                                endPort indicates that the range of ports from port to endPort if set, inclusive,
+                                                                should be used. This field cannot be defined if the port field is not defined.
+                                                                The endPort must be either unset, or equal or greater than port.
+                                                            type: integer
+                                                        port:
+                                                            description: port represents a port selected to be used. This is a required field.
+                                                            type: integer
+                                                    required:
+                                                        - port
+                                                    type: object
+                                                minItems: 1
+                                                type: array
+                                            selector:
+                                                additionalProperties:
+                                                    type: string
+                                                description: |-
+                                                    A selector which will be used to select the node's that will have their `ExternalIP`'s advertised
+                                                    by the ProxyGroup as Static Endpoints.
+                                                type: object
+                                        required:
+                                            - ports
+                                        type: object
+                                required:
+                                    - nodePort
                                 type: object
                             tailscale:
                                 description: |-
@@ -2810,6 +3024,10 @@ spec:
               jsonPath: .status.conditions[?(@.type == "ProxyGroupReady")].reason
               name: Status
               type: string
+            - description: URL of the kube-apiserver proxy advertised by the ProxyGroup devices, if any. Only applies to ProxyGroups of type kube-apiserver.
+              jsonPath: .status.url
+              name: URL
+              type: string
             - description: ProxyGroup type.
               jsonPath: .spec.type
               name: Type
@@ -2822,15 +3040,22 @@ spec:
             openAPIV3Schema:
                 description: |-
                     ProxyGroup defines a set of Tailscale devices that will act as proxies.
-                    Currently only egress ProxyGroups are supported.
+                    Depending on spec.Type, it can be a group of egress, ingress, or kube-apiserver
+                    proxies. In addition to running a highly available set of proxies, ingress
+                    and egress ProxyGroups also allow for serving many annotated Services from a
+                    single set of proxies to minimise resource consumption.
 
-                    Use the tailscale.com/proxy-group annotation on a Service to specify that
-                    the egress proxy should be implemented by a ProxyGroup instead of a single
-                    dedicated proxy. In addition to running a highly available set of proxies,
-                    ProxyGroup also allows for serving many annotated Services from a single
-                    set of proxies to minimise resource consumption.
+                    For ingress and egress, use the tailscale.com/proxy-group annotation on a
+                    Service to specify that the proxy should be implemented by a ProxyGroup
+                    instead of a single dedicated proxy.
 
-                    More info: https://tailscale.com/kb/1438/kubernetes-operator-cluster-egress
+                    More info:
+                    * https://tailscale.com/kb/1438/kubernetes-operator-cluster-egress
+                    * https://tailscale.com/kb/1439/kubernetes-operator-cluster-ingress
+
+                    For kube-apiserver, the ProxyGroup is a standalone resource. Use the
+                    spec.kubeAPIServer field to configure options specific to the kube-apiserver
+                    ProxyGroup type.
                 properties:
                     apiVersion:
                         description: |-
@@ -2861,6 +3086,30 @@ spec:
                                     must not start with a dash and must be between 1 and 62 characters long.
                                 pattern: ^[a-z0-9][a-z0-9-]{0,61}$
                                 type: string
+                            kubeAPIServer:
+                                description: |-
+                                    KubeAPIServer contains configuration specific to the kube-apiserver
+                                    ProxyGroup type. This field is only used when Type is set to "kube-apiserver".
+                                properties:
+                                    hostname:
+                                        description: |-
+                                            Hostname is the hostname with which to expose the Kubernetes API server
+                                            proxies. Must be a valid DNS label no longer than 63 characters. If not
+                                            specified, the name of the ProxyGroup is used as the hostname. Must be
+                                            unique across the whole tailnet.
+                                        pattern: ^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$
+                                        type: string
+                                    mode:
+                                        description: |-
+                                            Mode to run the API server proxy in. Supported modes are auth and noauth.
+                                            In auth mode, requests from the tailnet proxied over to the Kubernetes
+                                            API server are additionally impersonated using the sender's tailnet identity.
+                                            If not specified, defaults to auth mode.
+                                        enum:
+                                            - auth
+                                            - noauth
+                                        type: string
+                                type: object
                             proxyClass:
                                 description: |-
                                     ProxyClass is the name of the ProxyClass custom resource that contains
@@ -2890,11 +3139,12 @@ spec:
                                 type: array
                             type:
                                 description: |-
-                                    Type of the ProxyGroup proxies. Supported types are egress and ingress.
+                                    Type of the ProxyGroup proxies. Supported types are egress, ingress, and kube-apiserver.
                                     Type is immutable once a ProxyGroup is created.
                                 enum:
                                     - egress
                                     - ingress
+                                    - kube-apiserver
                                 type: string
                                 x-kubernetes-validations:
                                     - message: ProxyGroup type is immutable
@@ -2910,7 +3160,20 @@ spec:
                             conditions:
                                 description: |-
                                     List of status conditions to indicate the status of the ProxyGroup
-                                    resources. Known condition types are `ProxyGroupReady`.
+                                    resources. Known condition types include `ProxyGroupReady` and
+                                    `ProxyGroupAvailable`.
+
+                                    * `ProxyGroupReady` indicates all ProxyGroup resources are reconciled and
+                                      all expected conditions are true.
+                                    * `ProxyGroupAvailable` indicates that at least one proxy is ready to
+                                      serve traffic.
+
+                                    For ProxyGroups of type kube-apiserver, there are two additional conditions:
+
+                                    * `KubeAPIServerProxyConfigured` indicates that at least one API server
+                                      proxy is configured and ready to serve traffic.
+                                    * `KubeAPIServerProxyValid` indicates that spec.kubeAPIServer config is
+                                      valid.
                                 items:
                                     description: Condition contains details for one aspect of the current state of this API Resource.
                                     properties:
@@ -2978,6 +3241,11 @@ spec:
                                                 If MagicDNS is enabled in your tailnet, it is the MagicDNS name of the
                                                 node.
                                             type: string
+                                        staticEndpoints:
+                                            description: StaticEndpoints are user configured, 'static' endpoints by which tailnet peers can reach this device.
+                                            items:
+                                                type: string
+                                            type: array
                                         tailnetIPs:
                                             description: |-
                                                 TailnetIPs is the set of tailnet IP addresses (both IPv4 and IPv6)
@@ -2992,6 +3260,11 @@ spec:
                                 x-kubernetes-list-map-keys:
                                     - hostname
                                 x-kubernetes-list-type: map
+                            url:
+                                description: |-
+                                    URL of the kube-apiserver proxy advertised by the ProxyGroup devices, if
+                                    any. Only applies to ProxyGroups of type kube-apiserver.
+                                type: string
                         type: object
                 required:
                     - spec
@@ -3067,6 +3340,11 @@ spec:
                                     Corresponds to --ui tsrecorder flag https://tailscale.com/kb/1246/tailscale-ssh-session-recording#deploy-a-recorder-node.
                                     Required if S3 storage is not set up, to ensure that recordings are accessible.
                                 type: boolean
+                            replicas:
+                                description: Replicas specifies how many instances of tsrecorder to run. Defaults to 1.
+                                format: int32
+                                minimum: 0
+                                type: integer
                             statefulSet:
                                 description: |-
                                     Configuration parameters for the Recorder's StatefulSet. The operator
@@ -3362,7 +3640,6 @@ spec:
                                                                                         pod labels will be ignored. The default value is empty.
                                                                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                                                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                                                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                                                                     items:
                                                                                         type: string
                                                                                     type: array
@@ -3377,7 +3654,6 @@ spec:
                                                                                         pod labels will be ignored. The default value is empty.
                                                                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                                                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                                                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                                                                     items:
                                                                                         type: string
                                                                                     type: array
@@ -3538,7 +3814,6 @@ spec:
                                                                                 pod labels will be ignored. The default value is empty.
                                                                                 The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                                                                 Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                                                                This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                                                             items:
                                                                                 type: string
                                                                             type: array
@@ -3553,7 +3828,6 @@ spec:
                                                                                 pod labels will be ignored. The default value is empty.
                                                                                 The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                                                                 Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                                                                This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                                                             items:
                                                                                 type: string
                                                                             type: array
@@ -3642,8 +3916,8 @@ spec:
                                                                     most preferred is the one with the greatest sum of weights, i.e.
                                                                     for each node that meets all of the scheduling requirements (resource
                                                                     request, requiredDuringScheduling anti-affinity expressions, etc.),
-                                                                    compute a sum by iterating through the elements of this field and adding
-                                                                    "weight" to the sum if the node has pods which matches the corresponding podAffinityTerm; the
+                                                                    compute a sum by iterating through the elements of this field and subtracting
+                                                                    "weight" from the sum if the node has pods which matches the corresponding podAffinityTerm; the
                                                                     node(s) with the highest sum are the most preferred.
                                                                 items:
                                                                     description: The weights of all of the matched WeightedPodAffinityTerm fields are added per-node to find the most preferred node(s)
@@ -3707,7 +3981,6 @@ spec:
                                                                                         pod labels will be ignored. The default value is empty.
                                                                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                                                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                                                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                                                                     items:
                                                                                         type: string
                                                                                     type: array
@@ -3722,7 +3995,6 @@ spec:
                                                                                         pod labels will be ignored. The default value is empty.
                                                                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                                                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                                                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                                                                     items:
                                                                                         type: string
                                                                                     type: array
@@ -3883,7 +4155,6 @@ spec:
                                                                                 pod labels will be ignored. The default value is empty.
                                                                                 The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                                                                 Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                                                                This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                                                             items:
                                                                                 type: string
                                                                             type: array
@@ -3898,7 +4169,6 @@ spec:
                                                                                 pod labels will be ignored. The default value is empty.
                                                                                 The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                                                                 Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                                                                This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                                                             items:
                                                                                 type: string
                                                                             type: array
@@ -3981,7 +4251,7 @@ spec:
                                                 additionalProperties:
                                                     type: string
                                                 description: |-
-                                                    Annotations that will be added to Recorder Pods. Any annotations
+                                                    Annotations that will be added to Recorder Pods. Any annotations
                                                     specified here will be merged with the default annotations applied to
                                                     the Pod by the operator.
                                                     https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/#syntax-and-character-set
@@ -4047,7 +4317,7 @@ spec:
                                                                     Claims lists the names of resources, defined in spec.resourceClaims,
                                                                     that are used by this container.
 
-                                                                    This is an alpha field and requires enabling the
+                                                                    This field depends on the
                                                                     DynamicResourceAllocation feature gate.
 
                                                                     This field is immutable. It can only be set for containers.
@@ -4683,6 +4953,9 @@ spec:
                                     type: string
                                 type: array
                         type: object
+                        x-kubernetes-validations:
+                            - message: S3 storage must be used when deploying multiple Recorder replicas
+                              rule: '!(self.replicas > 1 && (!has(self.storage) || !has(self.storage.s3)))'
                     status:
                         description: |-
                             RecorderStatus describes the status of the recorder. This is set
@@ -5076,12 +5349,16 @@ spec:
                       valueFrom:
                         fieldRef:
                             fieldPath: metadata.namespace
+                    - name: OPERATOR_LOGIN_SERVER
+                      value: null
+                    - name: OPERATOR_INGRESS_CLASS_NAME
+                      value: tailscale
                     - name: CLIENT_ID_FILE
                       value: /oauth/client_id
                     - name: CLIENT_SECRET_FILE
                       value: /oauth/client_secret
                     - name: PROXY_IMAGE
-                      value: tailscale/tailscale:unstable
+                      value: tailscale/tailscale:stable
                     - name: PROXY_TAGS
                       value: tag:k8s
                     - name: APISERVER_PROXY
@@ -5096,7 +5373,7 @@ spec:
                       valueFrom:
                         fieldRef:
                             fieldPath: metadata.uid
-                  image: tailscale/k8s-operator:unstable
+                  image: tailscale/k8s-operator:stable
                   imagePullPolicy: Always
                   name: operator
                   volumeMounts:
