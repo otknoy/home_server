@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ./kube-system
   - ./nfs-provisioner
+  - ./distribution
   - ./monitoring
   - ./app
   - ./external_services.yaml
