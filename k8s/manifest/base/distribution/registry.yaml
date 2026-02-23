@@ -105,7 +105,6 @@ metadata:
   name: registry-ingress
   annotations:
     tailscale.com/ingress-class: tailscale
-    nginx.ingress.kubernetes.io/proxy-body-size: "0" # イメージのアップロード制限を解除
 spec:
   ingressClassName: tailscale
   tls:
