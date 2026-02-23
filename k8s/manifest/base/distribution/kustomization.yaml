@@ -9,4 +9,10 @@ resources:
 
 configMapGenerator:
   - name: registry-cm
-    literals: []
+    literals:
+      - REGISTRY_STORAGE_DELETE_ENABLED=true
+  - name: registry-ui-cm
+    literals:
+      - SINGLE_REGISTRY=true
+      - NGINX_PROXY_PASS=http://registry-service:5000
+      - REGISTRY_URL=https://my-registry.tailba37e.ts.net

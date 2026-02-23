@@ -30,9 +30,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: registry-cm
-          env:
-            - name: REGISTRY_STORAGE_DELETE_ENABLED
-              value: "true"
           securityContext:
             readOnlyRootFilesystem: false
           volumeMounts:
@@ -72,15 +69,9 @@ spec:
           image: joxit/docker-registry-ui:2.6.0
           ports:
             - containerPort: 80
-          env:
-            - name: SINGLE_REGISTRY
-              value: "true"
-            - name: REGISTRY_TITLE
-              value: "Docker Registry"
-            - name: NGINX_PROXY_PASS_URL
-              value: http://registry-service:5000
-            - name: REGISTRY_URL
-              value: https://my-registry.tailba37e.ts.net
+          envFrom:
+            - configMapRef:
+                name: registry-ui-cm
 
 ---
 
