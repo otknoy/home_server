@@ -32,6 +32,13 @@ spec:
                 name: registry-cm
           securityContext:
             readOnlyRootFilesystem: false
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
           volumeMounts:
             - name: data
               mountPath: /var/lib/registry
@@ -72,6 +79,13 @@ spec:
           envFrom:
             - configMapRef:
                 name: registry-ui-cm
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
 
 ---
 
