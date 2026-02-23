@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: distribution
+
+resources:
+  - ./namespace.yaml
+  - ./registry.yaml
+
+configMapGenerator:
+  - name: registry-cm
+    literals:
+      - REGISTRY_STORAGE_DELETE_ENABLED=true
+      - REGISTRY_LOG_LEVEL=info
+      - OTEL_TRACES_EXPORTER=none
+  - name: registry-ui-cm
+    literals:
+      - SINGLE_REGISTRY=true
+      - NGINX_PROXY_PASS=http://registry-service:5000
+      - REGISTRY_URL=https://my-registry.tailba37e.ts.net
