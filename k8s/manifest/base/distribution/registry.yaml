@@ -31,7 +31,7 @@ spec:
             - configMapRef:
                 name: registry-cm
           securityContext:
-            readOnlyRootFilesystem: false
+            readOnlyRootFilesystem: true
           resources:
             requests:
               cpu: 100m
