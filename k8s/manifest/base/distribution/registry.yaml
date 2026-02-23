@@ -21,11 +21,11 @@ spec:
             - containerPort: 5000
           livenessProbe:
             httpGet:
-              path: /
+              path: /v2/
               port: 5000
           readinessProbe:
             httpGet:
-              path: /
+              path: /v2/
               port: 5000
           envFrom:
             - configMapRef:
