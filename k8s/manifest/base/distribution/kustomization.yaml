@@ -11,6 +11,8 @@ configMapGenerator:
   - name: registry-cm
     literals:
       - REGISTRY_STORAGE_DELETE_ENABLED=true
+      - REGISTRY_LOG_LEVEL=info
+      - OTEL_TRACES_EXPORTER=none
   - name: registry-ui-cm
     literals:
       - SINGLE_REGISTRY=true
