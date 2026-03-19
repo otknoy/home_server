@@ -13,11 +13,12 @@ configMapGenerator:
       - ./provisioning/datasources/prometheus.yaml
   - name: grafana-dashboards01-cm
     files:
-      - ./dashboards/localhost.json
-      - ./dashboards/k8s.json
+      - ./dashboards/kube-state-metrics-v2.json
   - name: grafana-dashboards02-cm
     files:
       - ./dashboards/prometheus-2.0-stats.json
+      - ./dashboards/synology-snmp.json
   - name: grafana-dashboards03-cm
     files:
-      - ./dashboards/synology-snmp.json
+      - ./dashboards/localhost.json
+      - ./dashboards/k8s.json
