@@ -17,12 +17,12 @@ spec:
       serviceAccountName: prometheus
       containers:
         - name: prometheus
-          image: prom/prometheus:v3.11.0
+          image: prom/prometheus:v3.11.0-distroless
           args:
             - --config.file=/etc/prometheus/prometheus.yml
             - --storage.tsdb.path=/prometheus/data
             - --storage.tsdb.retention.time=2y
-            - --web.external-url=http://debian-server001/prometheus/
+            - --web.external-url=http://otknoy-k8s/prometheus
             - --web.route-prefix=/
           ports:
             - containerPort: 9090
