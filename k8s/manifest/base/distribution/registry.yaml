@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: registry
-          image: registry:3.1.0
+          image: registry:3.1.1
           ports:
             - containerPort: 5000
           livenessProbe:
