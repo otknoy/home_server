@@ -959,7 +959,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum by (namespace, pod) (irate(container_cpu_usage_seconds_total{namespace=~\"$namespace\", container!=\"\"}[5m]))\n",
+          "expr": "sum by (namespace, pod) (irate(container_cpu_usage_seconds_total{namespace=~\"$namespace\", container=~\".+\"}[5m]))\n",
           "hide": false,
           "legendFormat": "{{namespace}} {{pod}}",
           "range": true,
@@ -1055,7 +1055,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum by (namespace, pod) (container_memory_usage_bytes{namespace=~\"$namespace\", container!=\"\"})\n",
+          "expr": "sum by (namespace, pod) (container_memory_usage_bytes{namespace=~\"$namespace\", container=~\".+\"})\n",
           "hide": false,
           "legendFormat": "{{namespace}} {{pod}}",
           "range": true,
@@ -1073,7 +1073,7 @@
   "templating": {
     "list": [
       {
-        "allValue": ".*",
+        "allValue": ".+",
         "allowCustomValue": false,
         "current": {
           "text": "All",
