@@ -1024,13 +1024,13 @@
       "pluginVersion": "12.0.0",
       "targets": [
         {
-          "expr": "prometheus_tsdb_storage_blocks_bytes",
+          "expr": "prometheus_tsdb_storage_blocks_bytes{job=\"prometheus\"}",
           "intervalFactor": 4,
           "legendFormat": "used",
           "refId": "A"
         },
         {
-          "expr": "delta(prometheus_tsdb_storage_blocks_bytes[1d])",
+          "expr": "delta(prometheus_tsdb_storage_blocks_bytes{job=\"prometheus\"}[1d])",
           "hide": true,
           "intervalFactor": 4,
           "legendFormat": "delta",
