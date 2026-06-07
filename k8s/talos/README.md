@@ -24,13 +24,13 @@ $ talosctl -n 192.168.0.18 apply-config -f controlplane.yaml --dry-run
 ## upgrade talos linux
 
 ```sh
-$ talosctl upgrade --image ghcr.io/siderolabs/installer:v1.12.6
+$ talosctl upgrade --image ghcr.io/siderolabs/installer:v1.13.3
 ```
 
 ## upgrade kubernetes
 
 ```sh
-$ talosctl upgrade-k8s --to 1.34.5
+$ talosctl upgrade-k8s --to 1.35.3
 ```
 
 ## memo
