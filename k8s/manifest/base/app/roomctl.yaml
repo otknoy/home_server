@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: roomctl
-          image: ghcr.io/otknoy/roomctl:20260712051137
+          image: ghcr.io/otknoy/roomctl:20260716094301
           ports:
             - containerPort: 9199
           resources:
