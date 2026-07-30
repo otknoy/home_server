@@ -8,3 +8,4 @@ resources:
   - ./monitoring
   - ./app
   - ./external_services.yaml
+  - ./n8n
