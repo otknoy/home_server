@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+spec:
+  serviceName: postgres-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      securityContext:
+        runAsUser: 70
+        runAsGroup: 70
+        fsGroup: 70
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+          startupProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - n8n
+                - -d
+                - n8n
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 30
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - n8n
+                - -d
+                - n8n
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - n8n
+                - -d
+                - n8n
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          envFrom:
+            - secretRef:
+                name: postgres-secret
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+          ports:
+            - containerPort: 5432
+              name: postgres
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: nfs-client
+        resources:
+          requests:
+            storage: 10Gi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+      targetPort: 5432
+      name: postgres
+  selector:
+    app: postgres
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-secret
+type: Opaque
+stringData:
+  POSTGRES_DB: n8n
+  POSTGRES_USER: n8n
+  POSTGRES_PASSWORD: mysecretpassword
