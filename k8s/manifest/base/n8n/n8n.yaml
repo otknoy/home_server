@@ -38,6 +38,8 @@ spec:
           value: "n8n"
         - name: GENERIC_TIMEZONE
           value: "Asia/Tokyo"
+        - name: N8N_METRICS
+          value: "true"
 
 ---
 
@@ -46,6 +48,10 @@ kind: Service
 metadata:
   name: n8n
   namespace: n8n
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: "5678"
+    prometheus.io/scrape: "true"
 spec:
   type: NodePort
   selector:
