@@ -40,6 +40,14 @@ spec:
           value: "Asia/Tokyo"
         - name: N8N_METRICS
           value: "true"
+        - name: DB_TYPE
+          value: "postgresdb"
+        - name: DB_POSTGRESDB_HOST
+          value: "postgres-service"
+        - name: DB_POSTGRESDB_USER
+          value: "n8n"
+        - name: DB_POSTGRESDB_PASSWORD
+          value: "mysecretpassword"
 
 ---
 
