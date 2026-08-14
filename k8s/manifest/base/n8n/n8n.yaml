@@ -38,6 +38,16 @@ spec:
           value: "n8n"
         - name: GENERIC_TIMEZONE
           value: "Asia/Tokyo"
+        - name: N8N_METRICS
+          value: "true"
+        - name: DB_TYPE
+          value: "postgresdb"
+        - name: DB_POSTGRESDB_HOST
+          value: "postgres-service"
+        - name: DB_POSTGRESDB_USER
+          value: "n8n"
+        - name: DB_POSTGRESDB_PASSWORD
+          value: "mysecretpassword"
 
 ---
 
@@ -46,6 +56,10 @@ kind: Service
 metadata:
   name: n8n
   namespace: n8n
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: "5678"
+    prometheus.io/scrape: "true"
 spec:
   type: NodePort
   selector:

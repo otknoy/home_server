@@ -5,3 +5,4 @@ namespace: n8n
 
 resources:
   - ./n8n.yaml
+  - ./db.yaml
