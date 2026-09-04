@@ -47,6 +47,8 @@ spec:
           volumeMounts:
             - name: var-lib-grafana
               mountPath: /var/lib/grafana
+            - name: tmp-volume
+              mountPath: /tmp
             - name: provisioning-dashboards-volume
               mountPath: /etc/grafana/provisioning/dashboards
             - name: provisioning-datasources-volume
@@ -55,6 +57,8 @@ spec:
               mountPath: /var/lib/grafana/dashboards
       volumes:
         - name: var-lib-grafana
+          emptyDir: {}
+        - name: tmp-volume
           emptyDir: {}
         - name: provisioning-dashboards-volume
           configMap:
