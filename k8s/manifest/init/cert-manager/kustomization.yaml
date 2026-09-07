@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: cert-manager
 
 resources:
-  - https://github.com/cert-manager/cert-manager/releases/download/v1.17.0/cert-manager.yaml
+  - ./upstream/cert-manager.yaml
 
 patches:
   - target:
@@ -25,4 +25,4 @@ patches:
       - op: replace
         path: /spec/template/spec/containers/0/args/2
         value: --leader-election-namespace=cert-manager
-      
+
