@@ -5,7 +5,7 @@ set -euo pipefail
 script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
 # Update these tags deliberately.
-ARGOCD_TAG=v3.5.1
+ARGOCD_TAG=v3.5.2
 CERT_MANAGER_TAG=v1.17.0
 INGRESS_NGINX_TAG=controller-v1.15.1
 METALLB_TAG=v0.16.1
