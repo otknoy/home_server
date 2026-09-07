@@ -11,6 +11,19 @@ spec:
     path: k8s/manifest/base
   destination:
     server: https://kubernetes.default.svc
+  ignoreDifferences:
+    - group: ""
+      kind: Service
+      name: debian
+      namespace: monitoring
+      jsonPointers:
+        - /spec/externalName
+    - group: ""
+      kind: Service
+      name: ds224plus
+      namespace: monitoring
+      jsonPointers:
+        - /spec/externalName
   syncPolicy:
     automated:
       enabled: true
