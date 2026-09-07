@@ -5,4 +5,3 @@ namespace: argocd
 resources:
   - ./upstream/install.yaml
   - ./ingress.yaml
-  - ./home-server.yaml
