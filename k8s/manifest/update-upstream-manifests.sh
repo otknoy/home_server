@@ -7,7 +7,7 @@ script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 # Update these tags deliberately.
 # renovate: datasource=github-tags depName=argoproj/argo-cd versioning=semver
 ARGOCD_TAG=v3.5.2
-# renovate: datasource=github-tags depName=cert-manager/cert-manager versioning=semver
+# renovate: datasource=github-releases depName=cert-manager/cert-manager versioning=semver
 CERT_MANAGER_TAG=v1.21.1
 # renovate: datasource=github-tags depName=kubernetes/ingress-nginx versioning=semver extractVersion=^controller-v(?<version>.*)$
 INGRESS_NGINX_TAG=controller-v1.15.1
