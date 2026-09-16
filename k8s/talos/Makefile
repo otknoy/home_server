@@ -3,7 +3,6 @@ CLUSTER_ENDPOINT := https://192.168.0.18:6443
 NODE := 192.168.0.18
 
 TALOS_VERSION := v1.14.1
-TALOS_CONFIG_VERSION := v1.12.2
 KUBERNETES_VERSION := 1.36.4
 TALOS_SCHEMATIC_ID := 376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
 TALOS_IMAGE := factory.talos.dev/metal-installer/$(TALOS_SCHEMATIC_ID):$(TALOS_VERSION)
@@ -12,7 +11,8 @@ TALOS_IMAGE := factory.talos.dev/metal-installer/$(TALOS_SCHEMATIC_ID):$(TALOS_V
 
 generate:
 	talosctl gen config $(CLUSTER_NAME) $(CLUSTER_ENDPOINT) \
-		--talos-version $(TALOS_CONFIG_VERSION) \
+		--talos-version $(TALOS_VERSION) \
+		--install-image $(TALOS_IMAGE) \
 		--kubernetes-version $(KUBERNETES_VERSION) \
 		--force \
 		--config-patch-control-plane @patch/controlplane.yaml \
