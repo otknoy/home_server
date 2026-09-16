@@ -25,7 +25,7 @@ $ talosctl -n 192.168.0.18 apply-config -f controlplane.yaml --dry-run
 
 ```sh
 $ talosctl upgrade \
-  --image factory.talos.dev/metal-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.14
+  --image factory.talos.dev/metal-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.14.1
 ```
 
 ## upgrade kubernetes
