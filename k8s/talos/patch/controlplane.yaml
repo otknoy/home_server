@@ -1,12 +1,19 @@
-machine:
-  install:
-    disk: /dev/nvme0n1
-cluster:
-  apiServer:
-    admissionControl:
-      - name: PodSecurity
-        configuration:
-          exemptions:
-            namespaces:
-              - tailscale
-  allowSchedulingOnControlPlanes: true
+apiVersion: v1alpha1
+kind: UnattendedInstallConfig
+provisioning:
+  diskSelector:
+    match: disk.dev_path == "/dev/nvme0n1"
+---
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+taints:
+  node-role.kubernetes.io/control-plane:
+    $patch: delete
+---
+apiVersion: v1alpha1
+kind: KubeAdmissionControlConfig
+name: PodSecurity
+configuration:
+  exemptions:
+    namespaces:
+      - tailscale

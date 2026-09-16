@@ -1,42 +1,40 @@
 # talos linux
 
-## generate talos manifest
+## Usage
 
 ```sh
-$ ./gen_config.sh
+$ make generate
 ```
 
+生成した設定を dry-run で検証します。
+
 ```sh
-talosctl gen config my-k8s-cluster https://192.168.0.18:6443 \
-	 --force \
-	 --config-patch @patch/all.yaml \
-	 --config-patch-control-plane @patch/controlplane.yaml \
-	 --config-patch-worker @patch/worker.yaml \
-	 --with-secrets secrets.yaml
+$ make validate
 ```
 
-## apply
+検証後、設定を適用します。
 
 ```sh
-$ talosctl -n 192.168.0.18 apply-config -f controlplane.yaml --dry-run
+$ make apply
 ```
 
-## upgrade talos linux
+Talos Linux と Kubernetes をアップグレードします。バージョンは
+`Makefile` 冒頭の `TALOS_VERSION` と `KUBERNETES_VERSION` で管理します。
 
 ```sh
-$ talosctl upgrade \
-  --image factory.talos.dev/metal-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.14.1
+$ make upgrade
+$ make upgrade-k8s
 ```
 
-## upgrade kubernetes
+状態とバージョンを確認します。
 
 ```sh
-$ talosctl upgrade-k8s --to 1.36.4
+$ make health
+$ make versions
 ```
 
-## memo
+## Re-create kubeconfig
 
-re-create talosconfig
 ```sh
-$ talosctl kubeconfig -n 192.168.0.18 -e 192.168.0.18 --talosconfig ./talosconfig
+$ make kubeconfig
 ```
