@@ -13,6 +13,8 @@ CERT_MANAGER_TAG=v1.21.2
 INGRESS_NGINX_TAG=controller-v1.15.1
 # renovate: datasource=github-tags depName=metallb/metallb versioning=semver
 METALLB_TAG=v0.16.1
+# renovate: datasource=github-releases depName=bitnami-labs/sealed-secrets versioning=semver
+SEALED_SECRETS_TAG=v0.40.0
 # renovate: datasource=github-tags depName=kubernetes-sigs/nfs-subdir-external-provisioner versioning=semver extractVersion=^nfs-subdir-external-provisioner-(?<version>.*)$
 NFS_SUBDIR_EXTERNAL_PROVISIONER_TAG=nfs-subdir-external-provisioner-4.0.18
 
@@ -22,6 +24,8 @@ curl -fsSL "https://github.com/cert-manager/cert-manager/releases/download/$CERT
   -o "$script_dir/init/cert-manager/upstream/cert-manager.yaml"
 curl -fsSL "https://raw.githubusercontent.com/kubernetes/ingress-nginx/$INGRESS_NGINX_TAG/deploy/static/provider/cloud/deploy.yaml" \
   -o "$script_dir/init/ingress-nginx/upstream/deploy.yaml"
+curl -fsSL "https://github.com/bitnami-labs/sealed-secrets/releases/download/$SEALED_SECRETS_TAG/controller.yaml" \
+  -o "$script_dir/init/sealed-secrets/upstream/controller.yaml"
 
 metallb_dir="$script_dir/init/metallb-system/upstream/config"
 rm -rf -- "$metallb_dir"
@@ -42,6 +46,7 @@ curl -fsSL "https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner/a
 
 find "$script_dir/init/argocd/upstream" "$script_dir/init/cert-manager/upstream" \
   "$script_dir/init/ingress-nginx/upstream" "$script_dir/init/metallb-system/upstream" \
+  "$script_dir/init/sealed-secrets/upstream" \
   "$script_dir/base/nfs-provisioner/upstream" -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 |
   xargs -0 yamlfmt
 sed -i '${/^$/d;}' "$metallb_dir/native/ns.yaml" "$metallb_dir/webhook/patches/patch_webhook_configuration.yaml"

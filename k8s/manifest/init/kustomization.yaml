@@ -6,6 +6,6 @@ resources:
   - ./cert-manager
   - ./metallb-system
   - ./ingress-nginx
+  - ./sealed-secrets
+  - ./secrets
   - ./tailscale-k8s-operator.yaml
-  - ./secret.yaml
-
