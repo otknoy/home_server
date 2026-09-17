@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - alertmanager.yaml
+  - alertmanager-slack-url-secret.yaml
 
 configMapGenerator:
   - name: alertmanager-cm
