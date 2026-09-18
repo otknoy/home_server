@@ -1,25 +1,28 @@
 # Kubernetes クラスタ運用
 
-`manifest/init/`は初期導入用、`manifest/base/`はArgo CDが同期する常設リソースです。SecretはSealed Secretsで管理し、平文や秘密鍵をリポジトリへ保存しません。
+`manifest/bootstrap/`は手動での初期導入用、`manifest/platform/`と`manifest/base/`はArgo CDが同期します。SecretはSealed Secretsで管理し、平文や秘密鍵をリポジトリへ保存しません。
 
 ## 初期セットアップ
 
 ```bash
 cd k8s
-kubectl apply -k manifest/init/sealed-secrets
+kubectl apply -k manifest/platform/sealed-secrets
 kubectl wait --for=condition=Established crd/sealedsecrets.bitnami.com --timeout=5m
 kubectl rollout status deployment/sealed-secrets-controller -n kube-system --timeout=5m
 
-# クラスタ再構築時のみ、initを適用する前に秘密鍵を復元する
+# クラスタ再構築時のみ、Applicationを適用する前に秘密鍵を復元する
 kubectl apply -f /path/to/sealed-secrets-key.yaml
 kubectl rollout restart deployment/sealed-secrets-controller -n kube-system
 
-kubectl apply -k manifest/init
+kubectl apply -k manifest/bootstrap/argocd
 kubectl wait --for=condition=Established crd/applications.argoproj.io --timeout=5m
-kubectl apply -f manifest/init/argocd/home-server.yaml
+kubectl apply -f manifest/bootstrap/applications/home-server-platform.yaml
+kubectl wait --for=jsonpath='{.status.sync.status}'=Synced application/home-server-platform -n argocd --timeout=10m
+kubectl wait --for=jsonpath='{.status.health.status}'=Healthy application/home-server-platform -n argocd --timeout=10m
+kubectl apply -f manifest/bootstrap/applications/home-server.yaml
 ```
 
-`manifest/base`はArgo CDが同期するため、手動で適用しません。
+`manifest/platform`と`manifest/base`はArgo CDが同期するため、通常は手動で適用しません。
 
 ## Secretの追加・更新
 
