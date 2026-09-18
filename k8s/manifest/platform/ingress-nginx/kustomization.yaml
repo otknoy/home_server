@@ -16,3 +16,15 @@ patches:
         annotations:
           tailscale.com/expose: true
           tailscale.com/hostname: otknoy-k8s
+  - target:
+      group: batch
+      version: v1
+      kind: Job
+      name: ingress-nginx-admission-.*
+    patch: |-
+      - op: add
+        path: /metadata/annotations
+        value:
+          argocd.argoproj.io/sync-options: Replace=true
+      - op: remove
+        path: /spec/ttlSecondsAfterFinished
