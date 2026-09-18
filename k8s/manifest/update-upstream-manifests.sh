@@ -19,15 +19,15 @@ SEALED_SECRETS_TAG=v0.40.0
 NFS_SUBDIR_EXTERNAL_PROVISIONER_TAG=nfs-subdir-external-provisioner-4.0.18
 
 curl -fsSL "https://raw.githubusercontent.com/argoproj/argo-cd/$ARGOCD_TAG/manifests/install.yaml" \
-  -o "$script_dir/init/argocd/upstream/install.yaml"
+  -o "$script_dir/bootstrap/argocd/upstream/install.yaml"
 curl -fsSL "https://github.com/cert-manager/cert-manager/releases/download/$CERT_MANAGER_TAG/cert-manager.yaml" \
-  -o "$script_dir/init/cert-manager/upstream/cert-manager.yaml"
+  -o "$script_dir/platform/cert-manager/upstream/cert-manager.yaml"
 curl -fsSL "https://raw.githubusercontent.com/kubernetes/ingress-nginx/$INGRESS_NGINX_TAG/deploy/static/provider/cloud/deploy.yaml" \
-  -o "$script_dir/init/ingress-nginx/upstream/deploy.yaml"
+  -o "$script_dir/platform/ingress-nginx/upstream/deploy.yaml"
 curl -fsSL "https://github.com/bitnami-labs/sealed-secrets/releases/download/$SEALED_SECRETS_TAG/controller.yaml" \
-  -o "$script_dir/init/sealed-secrets/upstream/controller.yaml"
+  -o "$script_dir/platform/sealed-secrets/upstream/controller.yaml"
 
-metallb_dir="$script_dir/init/metallb-system/upstream/config"
+metallb_dir="$script_dir/platform/metallb-system/upstream/config"
 rm -rf -- "$metallb_dir"
 mkdir -p "$metallb_dir"
 curl -fsSL "https://github.com/metallb/metallb/archive/refs/tags/$METALLB_TAG.tar.gz" |
@@ -38,15 +38,15 @@ curl -fsSL "https://github.com/metallb/metallb/archive/refs/tags/$METALLB_TAG.ta
     '*/config/controllers/*' \
     '*/config/webhook/*'
 
-nfs_dir="$script_dir/base/nfs-provisioner/upstream/deploy"
+nfs_dir="$script_dir/platform/nfs-provisioner/upstream/deploy"
 rm -rf -- "$nfs_dir"
 mkdir -p "$nfs_dir"
 curl -fsSL "https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner/archive/refs/tags/$NFS_SUBDIR_EXTERNAL_PROVISIONER_TAG.tar.gz" |
   tar -xzf - --strip-components=2 -C "$nfs_dir" --wildcards '*/deploy/*'
 
-find "$script_dir/init/argocd/upstream" "$script_dir/init/cert-manager/upstream" \
-  "$script_dir/init/ingress-nginx/upstream" "$script_dir/init/metallb-system/upstream" \
-  "$script_dir/init/sealed-secrets/upstream" \
-  "$script_dir/base/nfs-provisioner/upstream" -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 |
+find "$script_dir/bootstrap/argocd/upstream" "$script_dir/platform/cert-manager/upstream" \
+  "$script_dir/platform/ingress-nginx/upstream" "$script_dir/platform/metallb-system/upstream" \
+  "$script_dir/platform/sealed-secrets/upstream" \
+  "$script_dir/platform/nfs-provisioner/upstream" -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 |
   xargs -0 yamlfmt
 sed -i '${/^$/d;}' "$metallb_dir/native/ns.yaml" "$metallb_dir/webhook/patches/patch_webhook_configuration.yaml"
