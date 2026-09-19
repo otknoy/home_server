@@ -98,15 +98,3 @@ spec:
       name: postgres
   selector:
     app: postgres
-
----
-
-apiVersion: v1
-kind: Secret
-metadata:
-  name: postgres-secret
-type: Opaque
-stringData:
-  POSTGRES_DB: n8n
-  POSTGRES_USER: n8n
-  POSTGRES_PASSWORD: mysecretpassword
