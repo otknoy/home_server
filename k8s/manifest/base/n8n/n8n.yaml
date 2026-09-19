@@ -25,29 +25,26 @@ spec:
         app: n8n
     spec:
       containers:
-      - name: n8n
-        image: n8nio/n8n
-        ports:
-        - containerPort: 5678
-        env:
-        - name: N8N_BASIC_AUTH_ACTIVE
-          value: "true"
-        - name: N8N_BASIC_AUTH_USER
-          value: "n8n"
-        - name: N8N_BASIC_AUTH_PASSWORD
-          value: "n8n"
-        - name: GENERIC_TIMEZONE
-          value: "Asia/Tokyo"
-        - name: N8N_METRICS
-          value: "true"
-        - name: DB_TYPE
-          value: "postgresdb"
-        - name: DB_POSTGRESDB_HOST
-          value: "postgres-service"
-        - name: DB_POSTGRESDB_USER
-          value: "n8n"
-        - name: DB_POSTGRESDB_PASSWORD
-          value: "mysecretpassword"
+        - name: n8n
+          image: n8nio/n8n
+          ports:
+            - containerPort: 5678
+          envFrom:
+            - secretRef:
+                name: n8n-secret
+          env:
+            - name: N8N_BASIC_AUTH_ACTIVE
+              value: "true"
+            - name: N8N_PORT
+              value: "5678"
+            - name: GENERIC_TIMEZONE
+              value: "Asia/Tokyo"
+            - name: N8N_METRICS
+              value: "true"
+            - name: DB_TYPE
+              value: "postgresdb"
+            - name: DB_POSTGRESDB_HOST
+              value: "postgres-service"
 
 ---
 
@@ -65,8 +62,8 @@ spec:
   selector:
     app: n8n
   ports:
-  - protocol: TCP
-    port: 5678
+    - protocol: TCP
+      port: 5678
 
 ---
 
@@ -79,16 +76,16 @@ metadata:
 spec:
   ingressClassName: tailscale
   tls:
-  - hosts:
-    - n8n
+    - hosts:
+        - n8n
   rules:
-  - host: n8n
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: n8n
-            port:
-              number: 5678 
+    - host: n8n
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: n8n
+                port:
+                  number: 5678
