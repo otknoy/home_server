@@ -59,16 +59,6 @@ spec:
         resources:
           requests:
             storage: 32Gi
-    # - metadata:
-    #     name: data
-    #   spec:
-    #     accessModes:
-    #       - ReadWriteOnce
-    #     storageClassName: synostorage
-    #     resources:
-    #       requests:
-    #         storage: 64Gi
-
 ---
 
 apiVersion: v1
@@ -114,6 +104,36 @@ metadata:
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: prometheus
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+      - services
+      - endpoints
+      - pods
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - nodes/metrics
+      - nodes/proxy
+    verbs:
+      - get
+  - nonResourceURLs:
+      - /metrics
+    verbs:
+      - get
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: prometheus
@@ -123,5 +143,5 @@ subjects:
     namespace: monitoring
 roleRef:
   kind: ClusterRole
-  name: cluster-admin
+  name: prometheus
   apiGroup: rbac.authorization.k8s.io
