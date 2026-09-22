@@ -25,6 +25,6 @@ patches:
       - op: add
         path: /metadata/annotations
         value:
-          argocd.argoproj.io/sync-options: Replace=true
+          argocd.argoproj.io/sync-options: Force=true,Replace=true
       - op: remove
         path: /spec/ttlSecondsAfterFinished
