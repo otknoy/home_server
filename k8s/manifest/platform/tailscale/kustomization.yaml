@@ -4,3 +4,6 @@ kind: Kustomization
 resources:
   - ./operator.yaml
   - ./secrets
+
+patches:
+  - path: ./remove-operator-oauth-secret.yaml

@@ -17,6 +17,8 @@ METALLB_TAG=v0.16.1
 SEALED_SECRETS_TAG=v0.40.0
 # renovate: datasource=github-tags depName=kubernetes-sigs/nfs-subdir-external-provisioner versioning=semver extractVersion=^nfs-subdir-external-provisioner-(?<version>.*)$
 NFS_SUBDIR_EXTERNAL_PROVISIONER_TAG=nfs-subdir-external-provisioner-4.0.18
+# renovate: datasource=docker depName=tailscale/k8s-operator versioning=semver
+TAILSCALE_OPERATOR_TAG=v1.102.4
 
 curl -fsSL "https://raw.githubusercontent.com/argoproj/argo-cd/$ARGOCD_TAG/manifests/install.yaml" \
   -o "$script_dir/bootstrap/argocd/upstream/install.yaml"
@@ -26,6 +28,10 @@ curl -fsSL "https://raw.githubusercontent.com/kubernetes/ingress-nginx/$INGRESS_
   -o "$script_dir/platform/ingress-nginx/upstream/deploy.yaml"
 curl -fsSL "https://github.com/bitnami-labs/sealed-secrets/releases/download/$SEALED_SECRETS_TAG/controller.yaml" \
   -o "$script_dir/platform/sealed-secrets/upstream/controller.yaml"
+
+tailscale_manifest="$script_dir/platform/tailscale/operator.yaml"
+curl -fsSL "https://raw.githubusercontent.com/tailscale/tailscale/$TAILSCALE_OPERATOR_TAG/cmd/k8s-operator/deploy/manifests/operator.yaml" \
+  -o "$tailscale_manifest"
 
 metallb_dir="$script_dir/platform/metallb-system/upstream/config"
 rm -rf -- "$metallb_dir"
@@ -47,6 +53,7 @@ curl -fsSL "https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner/a
 find "$script_dir/bootstrap/argocd/upstream" "$script_dir/platform/cert-manager/upstream" \
   "$script_dir/platform/ingress-nginx/upstream" "$script_dir/platform/metallb-system/upstream" \
   "$script_dir/platform/sealed-secrets/upstream" \
-  "$script_dir/platform/nfs-provisioner/upstream" -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 |
+  "$script_dir/platform/nfs-provisioner/upstream" "$script_dir/platform/tailscale" \
+  -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 |
   xargs -0 yamlfmt
 sed -i '${/^$/d;}' "$metallb_dir/native/ns.yaml" "$metallb_dir/webhook/patches/patch_webhook_configuration.yaml"
