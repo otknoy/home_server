@@ -31,7 +31,7 @@ curl -fsSL "https://raw.githubusercontent.com/kubernetes/ingress-nginx/$INGRESS_
 curl -fsSL "https://github.com/bitnami-labs/sealed-secrets/releases/download/$SEALED_SECRETS_TAG/controller.yaml" \
   -o "$script_dir/platform/sealed-secrets/upstream/controller.yaml"
 
-tailscale_manifest="$script_dir/platform/tailscale/operator.yaml"
+tailscale_manifest="$script_dir/platform/tailscale/upstream/operator.yaml"
 curl -fsSL "https://raw.githubusercontent.com/tailscale/tailscale/$TAILSCALE_OPERATOR_TAG/cmd/k8s-operator/deploy/manifests/operator.yaml" \
   -o "$tailscale_manifest"
 
@@ -64,6 +64,6 @@ find "$script_dir/bootstrap/argocd/upstream" "$script_dir/platform/cert-manager/
   "$script_dir/platform/ingress-nginx/upstream" "$script_dir/platform/metallb-system/upstream" \
   "$script_dir/platform/kube-system/kube-state-metrics/upstream" \
   "$script_dir/platform/sealed-secrets/upstream" \
-  "$script_dir/platform/nfs-provisioner/upstream" "$script_dir/platform/tailscale" \
+  "$script_dir/platform/nfs-provisioner/upstream" "$script_dir/platform/tailscale/upstream" \
   -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 |
   xargs -0 yamlfmt
