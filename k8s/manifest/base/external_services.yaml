@@ -6,7 +6,7 @@ metadata:
   name: debian
   namespace: monitoring
 spec:
-  externalName: placeholder   # any value - will be overwritten by operator
+  externalName: placeholder # any value - will be overwritten by operator
   type: ExternalName
 
 ---
@@ -19,5 +19,5 @@ metadata:
   name: ds224plus
   namespace: monitoring
 spec:
-  externalName: placeholder   # any value - will be overwritten by operator
+  externalName: placeholder # any value - will be overwritten by operator
   type: ExternalName

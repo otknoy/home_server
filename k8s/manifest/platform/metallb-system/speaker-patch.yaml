@@ -10,9 +10,9 @@ spec:
   template:
     spec:
       containers:
-      - name: speaker
-        args:
-        - --port=7472
-        - --log-level=info
-        # https://metallb.universe.tf/troubleshooting/#metallb-is-not-advertising-my-service-from-my-control-plane-nodes-or-from-my-single-node-cluster
-        - --ignore-exclude-lb
+        - name: speaker
+          args:
+            - --port=7472
+            - --log-level=info
+            # https://metallb.universe.tf/troubleshooting/#metallb-is-not-advertising-my-service-from-my-control-plane-nodes-or-from-my-single-node-cluster
+            - --ignore-exclude-lb
