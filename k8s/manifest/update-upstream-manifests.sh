@@ -17,6 +17,8 @@ METALLB_TAG=v0.16.1
 SEALED_SECRETS_TAG=v0.40.0
 # renovate: datasource=github-tags depName=kubernetes-sigs/nfs-subdir-external-provisioner versioning=semver extractVersion=^nfs-subdir-external-provisioner-(?<version>.*)$
 NFS_SUBDIR_EXTERNAL_PROVISIONER_TAG=nfs-subdir-external-provisioner-4.0.18
+# renovate: datasource=github-releases depName=kubernetes/kube-state-metrics versioning=semver
+KUBE_STATE_METRICS_TAG=v2.20.0
 # renovate: datasource=docker depName=tailscale/k8s-operator versioning=semver
 TAILSCALE_OPERATOR_TAG=v1.102.4
 
@@ -50,10 +52,17 @@ mkdir -p "$nfs_dir"
 curl -fsSL "https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner/archive/refs/tags/$NFS_SUBDIR_EXTERNAL_PROVISIONER_TAG.tar.gz" |
   tar -xzf - --strip-components=2 -C "$nfs_dir" --wildcards '*/deploy/*'
 
+ksm_dir="$script_dir/platform/kube-system/kube-state-metrics/upstream/standard"
+rm -rf -- "$ksm_dir"
+mkdir -p "$ksm_dir"
+curl -fsSL "https://github.com/kubernetes/kube-state-metrics/archive/refs/tags/$KUBE_STATE_METRICS_TAG.tar.gz" |
+  tar -xzf - --strip-components=3 -C "$ksm_dir" --wildcards '*/examples/standard/*.yaml'
+
 sed -i '${/^$/d;}' "$metallb_dir/native/ns.yaml" "$metallb_dir/webhook/patches/patch_webhook_configuration.yaml"
 
 find "$script_dir/bootstrap/argocd/upstream" "$script_dir/platform/cert-manager/upstream" \
   "$script_dir/platform/ingress-nginx/upstream" "$script_dir/platform/metallb-system/upstream" \
+  "$script_dir/platform/kube-system/kube-state-metrics/upstream" \
   "$script_dir/platform/sealed-secrets/upstream" \
   "$script_dir/platform/nfs-provisioner/upstream" "$script_dir/platform/tailscale" \
   -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 |
