@@ -50,10 +50,11 @@ mkdir -p "$nfs_dir"
 curl -fsSL "https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner/archive/refs/tags/$NFS_SUBDIR_EXTERNAL_PROVISIONER_TAG.tar.gz" |
   tar -xzf - --strip-components=2 -C "$nfs_dir" --wildcards '*/deploy/*'
 
+sed -i '${/^$/d;}' "$metallb_dir/native/ns.yaml" "$metallb_dir/webhook/patches/patch_webhook_configuration.yaml"
+
 find "$script_dir/bootstrap/argocd/upstream" "$script_dir/platform/cert-manager/upstream" \
   "$script_dir/platform/ingress-nginx/upstream" "$script_dir/platform/metallb-system/upstream" \
   "$script_dir/platform/sealed-secrets/upstream" \
   "$script_dir/platform/nfs-provisioner/upstream" "$script_dir/platform/tailscale" \
   -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 |
   xargs -0 yamlfmt
-sed -i '${/^$/d;}' "$metallb_dir/native/ns.yaml" "$metallb_dir/webhook/patches/patch_webhook_configuration.yaml"
