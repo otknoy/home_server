@@ -3,6 +3,7 @@
   "extends": [
     "config:recommended"
   ],
+  "reviewers": ["otknoy"],
   "separateMajorMinor": true,
   "separateMinorPatch": true,
   "ignorePaths": [
