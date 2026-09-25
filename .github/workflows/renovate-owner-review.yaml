@@ -5,37 +5,55 @@ on:
     types: [opened, reopened, synchronize, ready_for_review]
   pull_request_review:
     types: [submitted, dismissed]
+  workflow_dispatch:
+    inputs:
+      pull_request_number:
+        description: Pull request number to refresh
+        required: true
+        type: number
 
 permissions:
   pull-requests: read
+  statuses: write
 
 concurrency:
-  group: renovate-owner-review-${{ github.event.pull_request.number }}
+  group: renovate-owner-review-${{ github.event.pull_request.number || inputs.pull_request_number }}
   cancel-in-progress: true
 
 jobs:
-  owner-approval:
-    name: Renovate owner approval
+  publish-status:
+    name: Renovate owner review required
     runs-on: ubuntu-latest
     steps:
-      - name: Check approval on current commit
+      - name: Set status for current commit
         env:
           GH_TOKEN: ${{ github.token }}
-          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number || inputs.pull_request_number }}
         run: |
-          if [[ "$PR_AUTHOR" != 'renovate[bot]' ]]; then
+          pr=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER")
+          pr_author=$(jq -r '.user.login' <<< "$pr")
+          head_sha=$(jq -r '.head.sha' <<< "$pr")
+
+          if [[ "$pr_author" != 'renovate[bot]' ]]; then
             exit 0
           fi
 
-          if ! gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews?per_page=100" --paginate --slurp |
-            jq -e --arg reviewer otknoy --arg sha "$HEAD_SHA" '
+          if gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews?per_page=100" --paginate --slurp |
+            jq -e --arg reviewer otknoy --arg sha "$head_sha" '
               [.[][] | select(.user.login == $reviewer and
                 (.state == "APPROVED" or .state == "CHANGES_REQUESTED" or .state == "DISMISSED"))]
               | last
               | .state == "APPROVED" and .commit_id == $sha
             ' >/dev/null; then
-            echo '::error::Renovate PR requires approval by @otknoy on the current commit.'
-            exit 1
+            state=success
+            description='Approved by @otknoy on the current commit'
+          else
+            state=pending
+            description='Waiting for @otknoy to approve this commit'
           fi
+
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$head_sha" \
+            -f state="$state" \
+            -f context='Renovate owner review required' \
+            -f description="$description" \
+            -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/pull/$PR_NUMBER" >/dev/null
