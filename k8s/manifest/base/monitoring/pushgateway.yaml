@@ -28,7 +28,7 @@ spec:
               path: /-/ready
               port: 9091
           args:
-            - --web.external-url=http://localhost:9090/pushgateway/
+            - --web.external-url=http://otknoy-k8s/pushgateway/
             - --web.route-prefix=/
           securityContext:
             readOnlyRootFilesystem: true
