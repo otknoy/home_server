@@ -4,6 +4,10 @@
     "config:recommended"
   ],
   "reviewers": ["otknoy"],
+  "assignAutomerge": true,
+  "automerge": true,
+  "automergeType": "pr",
+  "platformAutomerge": true,
   "separateMajorMinor": true,
   "separateMinorPatch": true,
   "ignorePaths": [
