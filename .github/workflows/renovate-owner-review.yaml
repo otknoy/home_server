@@ -1,0 +1,41 @@
+name: Renovate owner review
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+  pull_request_review:
+    types: [submitted, dismissed]
+
+permissions:
+  pull-requests: read
+
+concurrency:
+  group: renovate-owner-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  owner-approval:
+    name: Renovate owner approval
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check approval on current commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [[ "$PR_AUTHOR" != 'renovate[bot]' ]]; then
+            exit 0
+          fi
+
+          if ! gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews?per_page=100" --paginate --slurp |
+            jq -e --arg reviewer otknoy --arg sha "$HEAD_SHA" '
+              [.[][] | select(.user.login == $reviewer and
+                (.state == "APPROVED" or .state == "CHANGES_REQUESTED" or .state == "DISMISSED"))]
+              | last
+              | .state == "APPROVED" and .commit_id == $sha
+            ' >/dev/null; then
+            echo '::error::Renovate PR requires approval by @otknoy on the current commit.'
+            exit 1
+          fi
