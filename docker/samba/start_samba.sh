@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+: "${USER:?USER is required}"
+: "${PASSWORD:?PASSWORD is required}"
+
 echo start samba
 
 # set user and password
