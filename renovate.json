@@ -34,6 +34,17 @@
         "# renovate: datasource=(?<datasource>[^\\s]+) depName=(?<depName>[^\\s]+)(?: versioning=(?<versioning>[^\\s]+))?(?: extractVersion=(?<extractVersion>[^\\s]+))?\\s+\\w+=(?<currentValue>[^\\s]+)"
       ],
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^\\.github/workflows/yamlfmt\\.yaml$/"
+      ],
+      "matchStrings": [
+        "go install github\\.com/google/yamlfmt/cmd/yamlfmt@(?<currentValue>v\\d+\\.\\d+\\.\\d+)"
+      ],
+      "depNameTemplate": "github.com/google/yamlfmt",
+      "datasourceTemplate": "go"
     }
   ]
 }
