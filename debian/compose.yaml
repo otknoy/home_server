@@ -20,8 +20,8 @@ services:
   samba:
     build: ../docker/samba
     environment:
-      USER: ${SAMBA_USER}
-      PASSWORD: ${SAMBA_PASSWORD}
+      USER: ${SAMBA_USER:?SAMBA_USER is required}
+      PASSWORD: ${SAMBA_PASSWORD:?SAMBA_PASSWORD is required}
     ports:
       - 139:139
       - 445:445
