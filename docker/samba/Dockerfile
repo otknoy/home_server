@@ -1,4 +1,4 @@
-FROM rockylinux/rockylinux:9.8-minimal
+FROM rockylinux/rockylinux:10.2-minimal
 
 RUN microdnf -y update && microdnf -y install samba
 
