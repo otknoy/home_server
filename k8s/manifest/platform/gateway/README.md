@@ -1,22 +1,25 @@
 # Gateway API cutover
 
-`home-server` の Envoy Gateway は、LAN の `192.168.0.128` と Tailscale の
-`otknoy-k8s` を ingress-nginx から引き継ぐ。Git の変更を `main` に反映する前に
-旧 Service を削除すると、Argo CD が旧構成を再同期する可能性がある。
+`home-server` の Envoy Gateway は、一時 IP `192.168.0.129` で ingress-nginx と
+並行稼働する。旧 Service が `otknoy-k8s` を使っている間は、Envoy の Service を
+Tailscale に公開しない。旧 Service を削除してから `cutover/` を適用し、LAN の
+`192.168.0.128` と Tailscale 名を引き継ぐ。
 
-1. Envoy Gateway の CRD とコントローラーを導入し、別の MetalLB IP
-   （初回検証では `192.168.0.129`）で Gateway と HTTPRoute を適用する。
+1. この変更を `main` に反映し、Argo CD が Envoy Gateway と HTTPRoute を
+   適用したことを確認する。`prune: false` なので旧リソースは残り、Application
+   全体は `OutOfSync` のままになる場合がある。
 2. 一時 IP で `/`、`/grafana/`、`/prometheus/`、`/alertmanager/`、
    `/pushgateway/` と各配下のページを確認する。Gateway の `Programmed`、
    HTTPRoute の `Accepted` と `ResolvedRefs` が `True` であることも確認する。
-3. このリポジトリの変更を `main` に反映し、Argo CD の platform と base の
-   同期を確認する。Envoy の Service はまだ旧 Service と同じ IP を取得できない。
-   `prune: false` なので旧リソースは残る。
-4. `kubectl delete svc ingress-nginx-controller -n ingress-nginx` で旧 Service の
-   MetalLB IP と Tailscale 名を解放する。Envoy の Service に
-   `192.168.0.128` が割り当てられ、Tailscale に `otknoy-k8s` が再登録される
-   まで待つ。この間は短時間の接続断が生じる。
-5. LAN と Tailscale の両方で5経路を再確認する。正常なら旧5 Ingress と
+3. `kubectl delete svc ingress-nginx-controller -n ingress-nginx` で旧 Service の
+   MetalLB IP と Tailscale 名を解放する。`kubectl get statefulset -n tailscale`
+   で旧 ingress-nginx 用 proxy の削除を確認してから
+   `kubectl apply -k k8s/manifest/platform/gateway/cutover` を実行する。
+   この間は短時間の接続断が生じる。
+4. Envoy の Service に `192.168.0.128` が割り当てられ、Tailscale に
+   `otknoy-k8s` が登録されたら、LAN と Tailscale の両方で5経路を再確認する。
+5. `platform/kustomization.yaml` の参照先を `./gateway/cutover` に変更して
+   `main` に反映する。実クラスタと Git の設定が一致したら旧5 Ingress と
    ingress-nginx の残存リソースを削除する。
 
 ```sh
