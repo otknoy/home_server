@@ -3,6 +3,8 @@ kind: EnvoyProxy
 metadata:
   name: home-server
   namespace: envoy-gateway-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   provider:
     type: Kubernetes
@@ -18,6 +20,8 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
 metadata:
   name: envoy
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   controllerName: gateway.envoyproxy.io/gatewayclass-controller
   parametersRef:
@@ -31,6 +35,8 @@ kind: Gateway
 metadata:
   name: home-server
   namespace: envoy-gateway-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   gatewayClassName: envoy
   listeners:
