@@ -89,25 +89,3 @@ spec:
     app: grafana
   ports:
     - port: 3000
-
----
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: grafana-ing
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/use-regex: "true"
-spec:
-  ingressClassName: nginx
-  rules:
-    - http:
-        paths:
-          - pathType: ImplementationSpecific
-            path: '/grafana(/|$)(.*)'
-            backend:
-              service:
-                name: grafana-svc
-                port:
-                  number: 3000

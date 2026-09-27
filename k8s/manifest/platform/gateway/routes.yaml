@@ -1,0 +1,80 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: web-dashboard
+  namespace: app
+spec:
+  parentRefs:
+    - name: home-server
+      namespace: envoy-gateway-system
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: web-dashboard-svc
+          port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: monitoring
+  namespace: monitoring
+spec:
+  parentRefs:
+    - name: home-server
+      namespace: envoy-gateway-system
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /grafana
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: grafana-svc
+          port: 3000
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /prometheus
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: prometheus-svc
+          port: 9090
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /alertmanager
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: alertmanager-svc
+          port: 9093
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /pushgateway
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: pushgateway-svc
+          port: 9091

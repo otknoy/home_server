@@ -3,7 +3,8 @@ kind: Kustomization
 
 resources:
   - ./cert-manager
-  - ./ingress-nginx
+  - ./envoy-gateway
+  - ./gateway
   - ./kube-system
   - ./metallb-system
   - ./nfs-provisioner

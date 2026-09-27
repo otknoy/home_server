@@ -37,8 +37,8 @@ update_archive_directory() {
 ARGOCD_TAG=v3.5.3
 # renovate: datasource=github-releases depName=cert-manager/cert-manager versioning=semver
 CERT_MANAGER_TAG=v1.21.2
-# renovate: datasource=github-tags depName=kubernetes/ingress-nginx versioning=semver extractVersion=^controller-v(?<version>.*)$
-INGRESS_NGINX_TAG=controller-v1.15.1
+# renovate: datasource=github-releases depName=envoyproxy/gateway versioning=semver
+ENVOY_GATEWAY_TAG=v1.9.1
 # renovate: datasource=github-tags depName=metallb/metallb versioning=semver
 METALLB_TAG=v0.16.1
 # renovate: datasource=github-releases depName=bitnami-labs/sealed-secrets versioning=semver
@@ -50,16 +50,31 @@ KUBE_STATE_METRICS_TAG=v2.20.0
 # renovate: datasource=docker depName=tailscale/k8s-operator versioning=semver
 TAILSCALE_OPERATOR_TAG=v1.102.4
 
+update_envoy_gateway() {
+  update_yaml "https://github.com/envoyproxy/gateway/releases/download/$ENVOY_GATEWAY_TAG/install.yaml" \
+    "$script_dir/platform/envoy-gateway/upstream/install.yaml"
+  yamlfmt "$script_dir/platform/envoy-gateway/upstream/install.yaml"
+}
+
+if [[ ${1:-} == envoy-gateway ]]; then
+  update_envoy_gateway
+  exit
+fi
+
+if [[ $# -ne 0 ]]; then
+  echo "usage: $0 [envoy-gateway]" >&2
+  exit 2
+fi
+
 update_yaml "https://raw.githubusercontent.com/argoproj/argo-cd/$ARGOCD_TAG/manifests/install.yaml" \
   "$script_dir/bootstrap/argocd/upstream/install.yaml"
 update_yaml "https://github.com/cert-manager/cert-manager/releases/download/$CERT_MANAGER_TAG/cert-manager.yaml" \
   "$script_dir/platform/cert-manager/upstream/cert-manager.yaml"
-update_yaml "https://raw.githubusercontent.com/kubernetes/ingress-nginx/$INGRESS_NGINX_TAG/deploy/static/provider/cloud/deploy.yaml" \
-  "$script_dir/platform/ingress-nginx/upstream/deploy.yaml"
 update_yaml "https://github.com/bitnami-labs/sealed-secrets/releases/download/$SEALED_SECRETS_TAG/controller.yaml" \
   "$script_dir/platform/sealed-secrets/upstream/controller.yaml"
 update_yaml "https://raw.githubusercontent.com/tailscale/tailscale/$TAILSCALE_OPERATOR_TAG/cmd/k8s-operator/deploy/manifests/operator.yaml" \
   "$script_dir/platform/tailscale/upstream/operator.yaml"
+update_envoy_gateway
 
 update_archive_directory "https://github.com/metallb/metallb/archive/refs/tags/$METALLB_TAG.tar.gz" \
   "$script_dir/platform/metallb-system/upstream/config" 2 \
@@ -76,7 +91,7 @@ update_archive_directory "https://github.com/kubernetes/kube-state-metrics/archi
   "$script_dir/platform/kube-system/kube-state-metrics/upstream/standard" 3 '*/examples/standard/*.yaml'
 
 find "$script_dir/bootstrap/argocd/upstream" "$script_dir/platform/cert-manager/upstream" \
-  "$script_dir/platform/ingress-nginx/upstream" "$script_dir/platform/metallb-system/upstream" \
+  "$script_dir/platform/metallb-system/upstream" \
   "$script_dir/platform/kube-system/kube-state-metrics/upstream" \
   "$script_dir/platform/sealed-secrets/upstream" \
   "$script_dir/platform/nfs-provisioner/upstream" "$script_dir/platform/tailscale/upstream" \
