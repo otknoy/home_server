@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - dashboard.yaml
+  - httproute.yaml
 
 configMapGenerator:
   - name: web-dashboard-nginx-cm
