@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - ./cert-manager
   - ./envoy-gateway
-  - ./gateway
+  - ./gateway/cutover
   - ./kube-system
   - ./metallb-system
   - ./nfs-provisioner
