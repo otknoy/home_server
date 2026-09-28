@@ -11,3 +11,4 @@ resources:
   - ./node-exporter.yaml
   - ./pushgateway.yaml
   - ./snmp-exporter.yaml
+  - ./httproute.yaml
