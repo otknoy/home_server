@@ -12,7 +12,9 @@ spec:
       envoyService:
         type: LoadBalancer
         annotations:
-          metallb.io/loadBalancerIPs: 192.168.0.129
+          metallb.io/loadBalancerIPs: 192.168.0.128
+          tailscale.com/expose: "true"
+          tailscale.com/hostname: otknoy-k8s
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
