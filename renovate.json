@@ -3,11 +3,8 @@
   "extends": [
     "config:recommended"
   ],
-  "reviewers": ["otknoy"],
-  "assignAutomerge": true,
-  "automerge": true,
-  "automergeType": "pr",
-  "platformAutomerge": true,
+  "assignees": ["otknoy"],
+  "automerge": false,
   "separateMajorMinor": true,
   "separateMinorPatch": true,
   "ignorePaths": [
