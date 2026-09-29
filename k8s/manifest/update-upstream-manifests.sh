@@ -38,7 +38,7 @@ ARGOCD_TAG=v3.5.3
 # renovate: datasource=github-releases depName=cert-manager/cert-manager versioning=semver
 CERT_MANAGER_TAG=v1.21.2
 # renovate: datasource=github-releases depName=envoyproxy/gateway versioning=semver
-ENVOY_GATEWAY_TAG=v1.9.1
+ENVOY_GATEWAY_TAG=v1.9.2
 # renovate: datasource=github-tags depName=metallb/metallb versioning=semver
 METALLB_TAG=v0.16.1
 # renovate: datasource=github-releases depName=bitnami-labs/sealed-secrets versioning=semver
