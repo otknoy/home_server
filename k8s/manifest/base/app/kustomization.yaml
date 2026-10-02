@@ -8,3 +8,4 @@ resources:
   - ./roomctl-secret.yaml
   - web-dashbaord/
   - roomctl.yaml
+  - image-crawler/
