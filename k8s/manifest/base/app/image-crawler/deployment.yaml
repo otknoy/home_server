@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-crawler
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: image-crawler
+  template:
+    metadata:
+      labels:
+        app: image-crawler
+    spec:
+      imagePullSecrets:
+        - name: ghcr-pull
+      containers:
+        - name: image-crawler
+          image: ghcr.io/otknoy/xxx_image_scraper:20261002212631
+          args:
+            - -o
+            - /data
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: image-crawler-data
