@@ -3,7 +3,6 @@ namespace: nfs-provisioner
 resources:
   - ./upstream/deploy
   - namespace.yaml
-  - retain-storageclass.yaml
 patches:
   - path: patch_nfs_details.yaml
   - target:
