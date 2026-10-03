@@ -9,6 +9,9 @@ patches:
       kind: StorageClass
       name: nfs-client
     patch: |-
+      - op: add
+        path: /reclaimPolicy
+        value: Retain
       - op: replace
         path: /parameters/pathPattern
         value: ${.PVC.namespace}/${.PVC.name}
