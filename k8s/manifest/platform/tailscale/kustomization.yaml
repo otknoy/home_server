@@ -4,6 +4,9 @@ kind: Kustomization
 resources:
   - ./upstream/operator.yaml
   - ./secrets
+  - ./api-server-proxy-rbac.yaml
+  - ./developers-rolebinding.yaml
 
 patches:
   - path: ./remove-operator-oauth-secret.yaml
+  - path: ./api-server-proxy-patch.yaml
