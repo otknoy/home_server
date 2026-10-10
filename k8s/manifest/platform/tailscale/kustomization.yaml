@@ -5,7 +5,7 @@ resources:
   - ./upstream/operator.yaml
   - ./secrets
   - ./api-server-proxy-rbac.yaml
-  - ./developers-rolebinding.yaml
+  - ./admin-rolebinding.yaml
 
 patches:
   - path: ./remove-operator-oauth-secret.yaml
