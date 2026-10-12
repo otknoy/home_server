@@ -18,7 +18,7 @@ spec:
         - name: ghcr-pull
       containers:
         - name: image-crawler
-          image: ghcr.io/otknoy/xxx_image_scraper:20261002212631
+          image: ghcr.io/otknoy/xxx_image_scraper:20261012210222
           args:
             - -o
             - /data
