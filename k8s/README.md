@@ -1,6 +1,6 @@
 # Kubernetes クラスタ運用
 
-`manifest/bootstrap/`は手動での初期導入用、`manifest/platform/`と`manifest/base/`はArgo CDが同期します。SecretはSealed Secretsで管理し、平文や秘密鍵をリポジトリへ保存しません。
+`manifest/bootstrap/`は初期導入・復旧用です。導入後は専用Application `argocd`でArgo CD自身を管理し、手動で同期します。`manifest/platform/`と`manifest/base/`はArgo CDが自動同期します。SecretはSealed Secretsで管理し、平文や秘密鍵をリポジトリへ保存しません。
 
 ## 初期セットアップ
 
@@ -14,8 +14,9 @@ kubectl rollout status deployment/sealed-secrets-controller -n kube-system --tim
 kubectl apply -f /path/to/sealed-secrets-key.yaml
 kubectl rollout restart deployment/sealed-secrets-controller -n kube-system
 
-kubectl apply -k manifest/bootstrap/argocd
+kubectl apply --server-side -k manifest/bootstrap/argocd
 kubectl wait --for=condition=Established crd/applications.argoproj.io --timeout=5m
+kubectl apply -f manifest/bootstrap/applications/argocd.yaml
 kubectl apply -f manifest/bootstrap/applications/home-server-platform.yaml
 kubectl wait --for=jsonpath='{.status.sync.status}'=Synced application/home-server-platform -n argocd --timeout=10m
 kubectl wait --for=jsonpath='{.status.health.status}'=Healthy application/home-server-platform -n argocd --timeout=10m
@@ -23,6 +24,21 @@ kubectl apply -f manifest/bootstrap/applications/home-server.yaml
 ```
 
 `manifest/platform`と`manifest/base`はArgo CDが同期するため、通常は手動で適用しません。
+
+## Argo CD自身の更新・復旧
+
+`./manifest/update-upstream-manifests.sh`でupstreamを更新し、差分を確認してmainへマージします。その後、Argo CD UIでApplication `argocd`をRefreshし、差分を確認してSyncします。Pruneは選択しません。
+
+Application `argocd`は自動同期・自動pruneを無効にし、削除連動のfinalizerを付けません。Applicationを削除する場合は非カスケード削除を選択します。CRDのannotationサイズ制限を避けるため、同期には`ServerSideApply=true`を設定しています。`argocd-secret`の`data`はArgo CDが管理するため、比較・同期の対象から除外します。
+
+Argo CDが停止して同期できない場合は、正常なマニフェストをcheckoutして手動で復旧します。
+
+```bash
+kubectl apply --server-side -k manifest/bootstrap/argocd
+kubectl rollout status deployment/argocd-server -n argocd --timeout=5m
+kubectl rollout status deployment/argocd-repo-server -n argocd --timeout=5m
+kubectl rollout status statefulset/argocd-application-controller -n argocd --timeout=5m
+```
 
 ## Secretの追加・更新
 
