@@ -26,4 +26,5 @@ spec:
       selfHeal: false
     syncOptions:
       - ServerSideApply=true
+      - DisableClientSideApplyMigration=true
       - RespectIgnoreDifferences=true
