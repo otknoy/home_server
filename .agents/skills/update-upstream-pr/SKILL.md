@@ -23,13 +23,13 @@ description: home_server 専用。update-upstream-manifests.sh を変更する P
 - `kubectl config current-context` と Application の接続先を確認し、更新対象のワークロード、Pod のイメージ・imageID・Ready、Application の revision・同期状態・正常性を記録する。Secret 本文や kubeconfig は出力しない。
 - 接続不能または更新対象に既存の異常がある場合は、マージ前に停止して報告する。
 
-## 3. 生成・バージョン固定・検証
+## 3. 生成・公式指定の確認・検証
 
 - PR のスクリプト差分から更新するタグ変数と生成先を特定する。`yamlfmt .` を変更前後に実行する。変更前の整形で既存ファイルに差分が生じた場合は、その差分を更新コミットに混入させず、先に報告して停止する。
 - リポジトリルートで `./k8s/manifest/update-upstream-manifests.sh` を実行する。このスクリプトは対象アプリ以外の upstream も再取得し、ディレクトリを置換するため、生成先の未追跡ファイルにも注意する。
 - 失敗時は部分的な生成結果を commit・push しない。成功時も差分全体を調べ、選択した更新と無関係な差分はコミットしない。元からの変更と区別できない場合は削除・復元せず停止する。
-- 生成済み YAML だけでなく Kustomize の展開結果を確認する。`stable`・`latest` などの可変タグが残る場合は、upstream 本体の手編集ではなく対象 Kustomization の `images` またはパッチで PR のバージョンを固定する。既存の固定タグが旧版に取り残されていないかも確認する。
-- Tailscale では Operator の image と `RELATED_IMAGE_PROXY_IMAGE` など関連する proxy イメージ指定を確認する。環境変数内のイメージは `images` だけでは変更されないため、必要なパッチを使う。付随コンポーネントのバージョンを機械的に同じ値にせず、そのリリースの公式マニフェスト・資料で対応を確認する。
+- 生成済み YAML と Kustomize の展開結果を確認し、イメージ指定は常に更新対象リリースの公式マニフェストに従う。`stable`・`latest` もそのまま維持し、バージョン固定のための `images` やパッチを追加しない。既存の環境固有設定は維持し、公式指定と異なるイメージ上書きを見つけた場合は差異を報告する。
+- Tailscale では Operator の image と `PROXY_IMAGE`・`RELATED_IMAGE_PROXY_IMAGE` など、そのリリースに存在する関連 proxy イメージ指定を確認する。環境変数内も公式マニフェストの値を維持し、付随コンポーネントを機械的に同じバージョンへ変更しない。
 - `git diff --check`、`yamlfmt -lint .`、影響範囲の `kubectl kustomize` と `kubectl apply --dry-run=client -k` を実施する。platform の変更は `k8s/manifest/platform`、Argo CD 自身は `k8s/manifest/bootstrap/argocd` を検証し、base に影響する場合は `k8s/manifest/base` も検証する。dry-run の接続・CRD 不足などは成功扱いせず、未検証として報告し停止する。
 - 関連ファイルだけを明示的に `git add` し、staged diff を確認して `Update <app> upstream manifests to <version>` のような件名で commit する。差分がなければ空 commit は作らず、目的のバージョンが既に生成物へ反映済みか確認する。
 
@@ -53,7 +53,7 @@ description: home_server 専用。update-upstream-manifests.sh を変更する P
 
 - platform に通常の `kubectl apply` は行わない。Argo CD 自身の更新は UI または利用可能な Argo CD CLI/API で、対象 Application だけを prune なし・force なしで Sync する。既存の ServerSideApply などの syncOptions を維持し、自動同期設定は変更しない。同期手段が利用できなければ、マージ済み・同期未完了として報告する。
 - Application の反映 revision が merge commit、またはそれを含む後続コミットであることを確認する。古い revision の `Synced` / `Healthy` だけでは完了にしない。
-- Application の `Synced` / `Healthy` に加え、影響する Deployment・StatefulSet・DaemonSet の rollout 完了、期待するイメージ指定、Pod の Ready を確認する。必要に応じて実行バイナリのバージョンや imageID を照合する。既存 Pod が Ready なだけでは更新成功と判定しない。
+- Application の `Synced` / `Healthy` に加え、展開結果どおりのイメージ指定と Pod の Ready を確認し、Pod template に変更があるワークロードは rollout 完了も確認する。可変タグではマニフェストの取得元タグと実行バイナリのバージョンが一致するとは限らないため、必要に応じて実行バージョンや imageID を照合する。Pod template に変更がなければ Pod が再作成されないことは正常とし、更新を起こすためだけのタグ変更や rollout restart は行わない。マニフェストの反映完了と実行バイナリの更新確認は区別し、既存 Pod の Ready だけでバイナリ更新済みと判定しない。
 - Tailscale では存在する関連 proxy ワークロードも確認する。変更前後の記録と展開結果から対象を特定し、無関係な Pod や正常終了済み Job を異常扱いしない。
 - 同期・rollout 待機は合計 15 分を目安に上限を設ける。失敗・タイムアウト時は Application conditions、対象ワークロード・Pod の状態やイベントを調べて報告し、次の PR へ進まない。自動 rollback、強制適用、無条件の再試行は行わない。
-- 最後に PR URL、merge commit、更新前後のバージョン、CI、反映 revision、実機確認結果と限界を簡潔に報告する。マージ成功と実機更新成功は区別する。
+- 最後に PR URL、merge commit、更新前後のバージョン、CI、反映 revision、実機確認結果と限界を簡潔に報告する。マージ成功、マニフェスト反映、実行バイナリ更新を区別し、可変タグで実行バージョンが未確認なら明記する。
