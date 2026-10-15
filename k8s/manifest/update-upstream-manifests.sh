@@ -48,7 +48,7 @@ NFS_SUBDIR_EXTERNAL_PROVISIONER_TAG=nfs-subdir-external-provisioner-4.0.18
 # renovate: datasource=github-releases depName=kubernetes/kube-state-metrics versioning=semver
 KUBE_STATE_METRICS_TAG=v2.20.0
 # renovate: datasource=docker depName=tailscale/k8s-operator versioning=semver
-TAILSCALE_OPERATOR_TAG=v1.102.4
+TAILSCALE_OPERATOR_TAG=v1.104.1
 
 update_yaml "https://raw.githubusercontent.com/argoproj/argo-cd/$ARGOCD_TAG/manifests/install.yaml" \
   "$script_dir/bootstrap/argocd/upstream/install.yaml"
