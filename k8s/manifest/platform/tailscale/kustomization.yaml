@@ -7,11 +7,6 @@ resources:
   - ./api-server-proxy-rbac.yaml
   - ./admin-rolebinding.yaml
 
-images:
-  - name: tailscale/k8s-operator
-    newTag: v1.104.1
-
 patches:
   - path: ./remove-operator-oauth-secret.yaml
   - path: ./api-server-proxy-patch.yaml
-  - path: ./proxy-image-patch.yaml
