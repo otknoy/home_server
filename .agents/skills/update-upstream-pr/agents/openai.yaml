@@ -1,0 +1,4 @@
+interface:
+  display_name: "upstream 更新 PR の反映"
+  short_description: "home_server 専用の upstream 更新 PR をマージし、実機への反映まで確認する"
+  default_prompt: "$update-upstream-pr を使って upstream 更新 PR を探し、選択した PR の更新から実機確認まで進めてください。"
