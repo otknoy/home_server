@@ -31,6 +31,7 @@ scrape_configs:
   # kubernetes
   # https://github.com/prometheus/prometheus/blob/release-2.50/documentation/examples/prometheus-kubernetes.yml
   - job_name: "kubernetes-apiservers"
+    scrape_interval: 1m
     kubernetes_sd_configs:
       - role: endpoints
     scheme: https
@@ -43,7 +44,13 @@ scrape_configs:
       - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
         action: keep
         regex: default;kubernetes;https
+    metric_relabel_configs:
+      # Unused high-cardinality histogram buckets. Keep sums and counts for averages.
+      - source_labels: [__name__]
+        action: drop
+        regex: (apiserver_request_duration_seconds|apiserver_request_sli_duration_seconds|apiserver_request_body_size_bytes|apiserver_response_sizes|apiserver_watch_list_duration_seconds|apiserver_watch_cache_read_wait_seconds|apiserver_watch_events_sizes|etcd_request_duration_seconds)_bucket
   - job_name: "kubernetes-nodes"
+    scrape_interval: 1m
     scheme: https
     tls_config:
       ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
@@ -54,8 +61,9 @@ scrape_configs:
       - role: node
     relabel_configs:
       - action: labelmap
-        regex: __meta_kubernetes_node_label_(.+)
+        regex: __meta_kubernetes_node_label_(kubernetes_io_hostname)
   - job_name: "kubernetes-cadvisor"
+    scrape_interval: 1m
     scheme: https
     metrics_path: /metrics/cadvisor
     tls_config:
@@ -67,7 +75,7 @@ scrape_configs:
       - role: node
     relabel_configs:
       - action: labelmap
-        regex: __meta_kubernetes_node_label_(.+)
+        regex: __meta_kubernetes_node_label_(kubernetes_io_hostname)
   - job_name: "kubernetes-service-endpoints"
     kubernetes_sd_configs:
       - role: endpoints
@@ -89,11 +97,11 @@ scrape_configs:
       - source_labels: [__meta_kubernetes_pod_name]
         action: replace
         target_label: pod
-      # map k8s label to metrics label
+      # Copy stable application labels only; exclude rollout hashes and version labels.
       - action: labelmap
-        regex: __meta_kubernetes_pod_label_(.+)
+        regex: __meta_kubernetes_pod_label_(app|k8s_app|app_kubernetes_io_name|app_kubernetes_io_instance|app_kubernetes_io_component|app_kubernetes_io_part_of|control_plane)
       - action: labelmap
-        regex: __meta_kubernetes_service_label_(.+)
+        regex: __meta_kubernetes_service_label_(app|k8s_app|app_kubernetes_io_name|app_kubernetes_io_instance|app_kubernetes_io_component|app_kubernetes_io_part_of|control_plane)
       # add namespace label
       - source_labels: [__meta_kubernetes_namespace]
         action: replace
@@ -143,5 +151,6 @@ scrape_configs:
 
   # Global exporter-level metrics
   - job_name: 'snmp_exporter'
+    scrape_interval: 1m
     static_configs:
       - targets: ['snmp-exporter-svc:9116']
