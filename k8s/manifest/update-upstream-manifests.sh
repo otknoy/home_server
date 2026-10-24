@@ -36,7 +36,7 @@ update_archive_directory() {
 # renovate: datasource=github-tags depName=argoproj/argo-cd versioning=semver
 ARGOCD_TAG=v3.5.6
 # renovate: datasource=github-releases depName=cert-manager/cert-manager versioning=semver
-CERT_MANAGER_TAG=v1.21.2
+CERT_MANAGER_TAG=v1.21.3
 # renovate: datasource=github-releases depName=envoyproxy/gateway versioning=semver
 ENVOY_GATEWAY_TAG=v1.9.2
 # renovate: datasource=github-tags depName=metallb/metallb versioning=semver
