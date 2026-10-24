@@ -747,7 +747,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "rate(node_cpu_package_throttles_total[2m])",
+          "expr": "rate(node_cpu_package_throttles_total[$__rate_interval])",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"

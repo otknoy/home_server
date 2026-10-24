@@ -53,7 +53,7 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "avg by (mode) (irate(node_cpu_seconds_total{job=\"node-exporter\", instance=\"$instance\"}[1m]))",
+                        "expr": "avg by (mode) (irate(node_cpu_seconds_total{job=\"node-exporter\", instance=\"$instance\"}[$__rate_interval]))",
                         "format": "time_series",
                         "instant": false,
                         "interval": "",
@@ -846,7 +846,7 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "irate(node_disk_read_bytes_total{job=\"node-exporter\", instance=\"$instance\"}[1m])",
+                        "expr": "irate(node_disk_read_bytes_total{job=\"node-exporter\", instance=\"$instance\"}[$__rate_interval])",
                         "format": "time_series",
                         "interval": "",
                         "intervalFactor": 1,
@@ -870,7 +870,7 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "-irate(node_disk_written_bytes_total{job=\"node-exporter\", instance=\"$instance\"}[1m])",
+                        "expr": "-irate(node_disk_written_bytes_total{job=\"node-exporter\", instance=\"$instance\"}[$__rate_interval])",
                         "format": "time_series",
                         "interval": "",
                         "intervalFactor": 1,

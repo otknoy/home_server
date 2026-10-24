@@ -6,3 +6,5 @@ datasources:
     uid: lq59VODMz
     access: proxy
     url: http://prometheus-svc:9090
+    jsonData:
+      timeInterval: 1m
