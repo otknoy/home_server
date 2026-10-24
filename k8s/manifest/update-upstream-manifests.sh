@@ -42,7 +42,7 @@ ENVOY_GATEWAY_TAG=v1.9.2
 # renovate: datasource=github-tags depName=metallb/metallb versioning=semver
 METALLB_TAG=v0.16.1
 # renovate: datasource=github-releases depName=bitnami-labs/sealed-secrets versioning=semver
-SEALED_SECRETS_TAG=v0.41.0
+SEALED_SECRETS_TAG=v0.41.1
 # renovate: datasource=github-tags depName=kubernetes-sigs/nfs-subdir-external-provisioner versioning=semver extractVersion=^nfs-subdir-external-provisioner-(?<version>.*)$
 NFS_SUBDIR_EXTERNAL_PROVISIONER_TAG=nfs-subdir-external-provisioner-4.0.18
 # renovate: datasource=github-releases depName=kubernetes/kube-state-metrics versioning=semver
