@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: grafana
-          image: grafana/grafana:13.2.5-distroless
+          image: grafana/grafana:13.3.0-distroless
           ports:
             - containerPort: 3000
           livenessProbe:
