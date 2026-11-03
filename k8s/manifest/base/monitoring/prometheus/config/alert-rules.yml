@@ -1,5 +1,38 @@
 groups:
 
+  - name: argocd
+    rules:
+      - alert: ArgoCDMetricsUnavailable
+        expr: up{service="argocd-metrics", namespace="argocd"} == 0 or absent(up{service="argocd-metrics", namespace="argocd"})
+        for: 5m
+        labels:
+          severity: warn
+        annotations:
+          summary: "Argo CD metrics are unavailable"
+      - alert: ArgoCDSyncFailed
+        expr: sum by (name, exported_namespace) (increase(argocd_app_sync_total{service="argocd-metrics", phase=~"Failed|Error"}[15m])) > 0
+        labels:
+          severity: warn
+        annotations:
+          summary: "Argo CD sync failed: {{ $labels.name }}"
+          description: "A sync failed or errored within the last 15 minutes. Check the latest operation in Argo CD."
+      - alert: ArgoCDAppOutOfSync
+        expr: argocd_app_info{service="argocd-metrics", sync_status!="Synced"} == 1
+        for: 15m
+        labels:
+          severity: warn
+        annotations:
+          summary: "Argo CD application is not synced: {{ $labels.name }}"
+          description: "An application has not been Synced for 15 minutes. Check Argo CD and sync manually if needed."
+      - alert: ArgoCDAppUnhealthy
+        expr: argocd_app_info{service="argocd-metrics", health_status!="Healthy"} == 1
+        for: 15m
+        labels:
+          severity: warn
+        annotations:
+          summary: "Argo CD application is unhealthy: {{ $labels.name }}"
+          description: "Application health has been {{ $labels.health_status }} for 15 minutes."
+
   - name: sample
     rules:
       - alert: NodeInstanceDown
