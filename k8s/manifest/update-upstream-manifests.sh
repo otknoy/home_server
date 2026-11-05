@@ -40,7 +40,7 @@ CERT_MANAGER_TAG=v1.21.3
 # renovate: datasource=github-releases depName=envoyproxy/gateway versioning=semver
 ENVOY_GATEWAY_TAG=v1.9.3
 # renovate: datasource=github-tags depName=metallb/metallb versioning=semver
-METALLB_TAG=v0.16.1
+METALLB_TAG=v0.16.2
 # renovate: datasource=github-releases depName=bitnami-labs/sealed-secrets versioning=semver
 SEALED_SECRETS_TAG=v0.41.2
 # renovate: datasource=github-tags depName=kubernetes-sigs/nfs-subdir-external-provisioner versioning=semver extractVersion=^nfs-subdir-external-provisioner-(?<version>.*)$
