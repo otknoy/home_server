@@ -49,7 +49,7 @@ spec:
               value: "app=metallb,component=speaker"
             - name: METALLB_ML_SECRET_KEY_PATH
               value: "/etc/ml_secret_key"
-          image: quay.io/metallb/speaker:v0.16.1
+          image: quay.io/metallb/speaker:v0.16.2
           name: speaker
           ports:
             - containerPort: 9120
@@ -116,7 +116,7 @@ spec:
             defaultMode: 420
         - name: metallb-excludel2
           configMap:
-            defaultMode: 256
+            defaultMode: 292
             name: metallb-excludel2
         - name: memberlist-config
           configMap:
