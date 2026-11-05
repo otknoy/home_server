@@ -22,6 +22,6 @@ open PR のうち `k8s/manifest/update-upstream-manifests.sh` を変更するも
 
 - 差分全体を確認し、`git diff --check`、`yamlfmt -lint .`、影響する Kustomization の `kubectl kustomize` と `kubectl apply --dry-run=client -k` を実行する。接続先を確認し、platform、Argo CD 自身なら bootstrap/argocd、base に影響すれば base を検証する。
 - 対象の生成結果と必要なバージョン指定のみ commit・通常 push する。生成差分がなければ空 commit は作らない。
-- PR 本文に更新内容・運用上の影響・検証結果を反映する。競合・レビュー要件・最新 HEAD の CI を確認し、問題がなければ `gh pr merge <番号> --squash --match-head-commit <確認済みSHA>` でマージする。HEAD が変われば再検証する。
+- Renovate が作成した PR 本文は維持し、編集・置換・追記しない。更新内容・運用上の影響・検証結果などの補足は PR コメントに記載する。競合・レビュー要件・最新 HEAD の CI を確認し、問題がなければ `gh pr merge <番号> --squash --match-head-commit <確認済みSHA>` でマージする。HEAD が変われば再検証する。
 - CI は最大30分待ち、失敗・未実施を成功扱いしない。検証に失敗した場合はマージしない。
 - PR の URL、merge commit、更新前後のバージョン、検証結果を報告する。取得元タグの変更と実行バイナリの更新は区別する。
