@@ -5,7 +5,7 @@ images:
   - name: tailscale/k8s-operator
     newTag: v1.104.7
   - name: tailscale/tailscale
-    newTag: v1.104.4
+    newTag: v1.104.7
 
 configurations:
   - ./image-transformer-config.yaml
