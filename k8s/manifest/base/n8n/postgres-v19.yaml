@@ -62,13 +62,15 @@ spec:
             timeoutSeconds: 3
           env:
             - name: PGDATA
-              value: /var/lib/postgresql/19/docker
+              value: /var/lib/postgresql/data/pgdata
           envFrom:
             - secretRef:
                 name: postgres-secret
           volumeMounts:
             - name: postgres-data
-              mountPath: /var/lib/postgresql
+              mountPath: /var/lib/postgresql/data/pgdata
+              # Reuse the directory initialized during the PostgreSQL 19 migration.
+              subPath: 19/docker
           ports:
             - containerPort: 5432
               name: postgres
