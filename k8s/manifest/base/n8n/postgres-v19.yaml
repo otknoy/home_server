@@ -68,9 +68,8 @@ spec:
                 name: postgres-secret
           volumeMounts:
             - name: postgres-data
-              mountPath: /var/lib/postgresql/data/pgdata
-              # Reuse the directory initialized during the PostgreSQL 19 migration.
-              subPath: 19/docker
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
           ports:
             - containerPort: 5432
               name: postgres
