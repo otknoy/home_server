@@ -1,18 +1,17 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: postgres
+  name: postgres-19
 spec:
-  serviceName: postgres-headless
-  # Retain the PostgreSQL 18 PVC for rollback.
-  replicas: 0
+  serviceName: postgres-19-headless
+  replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: postgres-19
   template:
     metadata:
       labels:
-        app: postgres
+        app: postgres-19
     spec:
       securityContext:
         runAsUser: 70
@@ -20,7 +19,7 @@ spec:
         fsGroup: 70
       containers:
         - name: postgres
-          image: postgres:18-alpine
+          image: postgres:19-alpine
           resources:
             requests:
               cpu: "250m"
@@ -63,14 +62,13 @@ spec:
             timeoutSeconds: 3
           env:
             - name: PGDATA
-              value: /var/lib/postgresql/data/pgdata
+              value: /var/lib/postgresql/19/docker
           envFrom:
             - secretRef:
                 name: postgres-secret
           volumeMounts:
             - name: postgres-data
-              mountPath: /var/lib/postgresql/data
-              subPath: postgres
+              mountPath: /var/lib/postgresql
           ports:
             - containerPort: 5432
               name: postgres
@@ -84,6 +82,20 @@ spec:
         resources:
           requests:
             storage: 10Gi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-19-headless
+spec:
+  clusterIP: None
+  ports:
+    - port: 5432
+      name: postgres
+  selector:
+    app: postgres-19
 
 ---
 
