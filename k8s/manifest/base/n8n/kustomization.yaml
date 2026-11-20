@@ -5,6 +5,5 @@ namespace: n8n
 
 resources:
   - ./n8n.yaml
-  - ./db.yaml
   - ./postgres-v19.yaml
   - ./sealed-secret.yaml
