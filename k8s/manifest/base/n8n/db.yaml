@@ -4,7 +4,8 @@ metadata:
   name: postgres
 spec:
   serviceName: postgres-headless
-  replicas: 1
+  # Retain the PostgreSQL 18 PVC for rollback.
+  replicas: 0
   selector:
     matchLabels:
       app: postgres
@@ -97,4 +98,4 @@ spec:
       targetPort: 5432
       name: postgres
   selector:
-    app: postgres
+    app: postgres-19
