@@ -11,6 +11,7 @@ spec:
     kubernetes:
       envoyService:
         type: LoadBalancer
+        allocateLoadBalancerNodePorts: false
         annotations:
           metallb.io/loadBalancerIPs: 192.168.0.128
           tailscale.com/expose: "true"
